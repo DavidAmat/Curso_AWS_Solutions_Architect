@@ -7,7 +7,7 @@ Guide to the AWS Course
 
 In **Security, Identity & Compliance > IAM**
 
-<img src="D:\Projectes\Curso_AWS_Architect\Section III Identity Acces Manag & S3\imgs\img1.PNG" width="600px" />
+<img src="imgs\img1.PNG" width="600px" />
 
 - Sign-in link: made up by your account number (sent to users). Changing it is a **DNS (Domain Name System)** change
 - Customize: Account Alias: it's a **universal namespace** (si el nom ja esta pillat no es pot)
@@ -28,13 +28,13 @@ The region is Global inside all IAM. When we do such operations **we are not cre
 - When you log in using your **root acount** you are in the **God Mode**
 - You don't want everyone to be loging in using the root account, we want to create users, groups and secure the groups... Enable MFA auth. so that if we get stolen the password they won't be able to access the account withouth the MFA.
 
-<img src="D:\Projectes\Curso_AWS_Architect\Section III Identity Acces Manag & S3\imgs\img2.PNG" width="600px" />
+<img src="imgs\img2.PNG" width="600px" />
 
-<img src="D:\Projectes\Curso_AWS_Architect\Section III Identity Acces Manag & S3\imgs\img3.PNG" width="600px" />
+<img src="imgs\img3.PNG" width="600px" />
 
 - With Virtual MFA device: you download the Google Auth. app on the Google Play store or Apple App Store typing **Google Authenticator**. Open the app, hit the + button and scan the QR code. You need to wait until 2 MFA codes have been generated:
 
-<img src="D:\Projectes\Curso_AWS_Architect\Section III Identity Acces Manag & S3\imgs\img4.PNG" width="600px" />
+<img src="imgs\img4.PNG" width="600px" />
 
 - **Show QR code**: take a picture of the QR and store it somewhere else (not the device you have downloaded the Google Authetincator App). It's for emergency cases when you lose your Virtual MFA device.  
 
@@ -53,7 +53,7 @@ The region is Global inside all IAM. When we do such operations **we are not cre
   - Permissions
     - Add user to group
 
-<img src="D:\Projectes\Curso_AWS_Architect\Section III Identity Acces Manag & S3\imgs\img5.PNG" width="600px" />
+<img src="imgs\img5.PNG" width="600px" />
 
 This is for our programmatinc access to AWS (download the .csv) or send email to email the logging instructions.
 
@@ -80,7 +80,7 @@ This is for our programmatinc access to AWS (download the .csv) or send email to
 
 - JSON notation
 
-<img src="D:\Projectes\Curso_AWS_Architect\Section III Identity Acces Manag & S3\imgs\img6.PNG" width="600px" />
+<img src="imgs\img6.PNG" width="600px" />
 
 **Allow anything on any resource**: this is the most powerful policy that you can have on AWS
 
@@ -132,9 +132,9 @@ This is for our programmatinc access to AWS (download the .csv) or send email to
 
 - > **Billing** > Create an Alarm
 
-<img src="D:\Projectes\Curso_AWS_Architect\Section III Identity Acces Manag & S3\imgs\img7.PNG" width="600px" />
+<img src="imgs\img7.PNG" width="600px" />
 
-<img src="D:\Projectes\Curso_AWS_Architect\Section III Identity Acces Manag & S3\imgs\img8.PNG" width="600px" />
+<img src="imgs\img8.PNG" width="600px" />
 
 
 
@@ -144,9 +144,9 @@ This is for our programmatinc access to AWS (download the .csv) or send email to
 - Enter the **email** where you will receive the notification
 -  You have to go to the email and subscribe to the topic
 
-<img src="D:\Projectes\Curso_AWS_Architect\Section III Identity Acces Manag & S3\imgs\img9.PNG" width="600px" />
+<img src="imgs\img9.PNG" width="600px" />
 
-<img src="D:\Projectes\Curso_AWS_Architect\Section III Identity Acces Manag & S3\imgs\img10.PNG" width="600px" />
+<img src="imgs\img10.PNG" width="600px" />
 
 ## 3. Create S3 Bucket
 
@@ -162,28 +162,28 @@ Select N.Virginina cause is the first region that all the products were implemen
 
   - Once created Upload a file and receive a HTTP Code 200 that the upload was successfull
 
-  <img src="D:\Projectes\Curso_AWS_Architect\Section III Identity Acces Manag & S3\imgs\img11.PNG" height="500px" />
+  <img src="imgs\img11.PNG" height="500px" />
 
 - If we click the **Object URL** you will find an XML access denied, cause we haven't make this **object PUBLIC**:
 
-<img src="D:\Projectes\Curso_AWS_Architect\Section III Identity Acces Manag & S3\imgs\img12.PNG" height="300px" />
+<img src="imgs\img12.PNG" height="300px" />
 
-<img src="D:\Projectes\Curso_AWS_Architect\Section III Identity Acces Manag & S3\imgs\img13.PNG" height="300px" />
+<img src="imgs\img13.PNG" height="300px" />
 
 - On **Actions** we canot make it public or it raises and ERROR... We go back to the **S3 Bucket** and select your Bucket and display **Edit public access settings**. 
 
-<img src="D:\Projectes\Curso_AWS_Architect\Section III Identity Acces Manag & S3\imgs\img14.PNG" width="1300px" />
+<img src="imgs\img14.PNG" width="1300px" />
 
-<img src="D:\Projectes\Curso_AWS_Architect\Section III Identity Acces Manag & S3\imgs\img15.PNG" width="300px" />
+<img src="imgs\img15.PNG" width="300px" />
 
 - Public Access is granted to buckets and objects through **Access Control Lists**, **bucket policies**, **access point policies**... If we Block all public access, it will apply only to the Bucket that is selected and its access points. You click confirm once you choose to **unselect** all options if you want 100% public access.
 - Now we can **Make public** the file:
 
-<img src="D:\Projectes\Curso_AWS_Architect\Section III Identity Acces Manag & S3\imgs\img16.PNG" width="400px" />
+<img src="imgs\img16.PNG" width="400px" />
 
 - **Storage class**:
 
-<img src="D:\Projectes\Curso_AWS_Architect\Section III Identity Acces Manag & S3\imgs\img17.PNG" width="1000px" />
+<img src="imgs\img17.PNG" width="1000px" />
 
 
 
@@ -215,7 +215,7 @@ Select N.Virginina cause is the first region that all the products were implemen
 
 Go to **S3** and click on a Bucket, and click on an Object and go to **Encryption**:
 
-<img src="D:\Projectes\Curso_AWS_Architect\Section III Identity Acces Manag & S3\imgs\img18.PNG" width="300px" />
+<img src="imgs\img18.PNG" width="300px" />
 
 ## 5. Versions
 
@@ -233,9 +233,9 @@ Go to **S3** :
 
 - we **turn Versioning ON**:
 
-  <img src="D:\Projectes\Curso_AWS_Architect\Section III Identity Acces Manag & S3\imgs\img19.PNG" width="300px" />
+  <img src="imgs\img19.PNG" width="300px" />
 
-<img src="D:\Projectes\Curso_AWS_Architect\Section III Identity Acces Manag & S3\imgs\img20.PNG" width="300px" />
+<img src="imgs\img20.PNG" width="300px" />
 
 - Edit Block Public Access: untick all to make them public
 - Upload a file (version 1)
@@ -245,21 +245,21 @@ Go to **S3** :
 
 
 
-<img src="D:\Projectes\Curso_AWS_Architect\Section III Identity Acces Manag & S3\imgs\img21.PNG" width="900px" />
+<img src="imgs\img21.PNG" width="900px" />
 
 - We see that know the size of the bucket is the sum of the two versions (**all versions get stored on the S3 bucket so bear that in mind with big files**). **Maybe you need to enable Lifecycle policy to retire old versions if a lot of versions are accumulated**
 - When you upload a new version is private object, but older versions remain public if they were public. 
 - **If we delete a file (in the Hide mode in "Versions") that has versioning** we place a **DELETE MARKER**:
 
-<img src="D:\Projectes\Curso_AWS_Architect\Section III Identity Acces Manag & S3\imgs\img22.PNG" width="900px" />
+<img src="imgs\img22.PNG" width="900px" />
 
 - To **restore** to the latest version we have to **Delete the Delete Marker**:
 
-<img src="D:\Projectes\Curso_AWS_Architect\Section III Identity Acces Manag & S3\imgs\img23.PNG" width="400px" />
+<img src="imgs\img23.PNG" width="400px" />
 
 - If we **delete the file in "Show" mode in Versions** you delete the version completely.
 
-<img src="D:\Projectes\Curso_AWS_Architect\Section III Identity Acces Manag & S3\imgs\img24.PNG" width="400px" />
+<img src="imgs\img24.PNG" width="400px" />
 
 
 
