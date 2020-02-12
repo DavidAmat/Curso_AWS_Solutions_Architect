@@ -1,5 +1,6 @@
 # Section III: Identity Access Management & S3 
 
+Guide to the AWS Course
 
 
 ### 1. IAM
