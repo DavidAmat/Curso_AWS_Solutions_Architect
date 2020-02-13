@@ -266,6 +266,8 @@ Go to **S3** :
 ## 6. Lifecycle Versioning
 
 - Go to the Bucket we have created previously
+- Automates moving objects between storage tiers
+- **Can be used in conjunction with versioning** (it is not required)
 - Go to **Management** and Add a lifecycle rule:
 
 <img src="imgs\img25.PNG" width="800px" />
@@ -281,3 +283,37 @@ Go to **S3** :
 
 <img src="imgs\img27.PNG" width="800px" />
 
+- We have create a Lifecycle rule applied to the Whole Bucket and have set actions for current and previous versions.
+
+### 7. Cross - Region Replication
+
+- Go to **S3** > **Your Bucket** > **Management **
+- There you click on Replication and Add rule:
+
+<img src="imgs\img28.PNG" width="800px" />
+
+- **IT REQUIRES VERSIONING to be enabled in the bucket**.
+- We will replicate the Entire bucket
+- We set a new Destination Bucket. 
+
+<img src="imgs\img29.PNG" width="800px" />
+
+- Destination Bucket: **the region has to be in a DIFFERENT REGION**. You can also change the STO class and ownership of the destination bucket
+
+<img src="imgs\img30.PNG" width="600px" />
+
+- We then create a new role that will **allow us to do the replication** and give our replication **rule name**:
+
+<img src="imgs\img31.PNG" width="600px" />
+
+- We hit Save, it can take few moments.... You can see our Source, Destination and Permissions
+
+<img src="imgs\img32.PNG" width="600px" />
+
+- We go back to the Buckets and see that it has automatically get in **Access** column the same permissions as the **Source Bucket**. 
+
+<img src="imgs\img33.PNG" width="600px" />
+
+- If we go into **we cannot see the objects that were BEFORE the creation of the replication rule**. This means that when we setup Cross Region Replication is not going to apply the objects of the existing Bucket. We upload objects in the Source and see that they upload in the Destination Bucket (remember to Make Public).
+
+<img src="imgs\img34.PNG" width="600px" />
