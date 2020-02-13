@@ -264,3 +264,20 @@ Go to **S3** :
 
 
 ## 6. Lifecycle Versioning
+
+- Go to the Bucket we have created previously
+- Go to **Management** and Add a lifecycle rule:
+
+<img src="imgs\img25.PNG" width="800px" />
+
+- You can add a lifecycle rule to manage your objects: **automate transitioning of objects to different tiers of objects**. And when specified **expire objects**.
+- You can put tags or prefix, if a object is tagged, any object tagged would be under the rule you create with a tag, otherwise it applies to all objects.
+- **Lifecycle rules** can apply to current object or previous versions:
+
+<img src="imgs\img26.PNG" width="800px" />
+
+- You can **add transitions specifying the days**. 
+- Then you set the **Expiration**:
+
+<img src="imgs\img27.PNG" width="800px" />
+
