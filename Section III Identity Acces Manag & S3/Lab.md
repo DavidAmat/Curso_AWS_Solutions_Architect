@@ -285,20 +285,20 @@ Go to **S3** :
 
 - We have create a Lifecycle rule applied to the Whole Bucket and have set actions for current and previous versions.
 
-### 7. Cross - Region Replication
+## 7. Cross - Region Replication
 
 - Go to **S3** > **Your Bucket** > **Management **
 - There you click on Replication and Add rule:
 
 <img src="imgs\img28.PNG" width="800px" />
 
-- **IT REQUIRES VERSIONING to be enabled in the bucket**.
+- **IT REQUIRES VERSIONING to be enabled in the Bucket (Source and Destination Bucket: versioning ENABLED)**.
 - We will replicate the Entire bucket
 - We set a new Destination Bucket. 
 
 <img src="imgs\img29.PNG" width="800px" />
 
-- Destination Bucket: **the region has to be in a DIFFERENT REGION**. You can also change the STO class and ownership of the destination bucket
+- Destination Bucket: **the region has to be in a DIFFERENT REGION (region has to be unique)** . You can also change the STO class and ownership of the destination bucket
 
 <img src="imgs\img30.PNG" width="600px" />
 
@@ -314,6 +314,107 @@ Go to **S3** :
 
 <img src="imgs\img33.PNG" width="600px" />
 
-- If we go into **we cannot see the objects that were BEFORE the creation of the replication rule**. This means that when we setup Cross Region Replication is not going to apply the objects of the existing Bucket. We upload objects in the Source and see that they upload in the Destination Bucket (remember to Make Public).
+- If we go into **we cannot see the objects that were BEFORE the creation of the replication rule**. This means that **when we setup Cross Region Replication is not going to apply the objects of the existing Bucket**. 
+- We upload objects in the Source and see that they upload in the Destination Bucket (remember to Make Public).
 
 <img src="imgs\img34.PNG" width="600px" />
+
+- When we make changes to a bucket with Cross Region Replication turned ON, those changes **will automatically be replicated in the Destination Bucket**. 
+
+- **If we put a DELETE MARKER** in the SourceBucket (SB), **it will be NOT replicated in the Destination Bucket** (DB). This is done deliverately to avoid accidental deletes from one bucket to another
+- If we **delete the actual version of a file**, it **will NOT be replicated in the DB**.
+
+
+
+## 8. CloudFront Lab
+
+- **S3** > Go to Bucket that will be the origin. This Bucket will be the one that we will attach our **CloudFront distribution to**.
+- **Networking & Content Delivery** > **CloudFront**:
+
+<img src="imgs\img35.PNG" width="800px" />
+
+
+
+- It is a **Global service**!
+- We **create our NEW DISTRIBUTION (two types):
+
+<img src="imgs\img36.PNG" width="800px" />
+
+- Select Get Started from the Web (RTMP is not usually asked in the Exam):
+
+<img src="imgs\img37.PNG" width="800px" />
+
+- Here you see all your valid origins: we will click a S3 bucket
+
+- **Origin Path**: if we have a directory inside a Bucket you can specify the path
+
+- **Origin ID**: leave as default (permissions to access our S3 bucket)
+
+- You can restrict your bucket access and say that users will always access the S3 content using CloudFront URL and not AWS S3 URLs (this is useful if you use **signed URLs** to restrict your content).
+
+- Leave everything else on default.
+
+- **Set the TTL (Time to Live) of the objects in their Edge Locations**
+
+- **YOU CAN RESTRICT the VIEWER ACCESS using SIGNED URLs or Signed COOKIES** (example of Netflix, only allowing users to see the videos if they are members)
+
+  <img src="imgs\img38.PNG" width="800px" />
+
+- We create the distribution and deploy it (this process takes time 15-20 min or 1 hour):
+
+<img src="imgs\img39.PNG" width="800px" />
+
+- The State should be Desabled to delete it
+
+- If the State is **Deployed** then everything has gone OK
+
+- We also see the **Domain Name**: this is the domain that we would use to connect to our **CloudFront distribution**. We copy that name.
+
+- We go to **S3**:
+
+  - Get into the Bucket and take a name of a bucket
+  - Type the  **Domain Name + Name Bucket in a URL of the Browser**:
+
+  <img src="imgs\img40.PNG" width="800px" />
+
+  - This is to check that it has loaded if very fast: this means that **the distribution is working** and it is loading our assets from S3
+
+- We go back to **Networking & Content Delivery** > **CloudFront**:
+
+  - Click Distribution Settings:
+
+  <img src="imgs\img41.PNG" width="800px" />
+
+  - Change the distribution after it is being deployed is possible:
+    - Note the **Invalidation** tab:
+
+  <img src="imgs\img42.PNG" width="800px" />
+
+  - Create an Invalidation (we can invalidate individual objects, entire directories, or entire sub directories)
+  - If we write /* if basically will **invalidate everything**. If we invalidate a Distribution, **it means that is not going to be in the Edge Locations**
+  - EXAM QUESTION: you push out some data and figure out that something's wrong, and you do an update but it's not showing up correctly: **you must create an invalidation**
+  - Let's go and delete this distribution (**it is not covered in the free tier**)
+  - Disabling the distribution also takes time (15 min)... Once it is 
+
+  <img src="imgs\img43.PNG" width="800px" />
+
+  
+
+  - Once it is Disabled, just Delete it (Delete button)
+
+  
+
+  ### Summary - 8. CloudFront Lab
+
+  	- Edge Location
+  	- **Origin**: source of the files that your CloudFront will distribute
+  	- **Distribution**: name given to the CDN, which is the collection of the Edge Locations 
+  	- Distributions can be Web Distribution or RTMP (media streaming)
+  	- EL are not READ ONLY (remember Transfer acceleration), you can write to them too
+  	- Objects are cached for the life of the TTL (seconds)
+  	- You can **invalidate cached objects, but you are going to be charged**
+
+  
+
+  
+
