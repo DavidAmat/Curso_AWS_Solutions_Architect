@@ -112,9 +112,10 @@ This is for our programmatinc access to AWS (download the .csv) or send email to
 
 - IAM is universal. Does not apply to regions
 - The root account is the account created when you setup your AWS account for the 1st time. Complete Admin access.
-- New users have **no permissions** when first created
+- New users have **no permissions** when first created netither access to any AWS Services
 - New users are assigned **Access Key ID & Secret Access Keys** when created
 - **Such credentials are NOT the same as the password**. You cannot use the Access Key ID & Secret Access Key to Login in to the **console**, but you can use it to access **AWS via API and CLI**.
+- !!!!!**This means that as a new user, you will be able to interact with AWS using your access key ID and secret access key using the API, CLI, and the AWS SDK...** !!!!
 - If you lose them, you have to **regenerate them**.
 - Setup a MFA on your root account **ALWAYS** (one can get all your passwords)
   - You need a device and Google Auth. App
