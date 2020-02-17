@@ -1,6 +1,5 @@
 # EC2 Part 1
 
- 
 
 ## Launch an instance
 
