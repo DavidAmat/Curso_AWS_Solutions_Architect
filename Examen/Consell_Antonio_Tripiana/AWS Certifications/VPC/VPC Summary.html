@@ -1,0 +1,565 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>VPC Summary</title><style>
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	opacity: 0.5;
+}
+
+.sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, KaiTi, STKaiTi, '华文楷体', KaiTi_GB2312, '楷体_GB2312', serif; }
+.mono { font-family: Nitti, 'Microsoft YaHei', '微软雅黑', monospace; }
+.pdf .sans { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .code { font-family: Source Code Pro, 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, KaiTi, STKaiTi, '华文楷体', KaiTi_GB2312, '楷体_GB2312', serif, 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .mono { font-family: PT Mono, Nitti, 'Microsoft YaHei', '微软雅黑', monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.highlight-default {
+}
+.highlight-gray {
+	color: rgb(155,154,151);
+}
+.highlight-brown {
+	color: rgb(100,71,58);
+}
+.highlight-orange {
+	color: rgb(217,115,13);
+}
+.highlight-yellow {
+	color: rgb(223,171,1);
+}
+.highlight-teal {
+	color: rgb(15,123,108);
+}
+.highlight-blue {
+	color: rgb(11,110,153);
+}
+.highlight-purple {
+	color: rgb(105,64,165);
+}
+.highlight-pink {
+	color: rgb(173,26,114);
+}
+.highlight-red {
+	color: rgb(224,62,62);
+}
+.highlight-gray_background {
+	background: rgb(235,236,237);
+}
+.highlight-brown_background {
+	background: rgb(233,229,227);
+}
+.highlight-orange_background {
+	background: rgb(250,235,221);
+}
+.highlight-yellow_background {
+	background: rgb(251,243,219);
+}
+.highlight-teal_background {
+	background: rgb(221,237,234);
+}
+.highlight-blue_background {
+	background: rgb(221,235,241);
+}
+.highlight-purple_background {
+	background: rgb(234,228,242);
+}
+.highlight-pink_background {
+	background: rgb(244,223,235);
+}
+.highlight-red_background {
+	background: rgb(251,228,228);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(55, 53, 47, 0.6);
+	fill: rgba(55, 53, 47, 0.6);
+}
+.block-color-brown {
+	color: rgb(100,71,58);
+	fill: rgb(100,71,58);
+}
+.block-color-orange {
+	color: rgb(217,115,13);
+	fill: rgb(217,115,13);
+}
+.block-color-yellow {
+	color: rgb(223,171,1);
+	fill: rgb(223,171,1);
+}
+.block-color-teal {
+	color: rgb(15,123,108);
+	fill: rgb(15,123,108);
+}
+.block-color-blue {
+	color: rgb(11,110,153);
+	fill: rgb(11,110,153);
+}
+.block-color-purple {
+	color: rgb(105,64,165);
+	fill: rgb(105,64,165);
+}
+.block-color-pink {
+	color: rgb(173,26,114);
+	fill: rgb(173,26,114);
+}
+.block-color-red {
+	color: rgb(224,62,62);
+	fill: rgb(224,62,62);
+}
+.block-color-gray_background {
+	background: rgb(235,236,237);
+}
+.block-color-brown_background {
+	background: rgb(233,229,227);
+}
+.block-color-orange_background {
+	background: rgb(250,235,221);
+}
+.block-color-yellow_background {
+	background: rgb(251,243,219);
+}
+.block-color-teal_background {
+	background: rgb(221,237,234);
+}
+.block-color-blue_background {
+	background: rgb(221,235,241);
+}
+.block-color-purple_background {
+	background: rgb(234,228,242);
+}
+.block-color-pink_background {
+	background: rgb(244,223,235);
+}
+.block-color-red_background {
+	background: rgb(251,228,228);
+}
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="30684cd6-697b-4086-a6cd-a69a110c5266" class="page sans"><header><h1 class="page-title">VPC Summary</h1></header><div class="page-body"><p id="730911e3-bd90-437f-a251-95fc967e8105" class="">Most important thing: Being able to create a whole VPC with NAT gateway, NACL, Flow Logs, Bastion Host and VPC Endpoints from memory.</p><h2 id="a7f4358c-f93b-4e08-a520-33aa255d9bcb" class="">VPC Overview</h2><p id="92712c8b-247f-4e22-a4b6-c4189a98660d" class="">Remember the following:</p><ul id="ba933922-2db6-4dd4-9754-f1ad1e120a14" class="bulleted-list"><li>Think of a VPC as a logical datacenter in AWS.</li></ul><ul id="a3aadcc3-67d8-465b-8c66-47b37922f727" class="bulleted-list"><li>Consists of IGWs (Or Virtual Private Gateways), Route Tables, Network Access Control Lists, Subnets and Security Groups.</li></ul><ul id="a364b788-564c-4255-ae84-1f79c3c8c5df" class="bulleted-list"><li>1 Subnet = 1 Availability Zone</li></ul><ul id="8e8be26a-5d9b-491b-98e9-97b0686f0d80" class="bulleted-list"><li>Security Groups are stateful, Network Access Control Lists are stateless.</li></ul><ul id="d45a6d3e-7617-4734-b514-5d341eaec7f1" class="bulleted-list"><li>NO TRANSITIVE PEERING</li></ul><ul id="2c17f32b-d2b5-47a3-a42a-c83a5b24bc62" class="bulleted-list"><li>5 VPC max per AWS region (by default)</li></ul><h2 id="e467c6e1-6a84-465f-88ce-5a8a202e47ef" class="">Building our VPC</h2><p id="2f3daf9a-6ae6-478c-a69b-f020268b04e5" class="">Remember the following:</p><ul id="e158f236-dfd7-4ae7-bf01-536a6eb70a67" class="bulleted-list"><li>When you create a VPC a default Route Table, Network Access Control List (NACL) and a default Security Group are created.</li></ul><ul id="70af500a-3e71-4c58-b268-2f74dc144403" class="bulleted-list"><li>It won&#x27;t create any subnets, nor will it create a default Internet Gateway.</li></ul><ul id="49408464-3260-43b6-9aa0-4f6197c2257c" class="bulleted-list"><li>US-EAST-1A in your AWS account can be a completely different Availability Zone to US-EAST-1A in another AWS account. The AZ&#x27;s are randomized.</li></ul><ul id="8a322e68-cf94-4f65-8aba-1b86f79f5606" class="bulleted-list"><li>Amazon always reserve 5 IP addresses within your subnets.</li></ul><ul id="d38ce597-0afb-4fa4-b43f-3257d5d1d41f" class="bulleted-list"><li>You can only have 1 Internet Gateway per VPC.</li></ul><ul id="38d96549-0205-4c4e-a60d-f4f3d408ce62" class="bulleted-list"><li>Security Groups can&#x27;t span VPCs.</li></ul><h2 id="631078d4-2627-4d75-b0ce-c6df55084a47" class="">NAT Instances vs NAT Gateways</h2><p id="3105bd77-1176-4b9c-aefe-78ec2de1c223" class="">NAT Instances:</p><ul id="18aca168-49db-4a6c-b9e1-b10ef84599a4" class="bulleted-list"><li>When creating a NAT instance, disable Source/Destination Check on the Instance.</li></ul><ul id="b72771f1-c8e3-438a-9cce-d44e94c27aa9" class="bulleted-list"><li>NAT instances must be in a public subnet.</li></ul><ul id="f39dc6f7-e9f9-45ba-b178-71986ea22cf7" class="bulleted-list"><li>There must be a route out of the private subnet to the NAT instance, in order for this to work.</li></ul><ul id="434fab2e-6162-42f4-9bc5-c8036a390503" class="bulleted-list"><li>The amount of traffic that NAT instances can support depends on the instance size. If you are bottlenecking, increase the instance size.</li></ul><ul id="f17d6625-7d44-4fe4-900d-4497b67e538d" class="bulleted-list"><li>You can create high availability using Autoscaling Groups, multiple subnets in different AZs and a script to automate failover.</li></ul><ul id="410d6690-9f75-4ac3-9b77-6aecba38c553" class="bulleted-list"><li>NAT instances must be Behind a Security Group</li></ul><p id="9127810e-babc-484a-b4ef-2cbeab2cb4be" class="">NAT Gateways:</p><ul id="54b61f11-41f2-49ed-a66c-db08b667ec04" class="bulleted-list"><li>Redundant inside the Availability Zone</li></ul><ul id="6625d3c2-7ba9-483e-b8a8-c16a476579b8" class="bulleted-list"><li>Preferred by the enterprise</li></ul><ul id="c3a2cf3a-fb69-493d-a564-c283c50da00e" class="bulleted-list"><li>Starts at 5Gbps and scales currently to 45Gbps</li></ul><ul id="7f797d3f-7827-4a10-b776-27290f187f3b" class="bulleted-list"><li>No need to patch</li></ul><ul id="8c8824a6-d0a0-409e-80e1-4c6752ac8627" class="bulleted-list"><li>Not associated with security groups.</li></ul><ul id="225ded4a-ad9c-4b52-92f6-b5e7d07a1fb2" class="bulleted-list"><li>Automatically assigned a public ip address</li></ul><ul id="770060a6-efec-43c9-988f-ef0504da23b6" class="bulleted-list"><li>Remember to update your route tables</li></ul><ul id="fb58a1aa-7438-4faa-a64e-ee58d7ac765f" class="bulleted-list"><li>No need to disable Source/Destination checks.</li></ul><ul id="1e5c0904-23f3-4bfb-b825-a95721fe569f" class="bulleted-list"><li>If you have resources in multiple Availability Zones and they share one NAT gateway, in the event that the NAT gateway&#x27;s Availability Zone is down, resources in the other Availability Zones lose internet access. To create an Availability Zone-independent architecture, create a NAT gateway in each AZ and configure your routing to ensure that resources use the NAT gateway in the same AZ.</li></ul><h2 id="ef6b8920-e39e-421f-91fb-30d808c672d2" class="">Network ACLs</h2><p id="091481ce-fb1d-4fdd-b289-204e599ac70f" class="">Remember the following for your exam:</p><ul id="9b1eef76-73d7-4131-bc19-3735a7fc2275" class="bulleted-list"><li>Your VPC automatically comes with a default Network ACL, and by default it allows all outbound and inbound traffic.</li></ul><ul id="c5491d04-079a-46e4-bed0-36c4be96c628" class="bulleted-list"><li>You can create custom Network ACLs. By default, each custom network ACL denies all inbound and outbound traffic until you add rules.</li></ul><ul id="fe3d116b-e7c7-43f3-b6d9-2b6ef8259b3b" class="bulleted-list"><li>Each subnet in your VPC must be associated with a network ACL. If you don&#x27;t explicitly associate a subnet with a netowrk ACL, the subnet is automatically associated with the default network ACL.</li></ul><ul id="cc48ca92-31f9-42df-9000-4646f0f3297b" class="bulleted-list"><li>Block IP Addresses using Network ACL not Security Groups.</li></ul><ul id="26334e27-bbb6-4e9c-8fc0-5cbf2726b757" class="bulleted-list"><li>You can associate a network ACL with multiple subnets; however, <strong>a subnet can be associated with only one Network ACL at a time. </strong>When you associate a network ACL with a subnet, the previous association is removed.</li></ul><ul id="7c5f589f-88cc-48cf-98e5-77ae1604595e" class="bulleted-list"><li>Network ACLs contain a numbered list of rules that is evaluated in order, starting with the lowest numbered rule.</li></ul><ul id="ef0891ae-29d6-4239-b618-7b7c61ebbc72" class="bulleted-list"><li>Network ACLs have separate inbound and outbound rules, and each rule can either allow or deny traffic.</li></ul><ul id="3d24cf34-4d65-482f-8cb9-4b9de12bad59" class="bulleted-list"><li>Network ACLs are stateless, responses to allowed inbound traffic are subject to the rules for outbound traffic (and vice versa)</li></ul><h2 id="aa6a7419-8a36-4ccf-ab8f-a37ef7a4503d" class="">ELBs and VPCs</h2><p id="6a224379-e353-47b1-9bd9-2b5a08c3222f" class="">Remember the following for your exam:</p><ul id="4ed7a621-c20b-4841-bc80-3c5b77b1fb33" class="bulleted-list"><li>You need a minimun of two public subnets to deploy an internet facing loadbalancer.</li></ul><h2 id="5d507ccd-3b07-4a45-81d9-1f792c7936f1" class="">VPC Flow Logs</h2><p id="67b68b90-8b42-42e6-a1bd-a3401affc7d2" class="">Remember the following:</p><ul id="3733a834-9479-4bff-aac2-57ae04a669c3" class="bulleted-list"><li>You cannot enable flow logs for VPCs that are peered with your VPC unless the peer VPC is in your account.</li></ul><ul id="22b97704-9259-4eba-8e72-12a0750820fd" class="bulleted-list"><li>You cannot tag a flow log.</li></ul><ul id="ca42b042-4c24-4200-9651-f40441471f81" class="bulleted-list"><li>After you&#x27;ve created a flow log, you cannot change its configuration, for example, you can&#x27;t associate a different IAM role with the flow log.</li></ul><ul id="555bdb13-09e8-4ac1-a122-6c5e6606e377" class="bulleted-list"><li>Not all IP Traffic is monitored:<ul id="ea728ecb-789c-41cf-b216-cee0b7fcb71d" class="bulleted-list"><li>Traffic generated by instances when they contact the Amazon DNS server. If you use your own DNS server, then all traffic to that DNS server is logged.</li></ul><ul id="0e3ac23e-9224-4a57-be96-4139782bc3d4" class="bulleted-list"><li>Traffic generated by a Windows instance for Amazon Windows license activation.</li></ul><ul id="f8dfdc6d-4a81-4e54-afbc-ac13e3a7bdc8" class="bulleted-list"><li>Traffic to and from 169.254.169.254 for instance metadata.</li></ul><ul id="37133c39-1ce7-4feb-b2b5-f891c7f93e1b" class="bulleted-list"><li>DHCP traffic.</li></ul><ul id="35a4b383-943c-4978-9ebd-3e37d0702654" class="bulleted-list"><li>Traffic to the reserved IP address for the default VPC router.</li></ul></li></ul><h2 id="048de58c-9867-49cf-8ef7-2fa758426435" class="">Bastions vs NAT Gateways/Instances</h2><p id="4a907f07-a7e5-4deb-b150-31d474be793e" class="">Remember the following:</p><ul id="6340ddf4-68f9-4e2f-a654-a5f2be47c944" class="bulleted-list"><li><strong>A NAT Gateway or NAT instance </strong>is used to provide internet traffic to EC2 instances in a private subnet.</li></ul><ul id="de9e5aa7-fd42-4452-a0c3-31176320f919" class="bulleted-list"><li><strong>A Bastion</strong> is used to securely administer EC2 instances (using SSH or RDP). Bastions are also called jump boxes.<ul id="a7f6e7c6-5a9a-4d0f-bc8f-8626de451bc1" class="bulleted-list"><li>You cannot use a NAT Gateway as a Bastion host.</li></ul></li></ul><h2 id="63e51050-fc0c-4f01-9838-fbe295ddfcea" class="">Direct Connect</h2><p id="c1949626-4c97-4ce8-85ea-2e5095776090" class="">Remember the following:</p><ul id="dc971ed0-8386-494f-9b9b-563c48d2bab0" class="bulleted-list"><li>Direct Connect directly connects your data center to AWS</li></ul><ul id="3c150e66-3cfa-4f03-911c-fd40cc4947c6" class="bulleted-list"><li>Useful for high throughput workloads (ie lots of network traffic)</li></ul><ul id="c8612ce9-62df-4873-980b-22db715cfe13" class="bulleted-list"><li>Or if you need a stable and reliable secure connection</li></ul><h2 id="7dbb7558-987f-4ab0-b675-4533b0ffd894" class="">VPC Endpoints</h2><blockquote id="b4fff601-2720-4056-b658-c145af1fcfa6" class="">A VPC Endpoint allows AWS services to connect to each other without leaving AWS and without requiring internet.</blockquote><p id="6c7be117-4c14-4eb5-a1c6-c412239392de" class="">A VPC Endpoint enables you to privately connect your VPC to supported AWS services and VPC endpoint services powered by PrivateLink without requiring an internet gateway, NAT device, VPN connection or AWS Direct Connect connection. Instances in your VPC do not require public IP addresses to communicate with resources in the service. Traffic between your VPC and the other service does not leave the Amazon network.</p><p id="62861272-78c6-4957-ac37-31c8033f58b3" class="">Endpoints are virtual devices. They are horizontally scaled, redundant and highly available VPC components that allow communication between instances in your VPC and services without imposing availability risks or bandwidth constraints on your network traffic.</p><h2 id="fa157d1f-7631-4832-9271-0f1dde1fae99" class="">Types of VPC Endpoints</h2><ul id="99c99928-78ef-4811-88d0-c634917c1ff9" class="bulleted-list"><li><strong>Interface Endpoints</strong><p id="1debb101-6b6a-470e-8f02-6332700a717e" class="">An interface endpoint is an Elastic Network Interface (ENI) with a private IP address that serves as an entry point for traffic destined to a supported service. </p><ul id="84df018b-6b0e-46a8-8fe0-c638e78c8368" class="toggle"><li><details open=""><summary><em>The following services are supported:</em></summary><ul id="e1f0b93e-4d10-4091-a339-95ae9a9b28e8" class="bulleted-list"><li><em>API Gateway, CloudFormation, CloudWatch, CodeBuild, Config, EC2 API, Elastic Load Balancing, Key Management Service, Kinesis, SageMaker, Secrets Manager, Security Token Service, Service Catalog, SNS, SQS Systems Manager</em></li></ul><ul id="21158fe1-b660-4787-a1ea-185c9a2970de" class="bulleted-list"><li><em>Endpoint services hosted by other aws accounts</em></li></ul><ul id="d50f167e-c3dc-4fb3-819c-8a13812b7e99" class="bulleted-list"><li><em>Supported AWS Marketplace partner services</em></li></ul></details></li></ul></li></ul><ul id="7788f0bf-7e6f-45be-913b-8822de8a0884" class="bulleted-list"><li><strong>Gateway Endpoints</strong><p id="6d49e4c0-caa4-444c-942d-bb188c68a82a" class="">They are quite similar to endpoints, but acting as a Gateway. Services supported at the moment are: Amazon S3, DynamoDB</p></li></ul></div></article></body></html>

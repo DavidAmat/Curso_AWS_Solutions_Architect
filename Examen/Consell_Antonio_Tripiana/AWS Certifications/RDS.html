@@ -1,0 +1,566 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>RDS</title><style>
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	opacity: 0.5;
+}
+
+.sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, KaiTi, STKaiTi, '华文楷体', KaiTi_GB2312, '楷体_GB2312', serif; }
+.mono { font-family: Nitti, 'Microsoft YaHei', '微软雅黑', monospace; }
+.pdf .sans { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .code { font-family: Source Code Pro, 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, KaiTi, STKaiTi, '华文楷体', KaiTi_GB2312, '楷体_GB2312', serif, 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .mono { font-family: PT Mono, Nitti, 'Microsoft YaHei', '微软雅黑', monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.highlight-default {
+}
+.highlight-gray {
+	color: rgb(155,154,151);
+}
+.highlight-brown {
+	color: rgb(100,71,58);
+}
+.highlight-orange {
+	color: rgb(217,115,13);
+}
+.highlight-yellow {
+	color: rgb(223,171,1);
+}
+.highlight-teal {
+	color: rgb(15,123,108);
+}
+.highlight-blue {
+	color: rgb(11,110,153);
+}
+.highlight-purple {
+	color: rgb(105,64,165);
+}
+.highlight-pink {
+	color: rgb(173,26,114);
+}
+.highlight-red {
+	color: rgb(224,62,62);
+}
+.highlight-gray_background {
+	background: rgb(235,236,237);
+}
+.highlight-brown_background {
+	background: rgb(233,229,227);
+}
+.highlight-orange_background {
+	background: rgb(250,235,221);
+}
+.highlight-yellow_background {
+	background: rgb(251,243,219);
+}
+.highlight-teal_background {
+	background: rgb(221,237,234);
+}
+.highlight-blue_background {
+	background: rgb(221,235,241);
+}
+.highlight-purple_background {
+	background: rgb(234,228,242);
+}
+.highlight-pink_background {
+	background: rgb(244,223,235);
+}
+.highlight-red_background {
+	background: rgb(251,228,228);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(55, 53, 47, 0.6);
+	fill: rgba(55, 53, 47, 0.6);
+}
+.block-color-brown {
+	color: rgb(100,71,58);
+	fill: rgb(100,71,58);
+}
+.block-color-orange {
+	color: rgb(217,115,13);
+	fill: rgb(217,115,13);
+}
+.block-color-yellow {
+	color: rgb(223,171,1);
+	fill: rgb(223,171,1);
+}
+.block-color-teal {
+	color: rgb(15,123,108);
+	fill: rgb(15,123,108);
+}
+.block-color-blue {
+	color: rgb(11,110,153);
+	fill: rgb(11,110,153);
+}
+.block-color-purple {
+	color: rgb(105,64,165);
+	fill: rgb(105,64,165);
+}
+.block-color-pink {
+	color: rgb(173,26,114);
+	fill: rgb(173,26,114);
+}
+.block-color-red {
+	color: rgb(224,62,62);
+	fill: rgb(224,62,62);
+}
+.block-color-gray_background {
+	background: rgb(235,236,237);
+}
+.block-color-brown_background {
+	background: rgb(233,229,227);
+}
+.block-color-orange_background {
+	background: rgb(250,235,221);
+}
+.block-color-yellow_background {
+	background: rgb(251,243,219);
+}
+.block-color-teal_background {
+	background: rgb(221,237,234);
+}
+.block-color-blue_background {
+	background: rgb(221,235,241);
+}
+.block-color-purple_background {
+	background: rgb(234,228,242);
+}
+.block-color-pink_background {
+	background: rgb(244,223,235);
+}
+.block-color-red_background {
+	background: rgb(251,228,228);
+}
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="90aafa4f-1d1e-4dd4-be4d-4d4f3f4ceb8a" class="page sans"><header><img class="page-cover-image" src="https://www.notion.so/images/page-cover/met_camille_pissarro_1896.jpg" style="object-position:center 40%"/><div class="page-header-icon page-header-icon-with-cover"><span class="icon">🏙</span></div><h1 class="page-title">RDS</h1></header><div class="page-body"><ul id="87b8d7a4-c9e8-4432-a115-98379919a74a" class="bulleted-list"><li>RDS runs on virtual machines.</li></ul><ul id="e1b64c8f-340b-4582-8b18-5d684b78cb3f" class="bulleted-list"><li>You cannot log in to these operating systems however (you can&#x27;t ssh)</li></ul><ul id="4fc17514-63c1-4666-9270-dc86d275f968" class="bulleted-list"><li>Patching of the RDS Operating System and DB is Amazon&#x27;s responsability.</li></ul><ul id="38f0216c-7663-4453-8a21-0813d10e8c73" class="bulleted-list"><li>RDS is NOT Serverless</li></ul><ul id="a25dfa5d-1e08-467f-bf22-e9c74f4f7836" class="bulleted-list"><li>Aurora Serverless IS Serverless</li></ul><h2 id="c302536f-88d2-45bd-bd35-7baccd2cb2f8" class="">Backups with RDS</h2><p id="c75e38f6-9f87-466c-92cc-a5cc92206874" class="">There are two different types of Backups for RDS:</p><ul id="a5e8f712-34d9-42a6-8905-8864d6ae3e3a" class="bulleted-list"><li><strong>Automated Backups: </strong>Allow you to recover your database to any point in time within a &quot;retention period&quot;. The retention period can be between one and 35 days. Automated Backups will take a full daily snapshot and will also store transaction logs throughout the day. When you do a recovery, AWS will first choose the most recent daily back up, and then apply transaction logs relevant to that day. This allows you to do a point in time recovery down to a second, within the retention period.<ul id="ede201ae-01eb-4900-bc87-3ed293a9a06c" class="bulleted-list"><li>Enabled by default. The backup data is stored in S3 and you get free storage space equal to the size of your database. So if you have and RDS instance of 10GB, you will get 10GB worth of storage.</li></ul><ul id="11d5e18a-a770-4543-9e86-50d2b7ee8e32" class="bulleted-list"><li>Backups are taken within a defined window. During the backup window, storage I/O may be suspended while your data is being backed up and you may experience elevated latency.</li></ul></li></ul><ul id="57ac0e10-75a8-43e4-8376-3a1493f3a485" class="bulleted-list"><li><strong>Database Snapshots:</strong> Are done manually (ie they are user initiated). They are stored even after you delete the original RDS instance, unlike automated backups.</li></ul><p id="580377aa-2c47-45ca-b2d3-c9fa50d46f52" class="">
+</p><h2 id="d3b8e428-29f7-4025-9001-012d31930d46" class="">Restoring Backups</h2><p id="8cc6d1e1-ad71-4d83-b910-a0a73618caa4" class="">Whenever you restore either an Automatic Backup or a manual Snapshot, the restored version of the database will be a new RDS instance with a new DNS endpoint.</p><figure id="d764e967-b27b-4511-9e23-83d3ce33c73b" class="image"><a href="RDS/Screenshot_2019-12-16_at_08.55.27.png"><img style="width:1220px" src="RDS/Screenshot_2019-12-16_at_08.55.27.png"/></a></figure><h2 id="97d319af-82e8-4f61-8567-98644e670359" class="">Encryption at rest</h2><p id="409b5a4c-4986-4e39-9dbb-e3a12a440017" class="">Encryption at rest is supported for MySQL, Oracle, SQL Server, PostgreSQL, MariaDB &amp; Aurora. Encryption is done using the AWS Key Management System (KMS) service. Once your RDS instance is encrypted, the data stored at rest in the underlying storage is encrypted, as are its automated backups, read replicas and snapshots.</p><h2 id="2cfff293-8fec-41b1-a574-f36cb379c9dc" class="">Multi-AZ </h2><p id="1846312a-30e9-4b5a-8aae-61ca5adb8bc1" class="">Multi-AZ allows you to have an exact copy of your production database in another Availability Zone. AWS handles the replication for you, so when your production database is written to, this write will automatically be synchronised  to the stand by database.</p><p id="c62c4212-7462-4ba2-b5b3-5d4128319432" class="">In the event of planned database maintenance, DB Instance failure or an Availability Zone failure, Amazon RDS will automatically failover to the standby so that database operations can resume quickly without administrative intervention (see figure below).</p><p id="06c1abc3-30b3-4a75-be8c-656e760f0872" class="">⚠️<strong>Multi-AZ IS FOR DISASTER RECOVERY ONLY.</strong> It is not primarily used for improving performance. For performance improvement, you need Read Replicas.</p><p id="a6df243a-f018-4643-bb7a-2c7e7f19570a" class="">⚠️<strong>You can force a failover</strong> from one AZ to another by rebooting the RDS instance.</p><p id="0422dfbb-845e-40bd-97e9-4b941f3f0e95" class="">Multi-AZ is available for the following databases:</p><ul id="fafad618-ce63-46c7-ac3d-f2444e52fb54" class="bulleted-list"><li>SQL Server</li></ul><ul id="5e4f1a37-0a85-48fe-af5b-bd1d1cbf1f9b" class="bulleted-list"><li>Oracle</li></ul><ul id="79244a28-2ab4-4f25-86d4-3a9a619dc3e3" class="bulleted-list"><li>MySQL Server</li></ul><ul id="43cca1f7-c520-4c0f-a2b6-2238a52b91e5" class="bulleted-list"><li>PostgreSQL</li></ul><ul id="e88e7ec6-f6dd-469a-9e71-851765b0047b" class="bulleted-list"><li>MariaDB</li></ul><figure id="087d6ca5-03be-48ce-a4e5-4ffcc6e0fdf4" class="image"><a href="RDS/Screenshot_2019-12-16_at_08.59.02.png"><img style="width:1480px" src="RDS/Screenshot_2019-12-16_at_08.59.02.png"/></a></figure><h2 id="8b783b24-5b11-4d90-badd-3ad752b74d1b" class="">Read Replicas</h2><p id="8ed1136a-74fd-44c9-b883-96484ae7bd54" class="">Read replicas allow you to have a read-only copy of your production database. This is achieved by using Asynchronous replication from the primary RDS instance to the read replica. You use read replicas primarily for very read-heavy database workloads.</p><p id="81bba596-3d89-4422-a643-d50c5a81e08a" class="">You can create read-only replicas of your database so your EC2 instances read from different read replicas; and then they only write to a single database, that will be replicated out to the replicas.</p><div id="794be772-66dd-437c-a538-75d3038f4d40" class="column-list"><div id="01f4d240-fb1f-42ce-9173-f2a32fb1320b" style="width:50%" class="column"><figure id="19845d95-95bd-4df9-bfe9-f911612a3b76" class="image"><a href="RDS/Screenshot_2019-12-16_at_09.06.03.png"><img style="width:384px" src="RDS/Screenshot_2019-12-16_at_09.06.03.png"/></a></figure></div><div id="f375a7b8-5ce0-43ff-aea9-98dda6e3f997" style="width:50%" class="column"><figure id="20538884-593d-446a-8cee-9f895763d8fa" class="image"><a href="RDS/Screenshot_2019-12-16_at_09.06.10.png"><img style="width:902px" src="RDS/Screenshot_2019-12-16_at_09.06.10.png"/></a></figure></div></div><p id="89bbda09-8ab3-4067-83d3-02eff10119b4" class="">You can even have read replicas of read replicas.</p><figure id="c543dee1-4690-4375-a6bb-4fbf78ad47c0" class="image"><a href="RDS/Screenshot_2019-12-16_at_09.08.35.png"><img style="width:1283px" src="RDS/Screenshot_2019-12-16_at_09.08.35.png"/></a></figure><p id="475c7cb9-720e-45f7-8ba2-ed6ea5ab875d" class=""><strong><em>Read replicas are available for the following databases:</em></strong></p><ul id="56f7cd59-d142-419f-80b5-aa7386fed6e4" class="bulleted-list"><li>MySQL Server</li></ul><ul id="1efa119d-3a24-4c82-b2e7-0a40bf759775" class="bulleted-list"><li>PostgreSQL</li></ul><ul id="7320bc3d-15a4-45ea-958a-f168db07c5f6" class="bulleted-list"><li>MariaDB</li></ul><ul id="32793e32-4834-4c5e-adcd-da71ae3a468e" class="bulleted-list"><li>Oracle</li></ul><ul id="43c6ae56-182e-451d-9bb4-bd711d43dff8" class="bulleted-list"><li>Aurora</li></ul><p id="32ac6d59-efde-4c54-becb-05ca11fc7445" class=""><em><strong>Things to know about Read Replicas:</strong></em></p><ul id="f743add7-b95d-47fd-9df0-096c607e80c9" class="bulleted-list"><li>Used for scaling and improve performance, not for Disaster Recovery.</li></ul><ul id="b1be9dbd-1067-479a-9efd-8ebcc3c5e6fc" class="bulleted-list"><li>Must have automatic backup turned on in order to deploy a read replica.</li></ul><ul id="f22df56c-1212-4d12-849d-d3ed07763c59" class="bulleted-list"><li>You can have up to 5 read replica copies of any database.</li></ul><ul id="f9f998d9-0da6-49fa-8962-6689b46f8947" class="bulleted-list"><li>You can have read replicas of read replicas (but watch out for latency).</li></ul><ul id="ff74b101-d80f-4f2b-abb0-8df036beaed7" class="bulleted-list"><li>Each read replica will have its own DNS endpoint.</li></ul><ul id="4d72980f-835c-4fbe-a0f6-72f93ababf95" class="bulleted-list"><li>You can have read replicas that have Multi-AZ.</li></ul><ul id="95ee1e45-2dae-4b38-8571-c905b45f614c" class="bulleted-list"><li>You can create read replicas of Multi-AZ source databases.</li></ul><ul id="a3d4cd64-98bf-4316-b4a4-b93200083a33" class="bulleted-list"><li>Read replicas can be promoted to be their own databases (master). This breaks the replication.</li></ul><ul id="588b11c0-20fb-496b-863e-7fbb7031bd8c" class="bulleted-list"><li>You can have a read replica in a second region.</li></ul><h2 id="7c366c4c-7c90-4064-ba26-f88b4af8e15c" class="">How you can improve performance of the database?</h2><p id="e5a01c54-51e8-42bc-afa0-3525c1a40bab" class="">There are mainly two ways of doing that:</p><ol id="ecfc4900-9866-428f-aa15-8ef95386640d" class="numbered-list" start="1"><li>Add Read Replicas</li></ol><ol id="cbf94335-c5fc-4e24-a05b-8227bc58c358" class="numbered-list" start="2"><li>Use ElastiCache</li></ol></div></article></body></html>

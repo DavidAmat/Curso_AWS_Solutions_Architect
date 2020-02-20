@@ -1,0 +1,566 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>VPC 101</title><style>
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	opacity: 0.5;
+}
+
+.sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, KaiTi, STKaiTi, '华文楷体', KaiTi_GB2312, '楷体_GB2312', serif; }
+.mono { font-family: Nitti, 'Microsoft YaHei', '微软雅黑', monospace; }
+.pdf .sans { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .code { font-family: Source Code Pro, 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, KaiTi, STKaiTi, '华文楷体', KaiTi_GB2312, '楷体_GB2312', serif, 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .mono { font-family: PT Mono, Nitti, 'Microsoft YaHei', '微软雅黑', monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.highlight-default {
+}
+.highlight-gray {
+	color: rgb(155,154,151);
+}
+.highlight-brown {
+	color: rgb(100,71,58);
+}
+.highlight-orange {
+	color: rgb(217,115,13);
+}
+.highlight-yellow {
+	color: rgb(223,171,1);
+}
+.highlight-teal {
+	color: rgb(15,123,108);
+}
+.highlight-blue {
+	color: rgb(11,110,153);
+}
+.highlight-purple {
+	color: rgb(105,64,165);
+}
+.highlight-pink {
+	color: rgb(173,26,114);
+}
+.highlight-red {
+	color: rgb(224,62,62);
+}
+.highlight-gray_background {
+	background: rgb(235,236,237);
+}
+.highlight-brown_background {
+	background: rgb(233,229,227);
+}
+.highlight-orange_background {
+	background: rgb(250,235,221);
+}
+.highlight-yellow_background {
+	background: rgb(251,243,219);
+}
+.highlight-teal_background {
+	background: rgb(221,237,234);
+}
+.highlight-blue_background {
+	background: rgb(221,235,241);
+}
+.highlight-purple_background {
+	background: rgb(234,228,242);
+}
+.highlight-pink_background {
+	background: rgb(244,223,235);
+}
+.highlight-red_background {
+	background: rgb(251,228,228);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(55, 53, 47, 0.6);
+	fill: rgba(55, 53, 47, 0.6);
+}
+.block-color-brown {
+	color: rgb(100,71,58);
+	fill: rgb(100,71,58);
+}
+.block-color-orange {
+	color: rgb(217,115,13);
+	fill: rgb(217,115,13);
+}
+.block-color-yellow {
+	color: rgb(223,171,1);
+	fill: rgb(223,171,1);
+}
+.block-color-teal {
+	color: rgb(15,123,108);
+	fill: rgb(15,123,108);
+}
+.block-color-blue {
+	color: rgb(11,110,153);
+	fill: rgb(11,110,153);
+}
+.block-color-purple {
+	color: rgb(105,64,165);
+	fill: rgb(105,64,165);
+}
+.block-color-pink {
+	color: rgb(173,26,114);
+	fill: rgb(173,26,114);
+}
+.block-color-red {
+	color: rgb(224,62,62);
+	fill: rgb(224,62,62);
+}
+.block-color-gray_background {
+	background: rgb(235,236,237);
+}
+.block-color-brown_background {
+	background: rgb(233,229,227);
+}
+.block-color-orange_background {
+	background: rgb(250,235,221);
+}
+.block-color-yellow_background {
+	background: rgb(251,243,219);
+}
+.block-color-teal_background {
+	background: rgb(221,237,234);
+}
+.block-color-blue_background {
+	background: rgb(221,235,241);
+}
+.block-color-purple_background {
+	background: rgb(234,228,242);
+}
+.block-color-pink_background {
+	background: rgb(244,223,235);
+}
+.block-color-red_background {
+	background: rgb(251,228,228);
+}
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="b1cdc451-844a-4710-a39e-a132b7865159" class="page sans"><header><img class="page-cover-image" src="https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?ixlib=rb-1.2.1&amp;q=85&amp;fm=jpg&amp;crop=entropy&amp;cs=srgb" style="object-position:center 50%"/><div class="page-header-icon page-header-icon-with-cover"><span class="icon">🏛</span></div><h1 class="page-title">VPC 101</h1></header><div class="page-body"><h2 id="9ee40f12-89ef-44c9-94ee-dc9c709e8f9e" class="">What is a VPC?</h2><p id="86b3efca-e120-4b3e-8c00-c45521b63699" class="">Amazon Virtual Private Cloud (Amazon VPC) lets you provision a logically isolated section of the AWS Cloud where you can launch AWS resources in a virtual network that you define. You have complete control over your virtual networking environment, including selection of your own IP address range, creation of subnets and configuration of route tables and network gateways.</p><blockquote id="734ff861-a97e-44f3-9633-8f5e3137eb25" class="">Think of a VPC as a virtual (logical) data centre in the cloud</blockquote><p id="25e3d7dc-2fd7-4167-aee6-93889839fcc7" class="">You can easily customize the network configuration for your VPC. For example, you can create a public-facing subnet for your webservers that has access to the Internet, and place your backend systems such as databases or application servers in a private-facing subnet with no Internet access. You can leverage multiple layers of security, including security groups and network access control lists (NACL) to help control access to Amazon EC2 instances in each subnet.</p><p id="aac5f1f0-9737-48bb-b834-a70e3393f107" class="">Additionally, you can create a Hardware Virtual Private Network (VPN) connection between your corporate datacenter and your VPC and leverage the AWS cloud as an extension of your corporate datacenter.</p><figure id="d8539a80-7cd3-463a-8b45-18fec4af6f1e" class="image"><a href="VPC%20101/Screenshot_2019-12-27_at_13.07.04.png"><img style="width:1582px" src="VPC%20101/Screenshot_2019-12-27_at_13.07.04.png"/></a></figure><p id="7109c8e2-27d5-4def-9d73-22b9c3df0929" class="">Ip addresses for private networks:</p><figure id="b8b587bd-1896-45fc-8a51-ffb3dd5cf54c" class="image"><a href="VPC%20101/Screenshot_2019-12-27_at_13.10.21.png"><img style="width:720px" src="VPC%20101/Screenshot_2019-12-27_at_13.10.21.png"/></a></figure><p id="729a667a-62ed-4671-9f9d-b08dbb4bdd3c" class="">Cool tool to create subnets:</p><p id="4beb26a1-b13a-4b79-8d46-3099ca2f5819" class=""><a href="https://cidr.xyz/">CIDR.xyz</a></p><h2 id="effd301d-d7c9-4ea3-b6fa-46a44e55a553" class="">VPC Features</h2><p id="9d849601-dc7b-4340-b617-a66b4c167611" class="">What can we do with a VPC</p><ul id="e62c1659-b639-4b91-9612-53826bd92885" class="bulleted-list"><li>Launch instances into a subnet of your choosing</li></ul><ul id="cedc54a9-f56b-4269-b6b7-a1baf1387bcc" class="bulleted-list"><li>Assing custom IP address ranges in each subnet</li></ul><ul id="7c65375c-01e5-4a07-913f-6d140b7a80f3" class="bulleted-list"><li>Configure route tables between subnets</li></ul><ul id="a73a0b32-c920-43ab-8812-9098a4ff8750" class="bulleted-list"><li>Create internet gateway and attach it to our VPC</li></ul><ul id="493a7d75-1733-461b-aac1-7bdb34535b2e" class="bulleted-list"><li>Much better security control over your AWS resources</li></ul><ul id="328dc1d5-9625-4a8d-aa4b-4a64b8b95e08" class="bulleted-list"><li>Instance security groups</li></ul><ul id="5eb42c0e-5380-40f8-9274-c8cac4bb16e7" class="bulleted-list"><li>Subnet network access control lists (ACLS)</li></ul><p id="7af3d3ad-b9f2-4bf5-9a3c-f527f5f68b3a" class="">
+</p><h2 id="4f903953-2352-419d-8e60-377b084035d4" class="">Default VPC vs Custom VPC</h2><ul id="7ad9ab15-cfd6-4884-8f6e-9872ec134537" class="bulleted-list"><li>Default VPC is user friendly, allowing you to immediately deploy instances.</li></ul><ul id="269ed215-fd8f-408c-8fa3-9bc64d0380ff" class="bulleted-list"><li>All Subnets in default VPC have a route out to the internet.</li></ul><ul id="152efc22-4a01-4de4-a6f2-5165191cecd7" class="bulleted-list"><li>Each EC2 instance has both a public and private IP address.</li></ul><h2 id="a5855c79-e8d8-45e8-95fb-2fc42faf5281" class="">VPC Peering (VPC ↔ VPC)</h2><ul id="c3008a2f-fd4f-483c-babe-ca4a0936650d" class="bulleted-list"><li>Allows you to connect one VPC with another via a direct network route using private IP addresses.</li></ul><ul id="a69a6eef-2e9f-4051-a5ae-4733b7e03975" class="bulleted-list"><li>Instances behave as if they were on the same private network</li></ul><ul id="23f8b0cd-a1ce-49a8-ba5d-384a2e9ffc9e" class="bulleted-list"><li>You can peer VPC&#x27;s with other AWS accounts as well as with other VPCs in the same account.</li></ul><ul id="b87008ed-7512-4182-b2b9-933068a3d86c" class="bulleted-list"><li>Peering is in a star configuration: ie 1 central VPC peers with 4 others. NO TRANSITIVE PEERING (you need to create a direct connection between VPCs, in figure, to connect VPC B to VPC C, you have to directly connect between them)<figure id="5f500a3a-5c24-4ace-9fc6-4fb6414f318e" class="image"><a href="VPC%20101/Screenshot_2019-12-27_at_13.18.28.png"><img style="width:336px" src="VPC%20101/Screenshot_2019-12-27_at_13.18.28.png"/></a></figure></li></ul><ul id="af4cd6f6-4d5e-44ac-9583-fc5ca5163fcc" class="bulleted-list"><li>You can peer between regions.</li></ul><h2 id="e1f7d309-d26f-4067-bebe-fd7370148625" class="">Exam Tips</h2><ul id="874ef8c8-ab4a-44ff-be94-22869600c702" class="bulleted-list"><li>VPC Consists of:<ul id="32fd5fa8-0ecf-42cd-b401-020ae6af2a77" class="bulleted-list"><li>Internet Gateways (or Virtual Private Gateways)</li></ul><ul id="12be6947-7931-443c-a916-e6de34c44ac2" class="bulleted-list"><li>Route Tables</li></ul><ul id="c3e391fe-6f34-4162-b328-ba503dfabd96" class="bulleted-list"><li>Network Access Control Lists</li></ul><ul id="e6101cb1-81a5-4a23-a5fd-cf02f4f1f340" class="bulleted-list"><li>Subnets</li></ul><ul id="8b8c6276-9a7f-444d-ae43-77d9d5058966" class="bulleted-list"><li>Security Groups</li></ul></li></ul><ul id="2da9e12d-9a37-40e8-a0ce-c6ea17055a7d" class="bulleted-list"><li>1 Subnet cannot be accross multiple AZ (only in one at the same time.</li></ul><ul id="dd6ba76d-08b7-452e-ac96-798bd0ab2e20" class="bulleted-list"><li>1 AZ can have multiple subnets inside.</li></ul><ul id="eba6033e-3fa5-411a-99e7-c8f48ef495ba" class="bulleted-list"><li>Security Groups are Stateful; Network Access Control Lists are Stateless</li></ul><ul id="82c45cf0-0940-4c6c-b1c0-9c8c2d028724" class="bulleted-list"><li>No transitive peering. </li></ul></div></article></body></html>

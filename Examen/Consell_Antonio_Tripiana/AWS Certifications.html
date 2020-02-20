@@ -1,0 +1,566 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>AWS Certifications</title><style>
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	opacity: 0.5;
+}
+
+.sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, KaiTi, STKaiTi, '华文楷体', KaiTi_GB2312, '楷体_GB2312', serif; }
+.mono { font-family: Nitti, 'Microsoft YaHei', '微软雅黑', monospace; }
+.pdf .sans { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .code { font-family: Source Code Pro, 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, KaiTi, STKaiTi, '华文楷体', KaiTi_GB2312, '楷体_GB2312', serif, 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .mono { font-family: PT Mono, Nitti, 'Microsoft YaHei', '微软雅黑', monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.highlight-default {
+}
+.highlight-gray {
+	color: rgb(155,154,151);
+}
+.highlight-brown {
+	color: rgb(100,71,58);
+}
+.highlight-orange {
+	color: rgb(217,115,13);
+}
+.highlight-yellow {
+	color: rgb(223,171,1);
+}
+.highlight-teal {
+	color: rgb(15,123,108);
+}
+.highlight-blue {
+	color: rgb(11,110,153);
+}
+.highlight-purple {
+	color: rgb(105,64,165);
+}
+.highlight-pink {
+	color: rgb(173,26,114);
+}
+.highlight-red {
+	color: rgb(224,62,62);
+}
+.highlight-gray_background {
+	background: rgb(235,236,237);
+}
+.highlight-brown_background {
+	background: rgb(233,229,227);
+}
+.highlight-orange_background {
+	background: rgb(250,235,221);
+}
+.highlight-yellow_background {
+	background: rgb(251,243,219);
+}
+.highlight-teal_background {
+	background: rgb(221,237,234);
+}
+.highlight-blue_background {
+	background: rgb(221,235,241);
+}
+.highlight-purple_background {
+	background: rgb(234,228,242);
+}
+.highlight-pink_background {
+	background: rgb(244,223,235);
+}
+.highlight-red_background {
+	background: rgb(251,228,228);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(55, 53, 47, 0.6);
+	fill: rgba(55, 53, 47, 0.6);
+}
+.block-color-brown {
+	color: rgb(100,71,58);
+	fill: rgb(100,71,58);
+}
+.block-color-orange {
+	color: rgb(217,115,13);
+	fill: rgb(217,115,13);
+}
+.block-color-yellow {
+	color: rgb(223,171,1);
+	fill: rgb(223,171,1);
+}
+.block-color-teal {
+	color: rgb(15,123,108);
+	fill: rgb(15,123,108);
+}
+.block-color-blue {
+	color: rgb(11,110,153);
+	fill: rgb(11,110,153);
+}
+.block-color-purple {
+	color: rgb(105,64,165);
+	fill: rgb(105,64,165);
+}
+.block-color-pink {
+	color: rgb(173,26,114);
+	fill: rgb(173,26,114);
+}
+.block-color-red {
+	color: rgb(224,62,62);
+	fill: rgb(224,62,62);
+}
+.block-color-gray_background {
+	background: rgb(235,236,237);
+}
+.block-color-brown_background {
+	background: rgb(233,229,227);
+}
+.block-color-orange_background {
+	background: rgb(250,235,221);
+}
+.block-color-yellow_background {
+	background: rgb(251,243,219);
+}
+.block-color-teal_background {
+	background: rgb(221,237,234);
+}
+.block-color-blue_background {
+	background: rgb(221,235,241);
+}
+.block-color-purple_background {
+	background: rgb(234,228,242);
+}
+.block-color-pink_background {
+	background: rgb(244,223,235);
+}
+.block-color-red_background {
+	background: rgb(251,228,228);
+}
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="9f7ccd39-7ee3-44c5-ba01-a386bbf74a9b" class="page serif"><header><img class="page-cover-image" src="https://www.notion.so/images/page-cover/nasa_space_shuttle_challenger.jpg" style="object-position:center 0%"/><div class="page-header-icon page-header-icon-with-cover"><span class="icon">📓</span></div><h1 class="page-title">AWS Certifications</h1></header><div class="page-body"><p id="7001c1c9-f71a-483e-a263-21a2ddd0913a" class="block-color-gray">All things related to AWS Solutions Architect Associate Certification</p><figure id="2eb87f40-5a23-40f1-93c1-e2452dcd76db" class="link-to-page"><a href="AWS%20Certifications/Exam%20Blue%20Print.html"><span class="icon">🌄</span>Exam Blue Print</a></figure><h1 id="edb60b5a-f5f0-44dc-949d-a7aa81c443d4" class="">Table of Contents</h1><hr id="16c04a5f-f038-430a-bbec-ae59fc117259"/><h2 id="bca26c04-d160-4788-9a73-832b6fd1045c" class="">AWS Global Infrastructure</h2><figure id="2555d0b0-f876-4f40-a389-873afea577ba" class="link-to-page"><a href="AWS%20Certifications/Region%20AZ%20Edge%20Location.html"><span class="icon">🌍</span>Region, AZ &amp; Edge Location</a></figure><h2 id="5b6924be-5a2d-4ac4-9bb9-f9558b155e9c" class="">Security, Identity, Compliance</h2><figure id="44e50062-e94b-4d60-a4b8-128c3f54c3a5" class="link-to-page"><a href="AWS%20Certifications/IAM.html"><span class="icon">🔑</span>IAM </a></figure><h2 id="9d973b01-4058-445d-b7c3-a0276bdd1486" class="">Storage</h2><figure id="7ad60d26-86e8-45f5-8159-f52257accca4" class="link-to-page"><a href="AWS%20Certifications/S3.html"><span class="icon">📦</span>S3</a></figure><figure id="9fc6b1a3-4fd6-4721-8725-7b3a0987c6e0" class="link-to-page"><a href="AWS%20Certifications/Storage%20Gateway.html"><span class="icon">🛣</span>Storage Gateway</a></figure><h2 id="fc220e3b-a9b7-49df-9107-9dc6391f2964" class="">Networking, Content Delivery</h2><figure id="f6e5600b-8aec-4010-9404-ef4b1ae5878d" class="link-to-page"><a href="AWS%20Certifications/CloudFront.html"><span class="icon">🗺</span>CloudFront</a></figure><h2 id="0c323972-4f3f-4371-a6bc-4405864a92a7" class="">Migration</h2><figure id="9b78ab1f-3cc1-4594-b453-541a2b6b66e6" class="link-to-page"><a href="AWS%20Certifications/Snowball%20Snowmobile.html"><span class="icon">🚚</span>Snowball / Snowmobile</a></figure><h2 id="a5b0b345-8afa-42e0-ad2a-e833c014928a" class="">Compute</h2><figure id="b22fb0da-db14-4072-a867-6f855ec4c031" class="link-to-page"><a href="AWS%20Certifications/EC2.html"><span class="icon">💻</span>EC2</a></figure><h2 id="8570c5d8-41d3-4dc7-898d-31865cce1c50" class="">Monitoring</h2><figure id="565bc24c-7d21-490e-8af2-528f77e5b990" class="link-to-page"><a href="AWS%20Certifications/Cloudwatch.html"><span class="icon">📈</span>Cloudwatch</a></figure><figure id="976745c3-5370-4c7c-b8ad-0b7eb6059527" class="link-to-page"><a href="AWS%20Certifications/CloudTrail.html"><span class="icon">🎥</span>CloudTrail</a></figure><h2 id="d283a2ce-fa4f-4b9e-9f1f-6557416f317c" class="">CLI (Command Line Interface)</h2><figure id="81bfe370-a1af-43dc-aefe-af0852617168" class="link-to-page"><a href="AWS%20Certifications/CLI%20Command%20Line%20Interface.html"><span class="icon">💻</span>CLI (Command Line Interface)</a></figure><h2 id="7cad2329-a713-4760-a19b-93df5dc76679" class="">Databases</h2><figure id="1fdd452d-2e42-4086-a2ab-86fe2ff8b495" class="link-to-page"><a href="AWS%20Certifications/Databases%20101.html"><span class="icon">💽</span>Databases 101</a></figure><figure id="90aafa4f-1d1e-4dd4-be4d-4d4f3f4ceb8a" class="link-to-page"><a href="AWS%20Certifications/RDS.html"><span class="icon">🏙</span>RDS</a></figure><figure id="a62ef92d-b22d-4eab-8e9f-1f76b9cd4cbf" class="link-to-page"><a href="AWS%20Certifications/DynamoDB.html"><span class="icon">📑</span>DynamoDB</a></figure><figure id="7d21b58c-7844-4394-bfbd-7a7f991b6914" class="link-to-page"><a href="AWS%20Certifications/Redshift.html"><span class="icon">🏮</span>Redshift</a></figure><figure id="ee76fb7b-05e3-45dc-a2ab-5034a0ad9ba7" class="link-to-page"><a href="AWS%20Certifications/Aurora.html"><span class="icon">🌌</span>Aurora</a></figure><figure id="6b799d1f-4283-4ce7-8a79-4f2011596977" class="link-to-page"><a href="AWS%20Certifications/ElastiCache.html"><span class="icon">⚡</span>ElastiCache</a></figure><h2 id="b2f6341b-7483-4fbf-91cb-387226776756" class="">DNS</h2><figure id="f762f249-f2a0-4e92-aed0-f8be7313ab37" class="link-to-page"><a href="AWS%20Certifications/DNS%20101.html"><span class="icon">📚</span>DNS 101</a></figure><figure id="0ed6f443-2893-4ad1-b45d-ae274c6cc150" class="link-to-page"><a href="AWS%20Certifications/Route%2053.html"><span class="icon">🎌</span>Route 53</a></figure><h2 id="3d0419e6-8cd5-497b-8028-0c31727d06ce" class="">VPC</h2><figure id="3cbe685d-9b9c-461e-bd2e-c7045dffb574" class="link-to-page"><a href="AWS%20Certifications/VPC.html"><span class="icon">🔒</span>VPC</a></figure><h2 id="28d94155-22c5-4cfd-9d96-fe9a02dd9572" class="">HA Architecture</h2><figure id="a7b40036-852c-497f-aaab-4f280423c244" class="link-to-page"><a href="AWS%20Certifications/HA%20Architecture.html"><span class="icon">⚡</span>HA Architecture</a></figure><h2 id="8df50d73-3db6-4862-8e6d-85f4581aa3cc" class="">Applications</h2><figure id="2b66b9c4-a745-4547-81bb-6f78dafeacf1" class="link-to-page"><a href="AWS%20Certifications/SQS.html">SQS</a></figure><figure id="ee833211-6c42-4428-aaa9-d2c7838f731e" class="link-to-page"><a href="AWS%20Certifications/SWF.html">SWF</a></figure><figure id="1bac4697-f133-4524-b297-1585cf035949" class="link-to-page"><a href="AWS%20Certifications/SNS.html"><span class="icon">🗨</span>SNS</a></figure><figure id="5419cd8e-ecb7-4e3e-901c-af29376d7f4b" class="link-to-page"><a href="AWS%20Certifications/Elastic%20Transcoder.html">Elastic Transcoder</a></figure><figure id="efb05294-2819-4afc-9077-7a91f2945cdd" class="link-to-page"><a href="AWS%20Certifications/API%20Gateway.html"><span class="icon">🚪</span>API Gateway</a></figure><figure id="0b71e64d-dc8d-4372-9da8-aed35f94d1d6" class="link-to-page"><a href="AWS%20Certifications/Kinesis.html"><span class="icon">🎥</span>Kinesis</a></figure><figure id="c1fb4deb-2c90-4354-9ced-bd6d6f449d55" class="link-to-page"><a href="AWS%20Certifications/Cognito%20Web%20Identity%20Federation.html"><span class="icon">🔒</span>Cognito (Web Identity Federation)</a></figure><figure id="1d9a32cb-bb21-40cd-a9b7-7850b41a7814" class="link-to-page"><a href="AWS%20Certifications/Application%20Summary.html">Application Summary</a></figure><h2 id="c504e018-4c8e-402f-815e-cab1e3bbef4e" class="">Serverless</h2><figure id="556e52cf-a2ae-4fdc-9a19-5e6f3b03679f" class="link-to-page"><a href="AWS%20Certifications/Lambda.html"><span class="icon">⚡</span>Lambda</a></figure><p id="714896da-814e-4319-8e22-b0772f6d2138" class="">
+</p></div></article></body></html>

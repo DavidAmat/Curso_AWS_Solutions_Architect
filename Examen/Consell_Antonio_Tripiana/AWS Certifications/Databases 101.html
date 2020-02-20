@@ -1,0 +1,569 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Databases 101</title><style>
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	opacity: 0.5;
+}
+
+.sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, KaiTi, STKaiTi, '华文楷体', KaiTi_GB2312, '楷体_GB2312', serif; }
+.mono { font-family: Nitti, 'Microsoft YaHei', '微软雅黑', monospace; }
+.pdf .sans { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .code { font-family: Source Code Pro, 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, KaiTi, STKaiTi, '华文楷体', KaiTi_GB2312, '楷体_GB2312', serif, 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .mono { font-family: PT Mono, Nitti, 'Microsoft YaHei', '微软雅黑', monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.highlight-default {
+}
+.highlight-gray {
+	color: rgb(155,154,151);
+}
+.highlight-brown {
+	color: rgb(100,71,58);
+}
+.highlight-orange {
+	color: rgb(217,115,13);
+}
+.highlight-yellow {
+	color: rgb(223,171,1);
+}
+.highlight-teal {
+	color: rgb(15,123,108);
+}
+.highlight-blue {
+	color: rgb(11,110,153);
+}
+.highlight-purple {
+	color: rgb(105,64,165);
+}
+.highlight-pink {
+	color: rgb(173,26,114);
+}
+.highlight-red {
+	color: rgb(224,62,62);
+}
+.highlight-gray_background {
+	background: rgb(235,236,237);
+}
+.highlight-brown_background {
+	background: rgb(233,229,227);
+}
+.highlight-orange_background {
+	background: rgb(250,235,221);
+}
+.highlight-yellow_background {
+	background: rgb(251,243,219);
+}
+.highlight-teal_background {
+	background: rgb(221,237,234);
+}
+.highlight-blue_background {
+	background: rgb(221,235,241);
+}
+.highlight-purple_background {
+	background: rgb(234,228,242);
+}
+.highlight-pink_background {
+	background: rgb(244,223,235);
+}
+.highlight-red_background {
+	background: rgb(251,228,228);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(55, 53, 47, 0.6);
+	fill: rgba(55, 53, 47, 0.6);
+}
+.block-color-brown {
+	color: rgb(100,71,58);
+	fill: rgb(100,71,58);
+}
+.block-color-orange {
+	color: rgb(217,115,13);
+	fill: rgb(217,115,13);
+}
+.block-color-yellow {
+	color: rgb(223,171,1);
+	fill: rgb(223,171,1);
+}
+.block-color-teal {
+	color: rgb(15,123,108);
+	fill: rgb(15,123,108);
+}
+.block-color-blue {
+	color: rgb(11,110,153);
+	fill: rgb(11,110,153);
+}
+.block-color-purple {
+	color: rgb(105,64,165);
+	fill: rgb(105,64,165);
+}
+.block-color-pink {
+	color: rgb(173,26,114);
+	fill: rgb(173,26,114);
+}
+.block-color-red {
+	color: rgb(224,62,62);
+	fill: rgb(224,62,62);
+}
+.block-color-gray_background {
+	background: rgb(235,236,237);
+}
+.block-color-brown_background {
+	background: rgb(233,229,227);
+}
+.block-color-orange_background {
+	background: rgb(250,235,221);
+}
+.block-color-yellow_background {
+	background: rgb(251,243,219);
+}
+.block-color-teal_background {
+	background: rgb(221,237,234);
+}
+.block-color-blue_background {
+	background: rgb(221,235,241);
+}
+.block-color-purple_background {
+	background: rgb(234,228,242);
+}
+.block-color-pink_background {
+	background: rgb(244,223,235);
+}
+.block-color-red_background {
+	background: rgb(251,228,228);
+}
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="1fdd452d-2e42-4086-a2ab-86fe2ff8b495" class="page sans"><header><img class="page-cover-image" src="https://www.notion.so/images/page-cover/gradients_11.jpg" style="object-position:center 40%"/><div class="page-header-icon page-header-icon-with-cover"><span class="icon">💽</span></div><h1 class="page-title">Databases 101</h1></header><div class="page-body"><h1 id="fdc6377b-afbb-40a4-9611-ce1357deec5f" class="">Relational Databases - RDS</h1><h2 id="5249669f-8833-4b86-8919-def85c6f44dc" class="">What is a relational database?</h2><p id="a48a8588-0f91-44d1-8275-2a48d3becd01" class="">Relational database is like a traditional spreadsheet (excel file):</p><ul id="a9332ed3-e41f-48a4-b182-bba812ecb35c" class="bulleted-list"><li>Database</li></ul><ul id="a3c75698-1d46-4b23-b7a5-02095a302bfe" class="bulleted-list"><li>Tables</li></ul><ul id="a3887fb7-517f-498b-8c23-491bbfde4045" class="bulleted-list"><li>Row</li></ul><ul id="39eea3f8-441f-4d92-b77f-d25957e37a99" class="bulleted-list"><li>Fields (Columns)</li></ul><p id="43088547-33c8-407b-83b2-15cd13e870c1" class="">
+</p><figure id="3ced4e8c-d399-4e8f-9890-400a3e734237" class="image"><a href="Databases%20101/Screenshot_2019-12-05_at_16.14.58.png"><img style="width:902px" src="Databases%20101/Screenshot_2019-12-05_at_16.14.58.png"/></a></figure><h2 id="ef5093dc-531d-4b46-abc6-614d130e11ff" class="">Relational databases on AWS</h2><ul id="de26cf58-61fa-4b01-94fc-0bfa9dddc482" class="bulleted-list"><li>SQL Server</li></ul><ul id="7c44e92e-005c-4fa8-98fa-e0fcc02ce29e" class="bulleted-list"><li>Oracle</li></ul><ul id="0900418c-7ec0-4c2b-9cca-5fd9ddcfa6e2" class="bulleted-list"><li>MySQL Server</li></ul><ul id="0195716a-303e-4064-8c2f-98b4ac97a654" class="bulleted-list"><li>PostgreSQL</li></ul><ul id="055205ca-8e10-45b6-a2ff-3e9f5c2f2254" class="bulleted-list"><li>Aurora</li></ul><h2 id="bc7bc3e9-1cfb-4459-acd5-20da2ec3ed1a" class="">RDS → Relational Database Service on AWS</h2><p id="db885dde-342a-41ab-8893-c27efbea762e" class="">RDS is an OLTP (OnLine Transaction Processing) solution .</p><p id="5922843b-eaf4-4039-9c37-98be75e3eba1" class="">RDS has two key features:</p><ul id="d86e15bf-0536-4ded-8bcc-18d95a267105" class="bulleted-list"><li><strong>Multi-AZ</strong> - For Disaster Recovery<p id="ac517dc0-0e56-4259-a8c4-1bc3a7942252" class="">Failover is automatic: If primary database fails, aws automatically change DNS pointer to another database in another AZ.</p></li></ul><ul id="9e3869ed-ee8d-4945-af35-8edabb0f7d5e" class="bulleted-list"><li><strong>Read Replicas</strong> - For Performance<p id="80ae25c8-22c5-483a-929f-ab61c84e8849" class="">aws creates a read replica so a portion of your calls go to the replica DB (lower load on first db). Limited to 5 replicas.</p></li></ul><h1 id="ec4e7f29-5276-432d-a2fd-58195b6f6e96" class="">Non Relational Databases - DynamoDB</h1><p id="ea74963e-ab32-45e3-8505-c796aebdb4f4" class="">Also called NoSQL / JSON</p><p id="eb759399-0131-4779-8007-f57cc5079801" class="">
+</p><h2 id="ef4a09b6-89dc-4ae6-b6aa-8da98952cddd" class="">What is a non relational database?</h2><p id="00432248-1eec-42b9-9815-916ff79bc46b" class="">Non relational databases are as follows:</p><ul id="89f9d3df-3eb2-4eaa-a568-a85eea9d6289" class="bulleted-list"><li>Collection → Table</li></ul><ul id="8bb753fc-3788-4590-8ca0-d1a4bc6e1900" class="bulleted-list"><li>Document → Row</li></ul><ul id="c4c60a35-1a27-4526-909c-98b76508e15d" class="bulleted-list"><li>Key Value Pairs → Fields/Columns</li></ul><p id="3aa4d351-fd83-4880-8ab5-5c0f768a72b3" class="">
+</p><p id="8ac7c9e4-0b8e-4c0b-86f9-127b5debe62e" class="">JSON example:</p><figure id="27f6f141-2d7f-4e6f-8e74-fbd6753fbb77" class="image"><a href="Databases%20101/Screenshot_2019-12-05_at_16.24.49.png"><img style="width:736px" src="Databases%20101/Screenshot_2019-12-05_at_16.24.49.png"/></a></figure><h1 id="b3bfa767-d921-4432-8708-49a2dd58f26b" class="">Data Warehousing - Redshift</h1><p id="d33f56c1-1e9a-4ff4-bd3a-f2829ff93233" class="">Data warehousing databases use different type of architecture both from a database perspective and infrastructure ayer. Amazon&#x27;s Data Warehouse Solution is Called <strong>Redshift.</strong></p><p id="17ee34c7-65d8-43d3-99ac-f194ad9b8105" class="">Used for business intelligence. Tools like Cognos, Jaspersoft, SQL Server Reporting Services, Oracle, Hyperion, SAP NetWeaver.</p><p id="1d64a042-0f03-4a2b-bf46-bf30dd7d60c6" class="">Used to pull in very large and complex data sets. Usually used by management to do OLAP queries on data (such as current performance vs targets etc).</p><h3 id="67d70b1b-9b56-49aa-8dc5-5c763431617b" class="">OLTP vs OLAP </h3><p id="4f3a33ec-f2de-4e6e-be8a-23de21159f54" class=""><strong>OLTP</strong> - Online Transaction Processing (OLTP) differs from OLAP Online Analytics Processing (OLAP) in terms of the types of queries you will run.</p><p id="62fbf2d5-2b8b-48ee-86c7-68853fd60de2" class=""><em>OLTP Example:  (ERP)</em></p><ul id="cfe92df3-2acc-41fb-b3ef-fe170bf8fc88" class="bulleted-list"><li>QUERY → select the order number 2120121</li></ul><ul id="f6cadc14-ba30-4ac4-9a36-a4eed51f49a1" class="bulleted-list"><li>ANSWER → Pulls up a row of data such as Name, Date, Address to Deliver to, Delivery Status etc.</li></ul><p id="4f9f2a00-48b9-415d-9ca2-8fa04606b7c5" class=""><em>OLAP Example: (Analytics)</em></p><ul id="f91c8b6f-822d-463a-8e14-755e5dee2468" class="bulleted-list"><li>QUERY → Net Profit for EMEA and Pacific for the Digital Radio Product.</li></ul><ul id="6b0210e4-fc77-45c2-b16c-ac0526f52394" class="bulleted-list"><li>ANSWER → Pulls in large numbers of records such as: Sum of Radios Sold in EMEA, Sum of Radios sold in Pacific, Unit Cost of Radio in each region, Sales price of each radio, Sales price - unit cost. </li></ul><figure id="d977a930-748b-4780-8d0f-9b5048f6f47b" class="image"><a href="Databases%20101/download.png"><img style="width:186px" src="Databases%20101/download.png"/></a></figure><h1 id="3ba3090d-033a-43e6-9e8c-b7e560c48a8d" class="">Caching - ElastiCache</h1><p id="0d5719d3-54b7-4388-8120-bb6e4a42d507" class="">ElastiCache to speed up performance of existing databases (frequent identical queries).</p><p id="e0bbf358-e13e-4b49-997c-03420eedf79b" class="">ElastiCache is a web service that makes it easy to deploy , operate and scale an in-memory cache in the cloud. The service improves the performance of web applications by allowing you to retrieve information from fast, managed, in-memory caches, instead of relying entirely on slower disk-based databases.</p><p id="dd218dfa-9e34-4fe9-bbf1-b69ef4084bd1" class="">ElastiCache supports to open-source in-memory caching engines:</p><ul id="1cbb8da3-7969-4832-942b-5f2de078294c" class="bulleted-list"><li>Redis</li></ul><ul id="06a1a4cb-8976-4afa-b54c-1c28f650dcfa" class="bulleted-list"><li>Memcached</li></ul><p id="8bdf8f45-e468-48a9-b3c2-be7bdc2197b8" class="">
+</p></div></article></body></html>

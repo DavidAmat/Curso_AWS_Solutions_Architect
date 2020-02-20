@@ -1,0 +1,565 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>API Gateway</title><style>
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	opacity: 0.5;
+}
+
+.sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, KaiTi, STKaiTi, '华文楷体', KaiTi_GB2312, '楷体_GB2312', serif; }
+.mono { font-family: Nitti, 'Microsoft YaHei', '微软雅黑', monospace; }
+.pdf .sans { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .code { font-family: Source Code Pro, 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, KaiTi, STKaiTi, '华文楷体', KaiTi_GB2312, '楷体_GB2312', serif, 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .mono { font-family: PT Mono, Nitti, 'Microsoft YaHei', '微软雅黑', monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.highlight-default {
+}
+.highlight-gray {
+	color: rgb(155,154,151);
+}
+.highlight-brown {
+	color: rgb(100,71,58);
+}
+.highlight-orange {
+	color: rgb(217,115,13);
+}
+.highlight-yellow {
+	color: rgb(223,171,1);
+}
+.highlight-teal {
+	color: rgb(15,123,108);
+}
+.highlight-blue {
+	color: rgb(11,110,153);
+}
+.highlight-purple {
+	color: rgb(105,64,165);
+}
+.highlight-pink {
+	color: rgb(173,26,114);
+}
+.highlight-red {
+	color: rgb(224,62,62);
+}
+.highlight-gray_background {
+	background: rgb(235,236,237);
+}
+.highlight-brown_background {
+	background: rgb(233,229,227);
+}
+.highlight-orange_background {
+	background: rgb(250,235,221);
+}
+.highlight-yellow_background {
+	background: rgb(251,243,219);
+}
+.highlight-teal_background {
+	background: rgb(221,237,234);
+}
+.highlight-blue_background {
+	background: rgb(221,235,241);
+}
+.highlight-purple_background {
+	background: rgb(234,228,242);
+}
+.highlight-pink_background {
+	background: rgb(244,223,235);
+}
+.highlight-red_background {
+	background: rgb(251,228,228);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(55, 53, 47, 0.6);
+	fill: rgba(55, 53, 47, 0.6);
+}
+.block-color-brown {
+	color: rgb(100,71,58);
+	fill: rgb(100,71,58);
+}
+.block-color-orange {
+	color: rgb(217,115,13);
+	fill: rgb(217,115,13);
+}
+.block-color-yellow {
+	color: rgb(223,171,1);
+	fill: rgb(223,171,1);
+}
+.block-color-teal {
+	color: rgb(15,123,108);
+	fill: rgb(15,123,108);
+}
+.block-color-blue {
+	color: rgb(11,110,153);
+	fill: rgb(11,110,153);
+}
+.block-color-purple {
+	color: rgb(105,64,165);
+	fill: rgb(105,64,165);
+}
+.block-color-pink {
+	color: rgb(173,26,114);
+	fill: rgb(173,26,114);
+}
+.block-color-red {
+	color: rgb(224,62,62);
+	fill: rgb(224,62,62);
+}
+.block-color-gray_background {
+	background: rgb(235,236,237);
+}
+.block-color-brown_background {
+	background: rgb(233,229,227);
+}
+.block-color-orange_background {
+	background: rgb(250,235,221);
+}
+.block-color-yellow_background {
+	background: rgb(251,243,219);
+}
+.block-color-teal_background {
+	background: rgb(221,237,234);
+}
+.block-color-blue_background {
+	background: rgb(221,235,241);
+}
+.block-color-purple_background {
+	background: rgb(234,228,242);
+}
+.block-color-pink_background {
+	background: rgb(244,223,235);
+}
+.block-color-red_background {
+	background: rgb(251,228,228);
+}
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="efb05294-2819-4afc-9077-7a91f2945cdd" class="page sans"><header><img class="page-cover-image" src="https://images.unsplash.com/photo-1550697318-929498858774?ixlib=rb-1.2.1&amp;q=85&amp;fm=jpg&amp;crop=entropy&amp;cs=srgb" style="object-position:center 24.870000000000005%"/><div class="page-header-icon page-header-icon-with-cover"><span class="icon">🚪</span></div><h1 class="page-title">API Gateway</h1></header><div class="page-body"><h1 id="5047ac41-0c8d-4869-99c8-61d042bdb904" class="">What is API Gateway?</h1><p id="03f2f02c-c457-4c51-b413-a9211782040f" class="">Amazon API Gateway is a fully managed service that makes it easy for developers to publish, maintain, monitor, and secure APIs at any scale.</p><p id="a8f8501b-618e-4f05-8580-50772c3cfbb0" class="">With a flew clicks in the AWS Management Console, you can create an API that acts as a &quot;front door&quot; for applications to access data, business logic, or functionality from your back-end services, such as applications running on Amazon Elastic Compute Cloud (EC2), code running on AWS Lambda, or any web application.</p><h1 id="692a4a63-7beb-4180-9cef-1e0c5d3b7075" class="">How API Gateway works</h1><figure id="dec4f4b6-82ac-47af-b25a-0169dae7e7e3" class="image"><a href="API%20Gateway/Screenshot_2020-01-28_at_10.43.52.png"><img style="width:1252px" src="API%20Gateway/Screenshot_2020-01-28_at_10.43.52.png"/></a></figure><h1 id="2f253068-bfc6-44d8-b4c8-f4bfc1d73003" class="">What Can API Gateway do?</h1><ul id="f660bdba-5e5e-4782-98ce-0c3d974f83f9" class="bulleted-list"><li>Expose HTTPS endpoints to define a RESTful API</li></ul><ul id="217af5f3-ba44-4258-8be3-8a2221101fa5" class="bulleted-list"><li>Serverless-ly connect to services like Lambda &amp; DynamoDB</li></ul><ul id="1d91b330-6b39-4544-b93e-c1cbea3abc71" class="bulleted-list"><li>Send each API endpoint to a different target</li></ul><ul id="f7d8f406-82bd-4385-bacb-95fb4d4c4e6f" class="bulleted-list"><li>Run efficiently with low cost</li></ul><ul id="39cfbaab-4319-4d9d-955d-aa3a3cd39549" class="bulleted-list"><li>Scale effortlessly</li></ul><ul id="a28b8991-9b28-4c84-86f3-566406ede759" class="bulleted-list"><li>Track and control usage by API key</li></ul><ul id="c25cef61-53f0-4ad3-9bd2-ffffbff13e2c" class="bulleted-list"><li>Throttle requests to prevent attacks</li></ul><ul id="7f317085-48b3-4307-a1c4-e6ec31350032" class="bulleted-list"><li>Connect to CloudWatch to log all requests for monitoring</li></ul><ul id="f63ad4bb-f627-449c-9315-a8a959b3b866" class="bulleted-list"><li>Maintain multiple versions of your API</li></ul><h1 id="1511f70c-4bb6-4d4d-b8aa-c6f228d86e9d" class="">How Do I configure API Gateway?</h1><ul id="0792b0e3-0994-4ab7-b86f-5fce70605cb7" class="bulleted-list"><li>Define an API (container)</li></ul><ul id="e5fa684a-620a-4a8b-8b5a-78d17201f92f" class="bulleted-list"><li>Define Resources and nested Resources (URL paths)</li></ul><ul id="f84649df-ba42-47e9-8792-019ba82f6621" class="bulleted-list"><li>For each Resource:<ul id="29e35c23-c194-442b-9683-fbcbb544abdf" class="bulleted-list"><li>Select supported HTTP methods (verbs)</li></ul><ul id="a98c7b19-3623-4f48-964b-50a394ad5a9a" class="bulleted-list"><li>Set security</li></ul><ul id="2729870d-094e-4cd4-b603-cc96f04127fd" class="bulleted-list"><li>Choose target (such as EC2, Lambda, dynamoDB, etc.)</li></ul><ul id="6e4767d0-780e-4071-8a9c-096e6778a37b" class="bulleted-list"><li>Set request and response transformations</li></ul></li></ul><h1 id="d6cbc0f9-231f-45ca-9641-6e08895cf5cc" class="">How Do I Deploy API Gateway?</h1><p id="d471e560-72e6-4905-8539-7b93ad9672eb" class="">Deploy API to a stage:</p><ul id="af15f468-9d14-4ee6-891d-e0a33353f27f" class="bulleted-list"><li>Uses API Gateway domain, by default</li></ul><ul id="10aaf8b2-05b1-4734-af2f-7817c8470cb9" class="bulleted-list"><li>Can use custom domain</li></ul><ul id="8450d239-6a40-4725-a269-07976e5f0c7c" class="bulleted-list"><li>Now supports AWS Certificate Manager: free SSL/TLS certs</li></ul><h1 id="cf68b9cf-696d-4e4f-858b-72bcaf4939df" class="">API Gateway Caching</h1><p id="1b2c88af-996d-4c46-a2a9-2bf8757fc7c7" class="">You can enable API caching in Amazon API Gateway to cache your endpoint&#x27;s response. With caching, you can reduce the number of calls made to your endpoint and also improve the latency of the requests to your API. When you enable caching for a stage, API Gateway caches responses from your endpoint for a specified time-to-live (TTL) period, in seconds. API Gateway then responds to the request by looking up the endpoint response from the cache instead of making a request to your endpoint (EC2, lambda,etc.)</p><h1 id="503c19d6-529e-4838-ab1d-fabc4c771e2e" class="">Same Origin Policy</h1><p id="78a3df71-169c-43b9-8455-4cfd89214ac7" class="">In computing, the same-origin policy is an important concept in the web application security model. Under the policy, a web browser permits scripts contained in a first web page to access data in a second web page, but only if both web pages have the same origin.</p><p id="dbe23c70-6269-4cd8-b923-9e5f5579b347" class="">This is done to prevent Cross-Site Scripting (XSS) attacks.</p><ul id="fb0cd886-43fd-4e66-806b-f92ab4b7934e" class="bulleted-list"><li>Enforced by web browsers</li></ul><ul id="f20b336b-7ed5-4485-9cf6-9b1778b817df" class="bulleted-list"><li>Ignored by tools like PostMan and curl</li></ul><h1 id="89079534-ccdd-4419-a81d-57caea60e90a" class="">CORS Explained</h1><p id="e7f4d399-dd6e-4af4-adc2-4db3f39e4e9a" class=""><strong>CORS is one way the server at the other end (not the client code in the browser) can relax the same-origin policy.</strong></p><p id="6367cdb0-d98c-4c05-9bb0-4f7e075d3210" class="">Cross-origin resource sharing (CORS) is a mechanism that allows restricted resources (e.g. fonts) on a web page to be requested from another domain outside the domain from which the first resource was served.</p><p id="7f859990-b0e9-4ad4-b104-fd779a8d4c29" class="">So, CORS is a way of a web page in one domain being able to talk to a webpage in another domain and request resources from it.</p><h1 id="cce20922-0c4d-42d7-b84a-0bc8f6635d73" class="">CORS in Action</h1><ul id="96accdce-88f4-444c-aeaa-c5289cdbe236" class="bulleted-list"><li>Browser makes an HTTP OPTIONS call for a URL (OPTIONS is an HTTP method like GET, PUT and POST)</li></ul><ul id="bcf7d205-a3de-4369-8183-9153056444b7" class="bulleted-list"><li>Server returns a response that says: &quot;These other domains are approved to GET this URL&quot;</li></ul><ul id="598a95a7-c446-4400-9402-a086fc0cafd8" class="bulleted-list"><li>Error - &quot;Origin policy cannot be read at the remote resource?&quot; You need to enable CORS on API Gateway.</li></ul><h1 id="27d128b4-7aac-470d-8d59-a5f4c899ad39" class="">🔥Exam Tips</h1><p id="4f772fdc-5572-4a7e-8ec7-54547af8ee90" class="">API Gateway Exam Tips:</p><ul id="cea77088-b7b3-47fa-8f87-0397930966d0" class="bulleted-list"><li>Remember what API Gateway is at a high level</li></ul><ul id="7659c6ee-64de-4133-919c-6eb210383590" class="bulleted-list"><li>API Gateway has caching capabilities to increase performance</li></ul><ul id="8c29ec97-2412-45fa-b12c-6443df2840e2" class="bulleted-list"><li>API Gateway is low cost and scales automatically</li></ul><ul id="62022fde-7906-4e66-b9ad-37621ab4840c" class="bulleted-list"><li>You can throttle API Gateway to prevent attacks</li></ul><ul id="6c6f009c-10f6-41b0-8719-663cfe5f7229" class="bulleted-list"><li>You can log results to CloudWatch</li></ul><ul id="063ffbd4-32c8-406c-81a4-1b9e25e5d427" class="bulleted-list"><li>If you are using Javascript/AJAX that uses multiple domains with API Gateway, ensure that you have enabled CORS on API Gateway.</li></ul><ul id="aa54b266-4b69-444a-b405-c972564baaa3" class="bulleted-list"><li>CORS is enforced by the client</li></ul></div></article></body></html>

@@ -271,6 +271,323 @@ We can go to Reserved Instances and look for prices and duration terms of your p
 # EBS Volumes and Snapshots
 
 
+## Encrypted Root Device Volumes & Snapshot
 
 
+- The Root Device Volume is the EBS Volume which has the OS installed on it
+- You can encrypt root device volumes **when creating an instance**, in the past you could NOT.
 
+### How to encrypt a RUNNING INSTANCE?
+
+- **Create a new instance without encryption**:
+
+
+<img src="imgs\img17.PNG" width="600px" />
+<img src="imgs\img18.PNG" width="600px" />
+
+- Go to Volumes and Create Snapshot from the existing root device volume:
+
+<img src="imgs\img19.PNG" width="600px" />
+<img src="imgs\img20.PNG" width="600px" />
+
+- Create an Encrypted Copy of our Snapshot:
+
+<img src="imgs\img21.PNG" width="600px" />
+<img src="imgs\img22.PNG" width="600px" />
+
+- Create an image from the encrypted snapshot:
+
+<img src="imgs\img23.PNG" width="600px" />
+<img src="imgs\img24.PNG" width="600px" />
+
+- This creates an AMI, so we use that AMI to launch a new encrypted EC2 instance
+
+<img src="imgs\img25.PNG" width="600px" />
+<img src="imgs\img26.PNG" width="600px" />
+
+- You will see in the Add Storage section that the volume is encrypted (you cannot select the Not Encryted version!!):
+<img src="imgs\img27.PNG" width="600px" />
+<img src="imgs\img28.PNG" width="600px" />
+
+### Exam tips
+
+- Snapshots of encrypted volumes are encrypted automatically
+-  Volumes restored from encrypted snapshots are encrypted automatically
+- You can share snashots, only if UNENCRYPTED
+- These snapshots can be shared with other AWS accounts or made public (unencrypted)
+- You can NOW encrypt root device volumes upon creation of the EC2 instance 
+- If you want to encrypt existing instance
+	- create a snapshot of the unencrypted Root Device Volume:
+	- Create a copy of the snapshot and select the encrypt option
+	- Create an AMI from the encrypted Snapshot
+	- Use that AMI to launch new encrypted instances
+
+
+# CloudWatch
+
+- Go to EC2 and launch a **new instance and ENABLE CloudWatch detailed monitoring**.
+- This allows to monitor our instance at **1 minute intervals**
+
+<img src="imgs\img29.PNG" width="600px"/>
+
+- If we go to our instance Status Checks, we will see that both tests (System Status and Instance Status) are passed (green):
+
+<img src="imgs\img30.PNG" width="600px"/>
+
+- On **Monitoring we see HOST level metrics: CPU, Disk, Network, Status Checks...**.
+
+<img src="imgs\img31.PNG" width="600px"/>
+
+
+## Set up an alert
+
+Go to **Services > Management & Governance > CloudWatch**
+
+- Go to Alarms and Create an alarm:
+
+<img src="imgs\img32.PNG" width="600px"/>
+
+- Select a metric:
+
+<img src="imgs\img33.PNG" width="600px"/>
+<img src="imgs\img34.PNG" width="600px"/>
+<img src="imgs\img35.PNG" width="600px"/>
+
+- We do it on a per-instance metric and **find CPU utilitzation for you instance**:
+
+<img src="imgs\img36.PNG" width="600px"/>
+
+- Click select metric:
+
+<img src="imgs\img37.PNG" width="600px"/>
+
+- Put a name of your alarm and whenever CPU is > 90 for **1 minute** , **send me an alarm**:
+
+<img src="imgs\img38.PNG" width="600px"/>
+
+- **Actions**:
+	- Whenever the alarm State is ALARM
+	- Send notification to a email list (give a name to send notification to):
+
+	<img src="imgs\img39.PNG" width="600px"/>
+
+For the created alarm:
+
+<img src="imgs\img40.PNG" width="600px"/>
+
+**Now I do an SSH to my EC2 instance**:
+
+<img src="imgs\img41.PNG" width="600px"/>
+
+- Put the instance into an infinite loop:
+
+<img src="imgs\img42.PNG" width="600px"/>
+
+- That's gonna maxout your CPU... In a minute you will get an email that your EC2 instance is in a state of an ALARM so we receive the email: 
+
+<img src="imgs\img43.PNG" width="600px"/>
+
+- In the monitoring section I can see that the CPU utilization has reach 100%... 
+<img src="imgs\img44.PNG" width="600px"/>
+
+- Go back to CloudWatch and see that in Alarms, an alarm has been triggered:
+
+<img src="imgs\img45.PNG" width="600px"/>
+
+- We can create a dashboard (dashboards can be global taking into account monitoring performances of **other regions**): 
+
+<img src="imgs\img46.PNG" width="600px"/>
+
+- In the Logs, we can do performance logging essentially and send all logs to cloudwatch
+
+<img src="imgs\img47.PNG" width="600px"/>
+
+- CloudWatch Events: near real time stream of system events that describe changes in AWS resources... 
+
+<img src="imgs\img48.PNG" width="600px"/>
+
+## Exam Tips
+
+- **Standard Monitoring** = 5 minutes
+- **Detailed Monitoring** = 1 minute
+
+- Create dashboards to see what happens to your AWS environment
+- Create alarms to notify particular thresholds are hit in terms of performance 
+- Create events: helps to respond to state changes in your AWS resources
+- Create logs: CW allow to aggregate, monitor and store logs
+- CloudWatch monitors performance while CloudTrial monitors API calls in the AWS platform.
+	- Who setup an S3 bucket ? Who provisioned the EC2 instance ?  -> Cloud Trail
+	- Performance -> CloudWatch
+
+# AWS Command Line (CLI) 
+
+Once you have you instance EC2, to launch the CLI, do an ssh:
+
+```bash
+ssh ec2-user@<ip_address> -i XXXXX.pem
+sudo su
+```
+
+To activate the CLI, you have to **configure you credentials** to programmatic access:
+
+
+```bash
+aws configure 
+```
+
+- This asks for Access Key ID and Secret Access Key, Default region and default out (empty)
+
+<img src="imgs\img49.PNG" width="600px"/>
+
+If we run:
+
+```bash
+aws s3 ls
+```
+
+- I will be able to access S3 and list all my buckets. 
+- **Create a new BUCKET**:
+```bash
+aws s3 mb s3://<name_bucket> #(unique)
+```
+With the **CLI** you can **provision EC2 instances, almost anything**.
+
+ - Then you can explore the ~ directory (there is a hidden directory .aws):
+ ```bash
+cd ~
+cd .aws
+```
+
+- Here, there is you config and credentials:
+
+<img src="imgs\img50.PNG" width="600px"/>
+<img src="imgs\img51.PNG" width="600px"/>
+
+- This a security **risk**, they can use that access key to access on other EC2 instances... 
+- That is why AWS recommends **using ROLES** (see **NEXT SECTION ABOUT ROLES**)
+
+## Exam tips
+
+- We can interact with AWS from anywhere just by using the CLI
+- You need to setup access in IAM 
+	- Create a user with programmatic access:
+		- This enables an access key ID and secreta ccess key for the AWS API, CLI and SDK 
+
+	<img src="imgs\img52.PNG" width="600px"/>
+
+	- Put the user in a group, apply **Administrator access policy** to that group so the user will inherit Administrator access. 
+	- THen you get your Access Key ID and Secret Access Key, which will be needed to launch the aws configure command 
+	- **If you loose your credentials, go to IAM > Users**, click into your user, and go to **Security Credentials** and **Make Inactive** and then "Create access key" to create a new one
+
+	<img src="imgs\img53.PNG" width="600px"/>
+
+	<img src="imgs\img54.PNG" width="600px"/>
+
+- Commands are not in the exam of the CLI
+
+# IAM Roles
+
+Roles enables us to **interact with the AWS platform** without having to pass our **access keys IDs**. 
+Roles are used for EC2 and every other AWS service.
+
+- **Go to IAM > Roles** and you will see a role that we created when enabling cross-region replication for our buckets.
+- We create a new one on EC2.
+
+<img src="imgs\img55.PNG" width="600px"/>
+
+- The I am asked to attach a policy: give Administrator access for this role:
+
+<img src="imgs\img56.PNG" width="600px"/>
+
+- Once created, we to to **EC2 > Instances**. And ssh to your instance:
+
+<img src="imgs\img57.PNG" width="600px"/>
+
+- Remember that we complained about the fact that inside the CLI we have a folder .aws that stores the credentials, hence, to avoid this, we delete that folder. 
+
+- **Once deleted, if I try to do an aws s3 ls I won't be able to see the buckets cause I deleted the credentials**:
+
+<img src="imgs\img58.PNG" width="600px"/>
+
+- We can **attach a role to the EC2 isntance**:
+
+<img src="imgs\img59.PNG" width="600px"/>
+<img src="imgs\img60.PNG" width="600px"/>
+
+- We can review the Administrator Access policy in the Roles by looking at the info for the IAM Role and looking at the policy attached:
+
+<img src="imgs\img62.PNG" width="600px"/>
+<img src="imgs\img61.PNG" width="600px"/>
+
+- Now, if I go to my CLI, you will see that you can ls your S3, since we have full administrator access in the AWS environment:
+
+<img src="imgs\img63.PNG" width="600px"/>
+
+- But the .aws it does not exists (no credentials being saved on the instances .aws folder). **This is done to prevent hackers to take your credentials**
+
+## Exam tips
+
+- **Roles are FAR MORE SECURE than storing your access key and secret access key on EC2 instance (.aws folder)**.
+- Roles are easier to manage (if you have 1,000 instances, and you update the key... you would have to change manually your 1,000 instance credentials) whereas if you have a role you can go in an change the role and that effect will take place immediately.
+- Roles can be assigned to an EC2 instance after it is created using the CONSOLE or CLI.
+- **Roles are UNIVERSAL, you can use them in any region** (you create them in IAM)
+
+
+# Bootstrap Scripts - Bash (Automate AWS Deployments)
+
+Way to **run things at the CLI** when your AWS EC2 instance **first boots**, install software, run commands...
+
+- Create an instance with IAM Role to Administrator Access:
+
+<img src="imgs\img64.PNG" width="600px"/>
+
+- Then I will create an S3 Bucket using my Bootstrap Script. 
+- A **Bootstrap Script is provided in the Advanced Details when creating an Instance**:
+
+<img src="imgs\img65.PNG" width="600px"/>
+<img src="imgs\img66.PNG" width="200px"/>
+<img src="imgs\img67.PNG" width="400px"/>
+
+- We go to our www html to create a web page with echo and redirect to index.html.
+- We create a random S3 bucket
+- Back up my web page to my S3 bucket:
+
+```bash
+aws s3 cp index.html s3://<bucket_name>
+```
+
+- We create the instance! You should be able to navigate to the IP Public IP Address:
+
+<img src="imgs\img68.PNG" width="600px"/>
+
+<img src="imgs\img69.PNG" width="300px"/>
+
+- And see that we have created an S3 bucket:
+
+<img src="imgs\img70.PNG" width="300px"/>
+
+
+# EC2 Instance Metadata (curl)
+
+- SSH insto your EC2 instance, and sudo su.
+
+- Do a curl command to **user/data** or **meta-data** to see our bootstrap script:
+
+```bash
+curl http://169.254.169.2/latest/meta-data/<option>
+# <option> = local-ipv4
+```
+<img src="imgs\img71.PNG" width="300px"/>
+
+- We can output the output to a bootstrap.txt file, we will see the script we made in the previous section. 
+
+- **Curl command can help us to get the data from our EC2 instance** (user / metadata) and hit the local-ipv4 option:
+
+<img src="imgs\img72.PNG" width="300px"/>
+
+- **What I can do is create a BootStrap script that runs this curl, takes the public IP, writes it to a file and then it copies automatically to S3, and that could trigger a Lambda Function and store that IP address in a Database**. 
+
+## Exam tips
+
+- Metada is used to get information about an instance (such as Public IP)
+- You can curl to latest: **meta-data** or **user-data** (BootStrap script that you run when first provisioned the instance)

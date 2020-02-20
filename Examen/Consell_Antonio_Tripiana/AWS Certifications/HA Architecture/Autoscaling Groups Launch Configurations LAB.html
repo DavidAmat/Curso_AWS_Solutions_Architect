@@ -1,0 +1,567 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Autoscaling Groups &amp; Launch Configurations - LAB</title><style>
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	opacity: 0.5;
+}
+
+.sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, KaiTi, STKaiTi, '华文楷体', KaiTi_GB2312, '楷体_GB2312', serif; }
+.mono { font-family: Nitti, 'Microsoft YaHei', '微软雅黑', monospace; }
+.pdf .sans { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .code { font-family: Source Code Pro, 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, KaiTi, STKaiTi, '华文楷体', KaiTi_GB2312, '楷体_GB2312', serif, 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .mono { font-family: PT Mono, Nitti, 'Microsoft YaHei', '微软雅黑', monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.highlight-default {
+}
+.highlight-gray {
+	color: rgb(155,154,151);
+}
+.highlight-brown {
+	color: rgb(100,71,58);
+}
+.highlight-orange {
+	color: rgb(217,115,13);
+}
+.highlight-yellow {
+	color: rgb(223,171,1);
+}
+.highlight-teal {
+	color: rgb(15,123,108);
+}
+.highlight-blue {
+	color: rgb(11,110,153);
+}
+.highlight-purple {
+	color: rgb(105,64,165);
+}
+.highlight-pink {
+	color: rgb(173,26,114);
+}
+.highlight-red {
+	color: rgb(224,62,62);
+}
+.highlight-gray_background {
+	background: rgb(235,236,237);
+}
+.highlight-brown_background {
+	background: rgb(233,229,227);
+}
+.highlight-orange_background {
+	background: rgb(250,235,221);
+}
+.highlight-yellow_background {
+	background: rgb(251,243,219);
+}
+.highlight-teal_background {
+	background: rgb(221,237,234);
+}
+.highlight-blue_background {
+	background: rgb(221,235,241);
+}
+.highlight-purple_background {
+	background: rgb(234,228,242);
+}
+.highlight-pink_background {
+	background: rgb(244,223,235);
+}
+.highlight-red_background {
+	background: rgb(251,228,228);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(55, 53, 47, 0.6);
+	fill: rgba(55, 53, 47, 0.6);
+}
+.block-color-brown {
+	color: rgb(100,71,58);
+	fill: rgb(100,71,58);
+}
+.block-color-orange {
+	color: rgb(217,115,13);
+	fill: rgb(217,115,13);
+}
+.block-color-yellow {
+	color: rgb(223,171,1);
+	fill: rgb(223,171,1);
+}
+.block-color-teal {
+	color: rgb(15,123,108);
+	fill: rgb(15,123,108);
+}
+.block-color-blue {
+	color: rgb(11,110,153);
+	fill: rgb(11,110,153);
+}
+.block-color-purple {
+	color: rgb(105,64,165);
+	fill: rgb(105,64,165);
+}
+.block-color-pink {
+	color: rgb(173,26,114);
+	fill: rgb(173,26,114);
+}
+.block-color-red {
+	color: rgb(224,62,62);
+	fill: rgb(224,62,62);
+}
+.block-color-gray_background {
+	background: rgb(235,236,237);
+}
+.block-color-brown_background {
+	background: rgb(233,229,227);
+}
+.block-color-orange_background {
+	background: rgb(250,235,221);
+}
+.block-color-yellow_background {
+	background: rgb(251,243,219);
+}
+.block-color-teal_background {
+	background: rgb(221,237,234);
+}
+.block-color-blue_background {
+	background: rgb(221,235,241);
+}
+.block-color-purple_background {
+	background: rgb(234,228,242);
+}
+.block-color-pink_background {
+	background: rgb(244,223,235);
+}
+.block-color-red_background {
+	background: rgb(251,228,228);
+}
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="1d7af5b7-48d0-409e-890b-9cf3010ade1e" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">⚗</span></div><h1 class="page-title">Autoscaling Groups &amp; Launch Configurations - LAB</h1></header><div class="page-body"><p id="222dcdd4-0e36-4185-95b3-d5072a9a65f2" class="">Prerequisite:</p><ol id="f38c754a-c843-495b-9030-7d0c87378b16" class="numbered-list" start="1"><li>Delete all instances that you have previously used, as well as ELB</li></ol><h2 id="55c3865c-97f9-4441-89e0-837f0fdba781" class="">Setup Launch Configuration</h2><p id="aafe296a-48eb-465e-b076-7cad49e3ff55" class="">In order to create AutoScaling Groups, you need a <strong>Launch Configuratio</strong>n:</p><ol id="2974252c-c192-4cdb-9844-99e1097532f0" class="numbered-list" start="1"><li>Go to EC2 &gt; Auto Scaling &gt; Launch Configurations &gt; Create launch configuration</li></ol><ol id="c1e8aa67-d8d6-4d99-b041-32cb8be0c505" class="numbered-list" start="2"><li>Step 1 - Choose AMI: Linux 2 AMI (or whatever you want), </li></ol><ol id="9aaaecb9-96ac-43d4-91e7-ff0451a56478" class="numbered-list" start="3"><li>Step 2 - Choose instance type: t2-micro (or whatever you need).</li></ol><ol id="6c5db0e4-2572-4adc-bb93-21700127bd16" class="numbered-list" start="4"><li>Step 3 - Configure Type. IAM role will be used for all EC2 instances. User Data will be used as bootstrap script for all new EC2 instances launched.<figure id="1c116ba6-8438-4467-95e2-8a99d4d52306" class="image"><a href="Autoscaling%20Groups%20Launch%20Configurations%20LAB/Screenshot_2020-01-10_at_10.36.51.png"><img style="width:1269px" src="Autoscaling%20Groups%20Launch%20Configurations%20LAB/Screenshot_2020-01-10_at_10.36.51.png"/></a></figure></li></ol><ol id="6d781a57-4e75-45c4-b460-72937244d1f5" class="numbered-list" start="5"><li>Step 4 - As default</li></ol><ol id="e88076d9-0ec4-4bfc-bf4e-a1bad4df1f07" class="numbered-list" start="6"><li>Step 5 - Configure Security Group - WebDMZ (open to internet)</li></ol><ol id="05a9d8a2-339a-49f9-975d-a293ee44daaf" class="numbered-list" start="7"><li>Create or go to create an autoscaling group using this launch configuration (this is next step explained)</li></ol><h2 id="05e8a58b-1afa-497d-9e87-cee2552a3a87" class="">Setup Autoscaling Group (ASG)</h2><p id="ea68f75a-db9d-41a8-868d-e61e26e52a2f" class="">Ok, we have created our Launch Configuration before, but this doesn&#x27;t do anything, it&#x27;s just a configuration. We need our Auto Scaling group that uses this Launch Configuration. We will create an Auto Scaling group that starts in 3 instances and scales up to 6 instances, randomly across 3 availability zones (ASG is intelligent to put 2 instances in each AZ). Scale will start when &gt;80% CPU utilization is found.</p><p id="6015931f-9c68-49db-b179-1cb4e8003c29" class="">So let&#x27;s go and configure it:</p><ol id="3e8ffeae-11f7-456a-b526-21f9986b13f2" class="numbered-list" start="1"><li>Go to EC2 &gt; Auto Scaling &gt; Auto Scaling Group &gt; Create Auto Scaling Group</li></ol><ol id="de03271c-152b-474b-80d0-a27d9912f816" class="numbered-list" start="2"><li>Step 1. Configure Auto Scaling Group Details: <figure id="ef7d9eae-8c23-4ecb-8b7c-740ddbb4ec38" class="image"><a href="Autoscaling%20Groups%20Launch%20Configurations%20LAB/Screenshot_2020-01-10_at_10.43.04.png"><img style="width:1392px" src="Autoscaling%20Groups%20Launch%20Configurations%20LAB/Screenshot_2020-01-10_at_10.43.04.png"/></a></figure></li></ol><ol id="bb613c99-06bc-4e20-b302-47dde1d16793" class="numbered-list" start="3"><li>Step 2. Configure scaling policies:<figure id="40c7bed1-51ac-47bd-8341-8e0761395adb" class="image"><a href="Autoscaling%20Groups%20Launch%20Configurations%20LAB/Screenshot_2020-01-10_at_10.44.33.png"><img style="width:1384px" src="Autoscaling%20Groups%20Launch%20Configurations%20LAB/Screenshot_2020-01-10_at_10.44.33.png"/></a></figure></li></ol><ol id="6ea40e08-9bb1-45f3-a6cc-c1e83080ee83" class="numbered-list" start="4"><li>Step 3. Configure Notifications: leave as default if you don&#x27;t want scaling notifications.</li></ol><ol id="2632c36f-e184-4946-969d-ab1e319faa80" class="numbered-list" start="5"><li>Step 4 &amp; 5 as default. Go create.</li></ol><p id="2f84ef99-b6e3-49f8-bf85-fdf02e5ffd67" class="">
+</p><p id="97598fa1-6204-41f8-9058-73b8fcf12f4d" class="">Great! We have our Autoscaling group launched! As soon as we started our Autoscaling Group, it will start launching our EC2 instances:</p><figure id="6b4c9165-73dc-4e8d-9127-059258806c0a" class="image"><a href="Autoscaling%20Groups%20Launch%20Configurations%20LAB/Screenshot_2020-01-10_at_10.46.22.png"><img style="width:1240px" src="Autoscaling%20Groups%20Launch%20Configurations%20LAB/Screenshot_2020-01-10_at_10.46.22.png"/></a></figure><figure id="d29c4070-d5c0-41ec-8ae4-d4889ad7f548" class="image"><a href="Autoscaling%20Groups%20Launch%20Configurations%20LAB/Screenshot_2020-01-10_at_10.49.12.png"><img style="width:1320px" src="Autoscaling%20Groups%20Launch%20Configurations%20LAB/Screenshot_2020-01-10_at_10.49.12.png"/></a></figure><h2 id="df99efee-fc07-4bd3-b62e-a5fab635bc91" class="">Simulating a Failover</h2><p id="d56f0c91-9567-4f47-a89e-38e5b5ee7578" class="">Now let&#x27;s simulate a failover and see what happens.</p><ol id="82b116df-14f2-4ee6-8c1a-c97a649665c1" class="numbered-list" start="1"><li>Select 2 of your EC2 instances and terminate them.</li></ol><ol id="7df94c04-3cac-4062-bf0e-80f79c6defb7" class="numbered-list" start="2"><li>After 60 seconds (as you put in your ASG scaling policies), you will see new instances starting. This is autoscaling running new instances on its own! :)</li></ol><p id="cece94c6-39fc-424f-a383-22780220a590" class="">You can also ssh and do an infinite loop on some instances (so CPU goes up to 100%). You will see that the same happens.</p><p id="686188b0-9398-46f6-b8d5-bf865ef64bd9" class="">
+</p></div></article></body></html>

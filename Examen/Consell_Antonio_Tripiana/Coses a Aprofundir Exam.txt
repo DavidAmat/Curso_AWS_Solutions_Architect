@@ -1,0 +1,10 @@
+Si encara et queda!! A veure de cara al que he vist al examen d'avui, el mes important, en ordre:
+Entendre perfectament tot lo del VPC per a high availability i saber com i quan fer cada cosa (subnetting, NAT, ELB...)
+Tema EBS y EFS tambe cau bastant
+Tema S3 tambe important
+Bases de dades: RDS, Aurora i DynamoDB (surten totes)
+Tema Logs, IAM, seguretat etc. tambe cau
+Route 53 tambe surten algunes.
+Y SQS tambe cauen normalment bastants (que al curs no esta molt ben explicat)
+
+Si et mires el curs i despres et mires SQS i les DB (sobretot dynamodb) en profunditat, jo crec que ja fas

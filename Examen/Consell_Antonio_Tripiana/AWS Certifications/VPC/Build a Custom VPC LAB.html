@@ -1,0 +1,570 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Build a Custom VPC - LAB</title><style>
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	opacity: 0.5;
+}
+
+.sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, KaiTi, STKaiTi, '华文楷体', KaiTi_GB2312, '楷体_GB2312', serif; }
+.mono { font-family: Nitti, 'Microsoft YaHei', '微软雅黑', monospace; }
+.pdf .sans { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .code { font-family: Source Code Pro, 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, KaiTi, STKaiTi, '华文楷体', KaiTi_GB2312, '楷体_GB2312', serif, 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .mono { font-family: PT Mono, Nitti, 'Microsoft YaHei', '微软雅黑', monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.highlight-default {
+}
+.highlight-gray {
+	color: rgb(155,154,151);
+}
+.highlight-brown {
+	color: rgb(100,71,58);
+}
+.highlight-orange {
+	color: rgb(217,115,13);
+}
+.highlight-yellow {
+	color: rgb(223,171,1);
+}
+.highlight-teal {
+	color: rgb(15,123,108);
+}
+.highlight-blue {
+	color: rgb(11,110,153);
+}
+.highlight-purple {
+	color: rgb(105,64,165);
+}
+.highlight-pink {
+	color: rgb(173,26,114);
+}
+.highlight-red {
+	color: rgb(224,62,62);
+}
+.highlight-gray_background {
+	background: rgb(235,236,237);
+}
+.highlight-brown_background {
+	background: rgb(233,229,227);
+}
+.highlight-orange_background {
+	background: rgb(250,235,221);
+}
+.highlight-yellow_background {
+	background: rgb(251,243,219);
+}
+.highlight-teal_background {
+	background: rgb(221,237,234);
+}
+.highlight-blue_background {
+	background: rgb(221,235,241);
+}
+.highlight-purple_background {
+	background: rgb(234,228,242);
+}
+.highlight-pink_background {
+	background: rgb(244,223,235);
+}
+.highlight-red_background {
+	background: rgb(251,228,228);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(55, 53, 47, 0.6);
+	fill: rgba(55, 53, 47, 0.6);
+}
+.block-color-brown {
+	color: rgb(100,71,58);
+	fill: rgb(100,71,58);
+}
+.block-color-orange {
+	color: rgb(217,115,13);
+	fill: rgb(217,115,13);
+}
+.block-color-yellow {
+	color: rgb(223,171,1);
+	fill: rgb(223,171,1);
+}
+.block-color-teal {
+	color: rgb(15,123,108);
+	fill: rgb(15,123,108);
+}
+.block-color-blue {
+	color: rgb(11,110,153);
+	fill: rgb(11,110,153);
+}
+.block-color-purple {
+	color: rgb(105,64,165);
+	fill: rgb(105,64,165);
+}
+.block-color-pink {
+	color: rgb(173,26,114);
+	fill: rgb(173,26,114);
+}
+.block-color-red {
+	color: rgb(224,62,62);
+	fill: rgb(224,62,62);
+}
+.block-color-gray_background {
+	background: rgb(235,236,237);
+}
+.block-color-brown_background {
+	background: rgb(233,229,227);
+}
+.block-color-orange_background {
+	background: rgb(250,235,221);
+}
+.block-color-yellow_background {
+	background: rgb(251,243,219);
+}
+.block-color-teal_background {
+	background: rgb(221,237,234);
+}
+.block-color-blue_background {
+	background: rgb(221,235,241);
+}
+.block-color-purple_background {
+	background: rgb(234,228,242);
+}
+.block-color-pink_background {
+	background: rgb(244,223,235);
+}
+.block-color-red_background {
+	background: rgb(251,228,228);
+}
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="13594d3a-9c94-4991-bcd5-5f7c8d420040" class="page sans"><header><img class="page-cover-image" src="https://www.notion.so/images/page-cover/woodcuts_14.jpg" style="object-position:center 60%"/><div class="page-header-icon page-header-icon-with-cover"><span class="icon">🔒</span></div><h1 class="page-title">Build a Custom VPC - LAB</h1></header><div class="page-body"><ol id="33b8e64d-865d-49a0-8d58-4a8890ed0330" class="numbered-list" start="1"><li><strong>Create VPC. </strong>Go to <strong>VPC &gt; Your VPCs &gt; Create VPC:</strong><figure id="3558475e-176a-471a-991f-d02df73f1a09" class="image"><a href="Build%20a%20Custom%20VPC%20LAB/Screenshot_2019-12-27_at_13.30.17.png"><img style="width:1513px" src="Build%20a%20Custom%20VPC%20LAB/Screenshot_2019-12-27_at_13.30.17.png"/></a></figure></li></ol><p id="21c3481c-b2f8-4f9a-9791-aca462786fbb" class="">Note that when you create a new VPC:</p><ul id="3f73e053-2f04-448f-a6c4-54cf44d05aa7" class="bulleted-list"><li>It creates a Route Table, a Network ACL and a Security Group associated to this VPC.</li></ul><ul id="a26517d0-8aed-4b33-939f-8c5ed5181dac" class="bulleted-list"><li>It doesn&#x27;t create any subnet nor any internet gateway.<figure id="489cd1d8-9e15-497a-afc2-980c4379dff0" class="image"><a href="Build%20a%20Custom%20VPC%20LAB/Screenshot_2019-12-27_at_13.33.10.png"><img style="width:1391px" src="Build%20a%20Custom%20VPC%20LAB/Screenshot_2019-12-27_at_13.33.10.png"/></a></figure><p id="88eb6ff8-f025-4c0e-b7a7-77cfb15fdc2c" class=""><em>This is how the VPC looks like</em></p><p id="3f5b63f2-b479-4a0c-a434-a5b043213851" class="">
+</p></li></ul><p id="0e5e53fc-c704-4bd3-8321-619cda42811a" class=""><strong>2. Create Subnets. </strong>Go to VPC &gt; Subnets &gt; Create Subnets</p><p id="f97f1aa7-915a-4d65-8cdf-c82b8123ee7a" class="">We will create one subnet for each availability zone (one for us-east-2a and one for us-east-2b). Remember that one Subnet can&#x27;t be across multiple AZs. We will choose the VPC that we created in step one, and for the IPv4 CIDR block, we will create the first subnet (us-east-2a) with 10.0.1.0/24, the second subnet (us-east-2b) with 10.0.2.0/24. Below is the creation of the second subnet (first is the same changing the AZ and the IPv4 CIDR block.</p><figure id="60b4543e-76b5-4369-a64e-302716174967" class="image"><a href="Build%20a%20Custom%20VPC%20LAB/Screenshot_2020-01-03_at_08.54.00.png"><img style="width:1572px" src="Build%20a%20Custom%20VPC%20LAB/Screenshot_2020-01-03_at_08.54.00.png"/></a></figure><p id="7afd0f63-6a01-419e-953f-ef2dd6efdc8e" class=""><strong>3. Auto-assign public IP to public subnet. </strong>Now we have our subnet created and if we check the subnet table we will see our new subnets. If we check the column &quot;Auto-assign public IP&quot;, the value will be &quot;No&quot; for our new subnets. This is because VPC, per default, does not assign public IP addresses to our  subnets. As we want to access subnet 10.0.1.0/24 (this will be our public subnet)  from the internet, we need to auto-assign public IP. To do that:</p><ul id="dac1400a-589d-4ae3-8e90-5d376b4ac6c1" class="bulleted-list"><li>Select the subnet</li></ul><ul id="ba585fd7-c666-4889-b787-2b06e7717aad" class="bulleted-list"><li>Actions / Modify auto-assign IP settings → enable Auto-assign IPv4<figure id="0aa5ed2d-c013-4b44-accb-6c3b5a9884d6" class="image"><a href="Build%20a%20Custom%20VPC%20LAB/Screenshot_2020-01-03_at_09.04.48.png"><img style="width:1587px" src="Build%20a%20Custom%20VPC%20LAB/Screenshot_2020-01-03_at_09.04.48.png"/></a></figure></li></ul><p id="7b9501f8-ffc7-4425-a647-51c01665c48a" class=""><em>Note: Also checking the subnet table you will see that there is a column &quot;Available IPv4&quot; which shows the number of available IP. From the </em><em><a href="http://cidr.xyz">cidr.xyz</a></em><em> tool, we should have 256 but it shows 251. This is because AWS reserves 5 IP addresses. See details here: </em><em><a href="https://docs.amazonaws.cn/en_us/vpc/latest/userguide/VPC_Subnets.html#VPC_Sizing">https://docs.amazonaws.cn/en_us/vpc/latest/userguide/VPC_Subnets.html#VPC_Sizing</a></em><em> </em></p><p id="35b90703-c767-4fdf-b935-59682f0c2116" class="">
+</p><figure id="1a07689a-0893-4703-839b-d4c6c1a728a9" class="image"><a href="Build%20a%20Custom%20VPC%20LAB/Screenshot_2020-01-03_at_09.07.57.png"><img style="width:1411px" src="Build%20a%20Custom%20VPC%20LAB/Screenshot_2020-01-03_at_09.07.57.png"/></a></figure><p id="ad581239-a76e-48eb-add8-f70946631811" class=""><em>This is how our VPC looks like after creating our public and private subnets.</em></p><p id="157e5c63-64f6-4a44-af66-a87434eac395" class="">
+</p><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="ce78852f-ee68-46fa-9788-98f7ddcb4158"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">Now we are missing a way to connect from the Internet. We will need an Internet Gateway that connects our VPC with the outside world.</div></figure><p id="74f55799-3d16-4fa6-aa37-0f8f8fff2524" class=""><strong>4. Create an Internet Gateway. </strong>VPC &gt; Internet Gateways &gt; Create Internet Gateway</p><figure id="2047710b-3d72-4666-ad8d-ba84d3891525" class="image"><a href="Build%20a%20Custom%20VPC%20LAB/Screenshot_2020-01-03_at_09.13.58.png"><img style="width:1312px" src="Build%20a%20Custom%20VPC%20LAB/Screenshot_2020-01-03_at_09.13.58.png"/></a></figure><p id="941d9c55-808b-4915-bee7-e11c9acfbd3c" class=""><strong>5. Attach Internet Gateway with your VPC.</strong> When you create your Internet Gateway, you will see that the Internet Gateway is <mark class="highlight-red">detached</mark>. To attach it:</p><ul id="49b9818e-a0b3-42d0-af18-8fdd54fc5e7f" class="bulleted-list"><li>Select your Internet Gateway from the table</li></ul><ul id="14d3952f-e806-4164-a77b-30a5a393bb29" class="bulleted-list"><li>Go to Actions &gt; Attach to VPC &gt; Select the VPC</li></ul><p id="f7f9dcd1-c436-42e7-a30c-077fa17222b8" class=""><em>Note: You can only have one Internet Gateway per VPC</em></p><p id="49f508ca-3ccb-488c-b73e-b124e7e157fd" class="">
+</p><p id="c1857e04-666a-4ce0-bd11-eadbf29b70f3" class=""><strong>6. Create a Public Route Table to connect out to the Internet.</strong> VPC &gt; Route Tables</p><p id="016a6c98-ed15-43c3-a310-26715ef64721" class="">Per default, there is one Route Table associated with our VPC. This is the Main Route Table. This is private per default (not allowing internet access).</p><p id="39255ed8-233e-4d3c-92ec-0793d201046c" class="">If we select this Route Table and click on &quot;Routes&quot; we can see 2 routes: 10.0.0.0/16 and 2600:1f16... . Essentially, what this is doing is allowing our subnets to talk to each other (10.0.0.0/16 means all traffic inside VPC, 2600:1f16... same for IPv6). Any subnet that we have in our VPC will be able to connect to another subnet using these 2 routes (over IPv4 and IPv6).</p><figure id="fc31a8a2-277c-4b71-a8e0-581cedb48d78" class="image"><a href="Build%20a%20Custom%20VPC%20LAB/Screenshot_2020-01-03_at_09.37.00.png"><img style="width:1579px" src="Build%20a%20Custom%20VPC%20LAB/Screenshot_2020-01-03_at_09.37.00.png"/></a></figure><p id="7ec90f60-c164-4fab-8616-bee60f3ee536" class="">Every subnet that we create inside our VPC, per default, will be connected to the Main Route Table. To check this is true, go to the Subnet Associations tab, and you will see that if subnets are not associated with any route table, they are automatically associated to the main VPC route table.</p><figure id="349ff63c-f5bb-4b73-8255-a2ab6811815f" class="image"><a href="Build%20a%20Custom%20VPC%20LAB/Screenshot_2020-01-03_at_09.42.37.png"><img style="width:1367px" src="Build%20a%20Custom%20VPC%20LAB/Screenshot_2020-01-03_at_09.42.37.png"/></a></figure><p id="c2dfbe64-7f2b-4804-823f-9485acfdccd7" class="">This Main Route Table does not allow to connect to internet per default (this would need a 0.0.0.0/0 route). This is convenient, because we don&#x27;t want, per default, that all the subnets are connected to the internet.</p><p id="272c5cad-9264-4ad5-858d-8ce49f00d4f1" class=""><strong>So, what we need to do is keep our Main Route Table as private and have a separate Route Table for our Public Subnets. </strong>To do so:</p><ul id="8083b26e-4e74-4175-9ce7-0ae6febbfa7c" class="bulleted-list"><li><strong>Create a new Route Table.</strong> Go to Route Tables &gt; Create Route Table: put a name tag and choose our custom VPC.</li></ul><ul id="c52d493a-3264-4efc-b16f-a6d0c23d2374" class="bulleted-list"><li><strong>Create new Routes out to the internet.</strong> Select the Route from the Table &gt; Routes (tab) &gt; Edit Routes<figure id="b30784da-e413-41e8-b8bb-faac09c2f53a" class="image"><a href="Build%20a%20Custom%20VPC%20LAB/Screenshot_2020-01-03_at_09.49.39.png"><img style="width:1386px" src="Build%20a%20Custom%20VPC%20LAB/Screenshot_2020-01-03_at_09.49.39.png"/></a></figure><ul id="a246315a-169f-47fd-8814-1c0ee802b647" class="bulleted-list"><li>Add a new route for IPv4: Destination: 0.0.0.0/0, Target: Internet Gateway (myIGW)</li></ul><ul id="82842792-8d94-4889-8fbe-b41f4b4ea7ed" class="bulleted-list"><li>Add a new route for IPv6: Destination: ::/0, Target: Internet Gateway (myIGW)</li></ul></li></ul><ul id="a12da8ae-c5dd-42a7-a022-07d6678fcd33" class="bulleted-list"><li><strong>Create new Subnet Association.</strong> Select the route from the Table &gt; Subnet Associations (tab) &gt; Edit Subnet Associations. <ul id="707f8aa1-a651-4dd5-8a19-ca116d1be63e" class="bulleted-list"><li>Select the subnet you want to be public (10.0.1.0 for example)</li></ul></li></ul><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="e167dba5-d453-4ac7-93c8-e8f57e3bbafc"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">Great! You are done. If you now check the main Route Table &gt; Subnet Associations, you will see that the subnet has been automatically dissociated from the main table.</div></figure><h2 id="b84c1c0e-287c-478a-abcd-b8c7e15f852a" class="">Deploy EC2 public instance</h2><ul id="83c1e542-61a8-4fd3-a4b4-747af86e3e75" class="bulleted-list"><li>Go to EC2 &gt; Launch instance</li></ul><ul id="39a11863-956d-4134-9c0d-0f87d6cf8849" class="bulleted-list"><li>In step 3, in Network part, select our new VPC, in subnet select the public subnet (10.0.1.0)</li></ul><ul id="2835ee77-9746-48c0-ac3a-cd9daa296270" class="bulleted-list"><li>In step 6, create new security group with ssh (port 22) and http (port 80) enabled for 0.0.0.0/0 (all internet)</li></ul><h2 id="15258130-4901-4160-ba1a-7cb710bbb72d" class="">Deploy EC2 private instance</h2><ul id="e4d59e17-ff61-43c4-aa38-638c301a7acc" class="bulleted-list"><li>Go to EC2 &gt; Launch instance</li></ul><ul id="0272e8ff-1404-410d-bcef-f692dcf2d1e8" class="bulleted-list"><li>In step 3, in Network part, select our new VPC, in subnet select the private subnet (10.0.2.0)</li></ul><ul id="cb0285a1-25a7-4603-bf4c-f82e5fbc2bc7" class="bulleted-list"><li>In step 6, select the default security group</li></ul><h2 id="3fbb01c8-0796-4106-9efc-274ca316c8bd" class="">Custom VPC Final Version</h2><figure id="0471b99e-2cd9-4007-aee2-57d9c3b1cd52" class="image"><a href="Build%20a%20Custom%20VPC%20LAB/Screenshot_2020-01-03_at_10.06.55.png"><img style="width:1587px" src="Build%20a%20Custom%20VPC%20LAB/Screenshot_2020-01-03_at_10.06.55.png"/></a></figure><h3 id="247b4944-cb75-469d-a705-7cd3b87bfee7" class="">🔥Exam Tips</h3><ul id="63ae4457-cfb3-47cf-aab8-e14b987f5e2c" class="bulleted-list"><li>When you create a VPC a default Route Table, Network Access Control List (NACL) and a default Security Group is created.</li></ul><ul id="dfa41924-ac75-43b1-9a80-e84925ef9e39" class="bulleted-list"><li>It won&#x27;t create any subnets, nor will it create a default internet gateway.</li></ul><ul id="e44af7cd-1187-4ebf-99ed-b6481829e9fb" class="bulleted-list"><li>US-East-1A in your AWS account can be a completely different availability zone to US-East-1A in another AWS account. The AZ&#x27;s are randomized.</li></ul><ul id="e1586e3c-9076-4c37-9bb2-c2981e4d3bc1" class="bulleted-list"><li>Amazon always reserve 5 IP addresses within your subnets.</li></ul><ul id="7d49bfc6-b6c6-42e9-a1e1-d41f2512f6d2" class="bulleted-list"><li>You can only have 1 Internet Gateway per VPC.</li></ul><ul id="a9e144a1-5361-47cf-b8f8-dc8c0274bbd8" class="bulleted-list"><li>Security Groups can&#x27;t span VPCs.</li></ul><p id="6f06d6a8-1ab5-47c8-91a9-d6d111ff4dc1" class="">
+</p></div></article></body></html>

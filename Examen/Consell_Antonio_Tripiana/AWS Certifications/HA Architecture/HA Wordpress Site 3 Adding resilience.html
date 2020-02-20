@@ -1,0 +1,574 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>HA Wordpress Site (3) - Adding resilience</title><style>
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	opacity: 0.5;
+}
+
+.sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, KaiTi, STKaiTi, '华文楷体', KaiTi_GB2312, '楷体_GB2312', serif; }
+.mono { font-family: Nitti, 'Microsoft YaHei', '微软雅黑', monospace; }
+.pdf .sans { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .code { font-family: Source Code Pro, 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, KaiTi, STKaiTi, '华文楷体', KaiTi_GB2312, '楷体_GB2312', serif, 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .mono { font-family: PT Mono, Nitti, 'Microsoft YaHei', '微软雅黑', monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.highlight-default {
+}
+.highlight-gray {
+	color: rgb(155,154,151);
+}
+.highlight-brown {
+	color: rgb(100,71,58);
+}
+.highlight-orange {
+	color: rgb(217,115,13);
+}
+.highlight-yellow {
+	color: rgb(223,171,1);
+}
+.highlight-teal {
+	color: rgb(15,123,108);
+}
+.highlight-blue {
+	color: rgb(11,110,153);
+}
+.highlight-purple {
+	color: rgb(105,64,165);
+}
+.highlight-pink {
+	color: rgb(173,26,114);
+}
+.highlight-red {
+	color: rgb(224,62,62);
+}
+.highlight-gray_background {
+	background: rgb(235,236,237);
+}
+.highlight-brown_background {
+	background: rgb(233,229,227);
+}
+.highlight-orange_background {
+	background: rgb(250,235,221);
+}
+.highlight-yellow_background {
+	background: rgb(251,243,219);
+}
+.highlight-teal_background {
+	background: rgb(221,237,234);
+}
+.highlight-blue_background {
+	background: rgb(221,235,241);
+}
+.highlight-purple_background {
+	background: rgb(234,228,242);
+}
+.highlight-pink_background {
+	background: rgb(244,223,235);
+}
+.highlight-red_background {
+	background: rgb(251,228,228);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(55, 53, 47, 0.6);
+	fill: rgba(55, 53, 47, 0.6);
+}
+.block-color-brown {
+	color: rgb(100,71,58);
+	fill: rgb(100,71,58);
+}
+.block-color-orange {
+	color: rgb(217,115,13);
+	fill: rgb(217,115,13);
+}
+.block-color-yellow {
+	color: rgb(223,171,1);
+	fill: rgb(223,171,1);
+}
+.block-color-teal {
+	color: rgb(15,123,108);
+	fill: rgb(15,123,108);
+}
+.block-color-blue {
+	color: rgb(11,110,153);
+	fill: rgb(11,110,153);
+}
+.block-color-purple {
+	color: rgb(105,64,165);
+	fill: rgb(105,64,165);
+}
+.block-color-pink {
+	color: rgb(173,26,114);
+	fill: rgb(173,26,114);
+}
+.block-color-red {
+	color: rgb(224,62,62);
+	fill: rgb(224,62,62);
+}
+.block-color-gray_background {
+	background: rgb(235,236,237);
+}
+.block-color-brown_background {
+	background: rgb(233,229,227);
+}
+.block-color-orange_background {
+	background: rgb(250,235,221);
+}
+.block-color-yellow_background {
+	background: rgb(251,243,219);
+}
+.block-color-teal_background {
+	background: rgb(221,237,234);
+}
+.block-color-blue_background {
+	background: rgb(221,235,241);
+}
+.block-color-purple_background {
+	background: rgb(234,228,242);
+}
+.block-color-pink_background {
+	background: rgb(244,223,235);
+}
+.block-color-red_background {
+	background: rgb(251,228,228);
+}
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="51b72d39-6394-4799-9734-6c181bfe960c" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">⚗</span></div><h1 class="page-title">HA Wordpress Site (3) - Adding resilience</h1></header><div class="page-body"><p id="ba5a0ccc-038b-453f-98e1-e992f0cbca9e" class=""><em>Building a fault tolerant Wordpress site: Lab 3 - Adding Resilience &amp; Autoscaling</em></p><h2 id="e2d1cece-186b-4a99-8976-352d4a00b210" class="">Network diagram</h2><p id="e43b3325-f9a3-4e41-8218-a5e3e9ef40d6" class="">This is what we&#x27;re going to do. The left instance with IP 34.... is the IP address of an EC2 instance. This is going to be our &quot;Writer Node&quot;, So everytime our marketing team wants to go and write a new blog article for our wordpress site, they can then navigate directly to this IP address. This EC2 instance will be then configured to PUSH any changes to S3.</p><p id="72430b7b-1450-4660-ba96-a64454c27d05" class="">On the other hand, on the right, we&#x27;re gonna have a fleet of EC2 instances, and their job is to constantly pull the S3 bucket looking for changes, and when people visit our domain, hellocloudgurus2019.com, Route 53 is going to send them over to this group of EC2 instances. This will be our &quot;Read Nodes&quot;.</p><figure id="d19f0caf-7989-4a31-936c-ee91a618a7d7" class="image"><a href="HA%20Wordpress%20Site%203%20Adding%20resilience/Screenshot_2020-01-15_at_11.52.47.png"><img style="width:1227px" src="HA%20Wordpress%20Site%203%20Adding%20resilience/Screenshot_2020-01-15_at_11.52.47.png"/></a></figure><h2 id="4e1ce9c4-980a-45d3-84cf-d7329a129a05" class="">Create the Reader Node EC2 Image (right side)</h2><p id="b18ca994-a2b2-43e9-b81f-c56c55a8de32" class="">We will be using our current EC2 as the reader node, as we have it already behind an ALB and with the correct domain name. We will setup everything we need for our reader node, and then we will create an image of our EC2 instance and we will use it as base image for our reader node fleet of EC2.</p><p id="f23be955-d617-408f-8564-743caf54a5a5" class="">The reader node will just scan S3 every minute and we&#x27;re gonna look for any changes to our WordPress site. If there is a change, it&#x27;s going to download that change to this EC2 instance.</p><ol id="439f6058-a56f-4108-a2ed-c056695d316e" class="numbered-list" start="1"><li>ssh to our EC2 instance<pre id="03d2b68c-2427-40fa-8aa8-ee4258febf6f" class="code"><code>ssh &lt;ip-address&gt; -i &lt;key.pem&gt;</code></pre></li></ol><ol id="ba46ee01-ffca-4512-88ae-51606f0be140" class="numbered-list" start="2"><li>Create a crontab for our reader node. Crontab is a way of running commands at a particular time.<pre id="ddf40f03-a17a-4c6a-acbc-a5dbd1a8bdc7" class="code"><code>cd /etc
+nano crontab</code></pre><p id="b026c6fc-9e4f-4d76-9585-aa1b98448190" class="">Scroll down till here:</p><figure id="2881454a-92a1-4651-956b-9f703db6d3d7" class="image"><a href="HA%20Wordpress%20Site%203%20Adding%20resilience/Screenshot_2020-01-15_at_12.07.23.png"><img style="width:432px" src="HA%20Wordpress%20Site%203%20Adding%20resilience/Screenshot_2020-01-15_at_12.07.23.png"/></a></figure></li></ol><ol id="cbf031c8-2608-4abb-a065-e75083eb6e57" class="numbered-list" start="3"><li>Now put the following line. This will do a perfect copy of your s3 bucket to our EC2 every minute of every hour of every day of every month of every day of the week, with the root user-name and will execute an aws s3 sync, deleting the prior files found in our directory and copying an exact copy of our s3 bucket.<pre id="251fbd90-3ab5-4e53-98aa-6e357bc6a58b" class="code"><code>*/1 * * * * root aws s3 sync --delete s3://acloudguruwp-code-12351345 /var/www/html</code></pre><figure id="9cbd36fa-2c2d-4cd1-9aea-32910690894e" class="image"><a href="HA%20Wordpress%20Site%203%20Adding%20resilience/Screenshot_2020-01-15_at_12.10.16.png"><img style="width:1554px" src="HA%20Wordpress%20Site%203%20Adding%20resilience/Screenshot_2020-01-15_at_12.10.16.png"/></a></figure><p id="3adb35b4-a12d-46c6-b212-9866bbffeb35" class="">CTRL+X → Y → Enter</p></li></ol><ol id="870fd96c-84f1-44bb-8203-ca6411e122ac" class="numbered-list" start="4"><li>If you are impatient (or you want to run your crontab straight away, just do:<pre id="3c234909-3382-4024-8aa4-372c7ec9990f" class="code"><code>service crond restart</code></pre></li></ol><ol id="1341c3df-cef3-455a-8ebc-5f512a1d24ac" class="numbered-list" start="5"><li>Test that this works. Copy a new file in your code bucket, wait one minute (or use step 4) and see if the file is in your EC2 → /var/www/html.</li></ol><ol id="ff15d71d-7648-46b4-9fb5-e41c1e7c1f2b" class="numbered-list" start="6"><li>If this works, we have our <strong>GOLDEN TEMPLATE</strong> for a PERFECT EC2. So now let&#x27;s create an EC2 image out of it, and let&#x27;s use it in our autoscaling group. Go to EC2 &gt; Instances &gt; Select your EC2 &gt; Actions &gt; Image &gt; Create image<figure id="5f80590a-e2cf-412d-98b5-2d414349276c" class="image"><a href="HA%20Wordpress%20Site%203%20Adding%20resilience/Screenshot_2020-01-15_at_12.16.49.png"><img style="width:1080px" src="HA%20Wordpress%20Site%203%20Adding%20resilience/Screenshot_2020-01-15_at_12.16.49.png"/></a></figure><p id="e9c3432f-af0e-4ff2-869d-8f789ea4b08f" class="">Note: Doing that will reboot your EC2 instance. (you can also select the &quot;no reboot&quot; option.</p></li></ol><ol id="4f5b8c70-976a-49ef-b04c-5bfddb51d7d9" class="numbered-list" start="7"><li>Go to EC2 &gt; Images &gt; AMIs and check that our new image is there.</li></ol><h2 id="37472c56-3b96-401f-b274-f3fd01f0c117" class="">Create the Writer Node EC2 Image (left side)</h2><p id="c8666233-d76b-45d6-8c0e-7ba1f129c463" class="">As we already have our reader node image, we can modify our EC2 instance and create the writer node image making a small change on our crontab file.</p><ol id="b17bfe23-991b-4918-9177-2bcabbd695f5" class="numbered-list" start="1"><li>Go to crontab file:<pre id="6dd87cce-1cd7-488f-b223-22d8fd398692" class="code"><code>ssh &lt;ip-address&gt; -i &lt;key.pem&gt;
+cd /etc
+nano crontab</code></pre></li></ol><ol id="634ba871-e4ce-4746-978c-9a685c0f8616" class="numbered-list" start="2"><li>Change the crontab line to do the opposite. First line is going to sync our /var/www/html to our S3 bucket, and the second command is going to sync the uploads to the other (media) S3 bucket, so if any images are uploaded to this EC2 instance, is going to be distributed through our cloudfront as well.<pre id="84fba088-fbf2-42c9-ab83-d1b48ff46e89" class="code"><code>*/1 * * * * root aws s3 sync --delete /var/www/html s3://acloudguruwp-code-12351345
+*/1 * * * * root aws s3 sync --delete /var/www/html/wp-content/uploads s3://acloudguruwp-media-123090983</code></pre><p id="154562ad-ae60-4f05-9a11-511f92613c48" class="">CTRL+X → Y → Enter</p></li></ol><ol id="065dc7e6-ae48-4581-877c-0bfedef3faf7" class="numbered-list" start="3"><li>Test this is working. Create a new file in your html directory and check this is uploaded to your S3.<pre id="e4772aad-d3fd-49d7-9f2c-f066b813e607" class="code"><code>cd /var/www/html
+echo &quot;This is a TEST&quot; &gt; test.txt
+service httpd status # check apache is still working!
+service crond restart # optional, you can wait 1 min</code></pre></li></ol><ol id="12a0fec5-b509-483a-a0dd-47824e5024d8" class="numbered-list" start="4"><li>Go to S3 &gt; code bucket. You will see your test.txt file. Maybe you can&#x27;t see it straight after because of S3 eventual consistency (it can take a minute).</li></ol><ol id="9fb19595-0bd4-4a65-81d4-37b932f3c77c" class="numbered-list" start="5"><li>Keep this single EC2 as your writer node. You can create an image of it just to make sure that you can recover it if a disaster appear (optional).</li></ol><h2 id="8fe7da1a-be19-4695-bf0b-0d43eb504fd6" class="">Reader&#x27;s node AMI behind ALB and in autoscaling group</h2><p id="487fda66-436e-434b-8b67-9603887bd945" class="">Go to EC2 &gt; Auto scaling &gt; Auto Scaling Groups</p><ol id="9f6fba3a-8003-4dc7-aec6-86f9022b4049" class="numbered-list" start="1"><li>Hit Create auto scaling group</li></ol><ol id="fb56a172-c091-460f-a8e6-18e5a886e763" class="numbered-list" start="2"><li>Create auto scaling group → hit on launch configuration → create a new launch configuration<figure id="95cea2f2-8a8a-48ad-94d5-d00389a6aeab" class="image"><a href="HA%20Wordpress%20Site%203%20Adding%20resilience/Screenshot_2020-01-15_at_12.41.17.png"><img style="width:1132px" src="HA%20Wordpress%20Site%203%20Adding%20resilience/Screenshot_2020-01-15_at_12.41.17.png"/></a></figure></li></ol><ol id="3622f116-f0bb-4c0c-adea-3206d6653e58" class="numbered-list" start="3"><li>Step 1 - Choose AMI → My AMIs<figure id="da820ff0-7d7f-43b3-8cfe-8a418f3f402f" class="image"><a href="HA%20Wordpress%20Site%203%20Adding%20resilience/Screenshot_2020-01-15_at_12.41.50.png"><img style="width:1520px" src="HA%20Wordpress%20Site%203%20Adding%20resilience/Screenshot_2020-01-15_at_12.41.50.png"/></a></figure></li></ol><ol id="3dca11ae-599d-4b8c-aaf8-d0669722151e" class="numbered-list" start="4"><li>Step 2 - t2.micro</li></ol><ol id="aeed0d28-2928-40ba-9dfb-e33201ca070b" class="numbered-list" start="5"><li>Step 3 - Configure details. Remember the S3ForWP IAM role and the bootstrap script (find it below)<figure id="a12de2a6-145f-4dd1-a13f-f65787d9ff0e" class="image"><a href="HA%20Wordpress%20Site%203%20Adding%20resilience/Screenshot_2020-01-15_at_12.44.37.png"><img style="width:1010px" src="HA%20Wordpress%20Site%203%20Adding%20resilience/Screenshot_2020-01-15_at_12.44.37.png"/></a></figure><pre id="23348628-7140-47f1-b8c2-9d6fc589c78b" class="code"><code>#!/bin/bash
+yum update -y
+aws s3 sync --delete s3://YOUR_S3_BUCKET_NAME /var/www/html</code></pre></li></ol><ol id="4f262e63-0305-49c6-b84e-25f05a339a89" class="numbered-list" start="6"><li>Step 5 - Configure security group<figure id="3b318f1e-4dfa-4c88-b820-daab569474f7" class="image"><a href="HA%20Wordpress%20Site%203%20Adding%20resilience/Screenshot_2020-01-15_at_12.45.58.png"><img style="width:1520px" src="HA%20Wordpress%20Site%203%20Adding%20resilience/Screenshot_2020-01-15_at_12.45.58.png"/></a></figure></li></ol><ol id="8213e645-c390-44fe-87ce-176e9967cbbc" class="numbered-list" start="7"><li>Step 6 - Review. Hit Create launch configuration, now it will launch the &quot;Create Auto Scaling Group&quot; configuration:</li></ol><ol id="f9799482-f956-40dc-9390-dbe8a9df1227" class="numbered-list" start="8"><li>Step 1 - Configure Auto scaling group details<figure id="25dbbf10-0919-47c6-9371-a68c5c31c367" class="image"><a href="HA%20Wordpress%20Site%203%20Adding%20resilience/Screenshot_2020-01-15_at_12.49.08.png"><img style="width:1052px" src="HA%20Wordpress%20Site%203%20Adding%20resilience/Screenshot_2020-01-15_at_12.49.08.png"/></a></figure><figure id="c45a0101-3e92-4c51-a5e2-599b30b5a7a7" class="image"><a href="HA%20Wordpress%20Site%203%20Adding%20resilience/Screenshot_2020-01-17_at_10.14.04.png"><img style="width:768px" src="HA%20Wordpress%20Site%203%20Adding%20resilience/Screenshot_2020-01-17_at_10.14.04.png"/></a></figure></li></ol><ol id="fbc87723-cb22-484f-85c4-4ffde5ec6e90" class="numbered-list" start="9"><li>Step 2 - Configure scaling policies - Add policies if you want, or leave as default.</li></ol><ol id="7d375f18-8f33-47d1-b612-e9b986565f7a" class="numbered-list" start="10"><li>Step 3 - Configure notifications - default</li></ol><ol id="b7a84d84-d01d-48e9-ba43-c5a928fa8287" class="numbered-list" start="11"><li>Step 4 - key: Name, value: MyWP-RN</li></ol><ol id="8aeb8a09-153e-4c80-aa45-0290c742acb2" class="numbered-list" start="12"><li>Step 5 - create</li></ol><h2 id="bd41cec2-f15f-4527-92b2-ab0088051073" class="">Deregister Writer Node from Target Groups</h2><p id="ab081024-f85e-4b3a-8852-4cc36cef92f0" class="">Now let&#x27;s deregister our Writer Node from our Target Groups, because we don&#x27;t want our Writer Node to get read traffic (is for writing!)</p><p id="54f3d785-9876-4a8d-92c2-8758c906e50d" class="">Go to EC2 &gt; Load Balancing &gt; Target Groups</p><ul id="a5ce8ffc-07ff-429c-8a65-821f35d4a30c" class="bulleted-list"><li>Select target group &quot;MyWPInstances&quot; &gt; Tab &quot;Targets&quot; &gt; Edit &gt; Remove registered target and hit save.</li></ul><p id="28eb8203-0580-4f0d-97dc-514e5d27bcf8" class="">Now let&#x27;s change the name of our EC2 Instance Writer Node from &quot;MyGoldenImage&quot; to &quot;MyWP-WN&quot;. Go to EC2 &gt; Instances, and change the name of the instance.</p><p id="357c82c8-724f-46d3-9f7a-6019c5f179c2" class="">You should see now 2 instances for the Reader Node (RN) and one for the Writer Node (WN)</p><h2 id="3d55aafa-1c6e-49ac-8316-7beb5664f74d" class="">Check reader and writer nodes</h2><p id="fe8a7eaa-426d-40b8-b891-f00ac6802008" class="">Go to your domain and check that Reader node  is working! → <a href="http://hellocloudgurus2019.com">hellocloudgurus2019.com</a> </p><p id="fd56f9ec-56ed-47ad-b66b-65448cd97721" class="">Go to your domain and check that Writer node is working → hellocloudgurus2019.com/wp-admin,  and you should see that automatically redirects to the Writer node ip instead of using the domain DNS (in your browser you should see something like 34.309.30.29/wp-admin). </p><p id="186527fd-5a75-4284-ade4-3615190b93a5" class="">Check details on that: <a href="https://acloud.guru/forums/aws-csa-2019/discussion/-Lt26C1GeqUlIWBl6tt8/how_did_reroute_to_writer_node">https://acloud.guru/forums/aws-csa-2019/discussion/-Lt26C1GeqUlIWBl6tt8/how_did_reroute_to_writer_node</a></p><ul id="23cecc70-48d8-411b-a6fc-64eb3b30b3c1" class="bulleted-list"><li>Now try to add a new Post on your admin, and put a jpg image. Cloudfront and DNS propagation can take time to propagate so expect this message to appear:<figure id="4d93d61c-b97e-44c1-92f9-3f5cc6e63e32" class="image"><a href="HA%20Wordpress%20Site%203%20Adding%20resilience/Screenshot_2020-01-21_at_09.38.10.png"><img style="width:752px" src="HA%20Wordpress%20Site%203%20Adding%20resilience/Screenshot_2020-01-21_at_09.38.10.png"/></a></figure></li></ul><ul id="7219fa79-0307-4693-a3ad-301cceade952" class="bulleted-list"><li>Publish anyway and wait about 10 minutes, the image will appear in your <a href="http://hellocloudgurus2019.com">hellocloudgurus2019.com</a> :)</li></ul><h2 id="f135ed51-7ece-44f7-8e88-82390b3860dc" class="">Testing high availability</h2><ul id="1cdb288d-8b79-4946-b9b3-14b38e2f40cb" class="bulleted-list"><li>Go to EC2 &gt; Instances and simulate a loss of an availability zone. To do that, terminate one reader node instance.</li></ul><ul id="ddba42ec-ab1a-4cbc-a03d-8e9cb85a42ed" class="bulleted-list"><li>Go to your Autoscaling group and it will say, (maybe waiting a bit) that one EC2 is failing and that is putting a new EC2 in service.</li></ul><ul id="185f4835-9835-42d7-8ab0-f09448de522f" class="bulleted-list"><li>If you wait a bit, you will see your autoscaling bringing up a new EC2 instance with the last version of the wordpress that was saved in S3. So everything is up to date in the new instance :)</li></ul></div></article></body></html>

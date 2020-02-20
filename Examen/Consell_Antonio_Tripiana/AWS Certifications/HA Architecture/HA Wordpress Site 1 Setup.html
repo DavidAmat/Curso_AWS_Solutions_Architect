@@ -1,0 +1,587 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>HA Wordpress Site (1) - Setup</title><style>
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	opacity: 0.5;
+}
+
+.sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, KaiTi, STKaiTi, '华文楷体', KaiTi_GB2312, '楷体_GB2312', serif; }
+.mono { font-family: Nitti, 'Microsoft YaHei', '微软雅黑', monospace; }
+.pdf .sans { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .code { font-family: Source Code Pro, 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, KaiTi, STKaiTi, '华文楷体', KaiTi_GB2312, '楷体_GB2312', serif, 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .mono { font-family: PT Mono, Nitti, 'Microsoft YaHei', '微软雅黑', monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.highlight-default {
+}
+.highlight-gray {
+	color: rgb(155,154,151);
+}
+.highlight-brown {
+	color: rgb(100,71,58);
+}
+.highlight-orange {
+	color: rgb(217,115,13);
+}
+.highlight-yellow {
+	color: rgb(223,171,1);
+}
+.highlight-teal {
+	color: rgb(15,123,108);
+}
+.highlight-blue {
+	color: rgb(11,110,153);
+}
+.highlight-purple {
+	color: rgb(105,64,165);
+}
+.highlight-pink {
+	color: rgb(173,26,114);
+}
+.highlight-red {
+	color: rgb(224,62,62);
+}
+.highlight-gray_background {
+	background: rgb(235,236,237);
+}
+.highlight-brown_background {
+	background: rgb(233,229,227);
+}
+.highlight-orange_background {
+	background: rgb(250,235,221);
+}
+.highlight-yellow_background {
+	background: rgb(251,243,219);
+}
+.highlight-teal_background {
+	background: rgb(221,237,234);
+}
+.highlight-blue_background {
+	background: rgb(221,235,241);
+}
+.highlight-purple_background {
+	background: rgb(234,228,242);
+}
+.highlight-pink_background {
+	background: rgb(244,223,235);
+}
+.highlight-red_background {
+	background: rgb(251,228,228);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(55, 53, 47, 0.6);
+	fill: rgba(55, 53, 47, 0.6);
+}
+.block-color-brown {
+	color: rgb(100,71,58);
+	fill: rgb(100,71,58);
+}
+.block-color-orange {
+	color: rgb(217,115,13);
+	fill: rgb(217,115,13);
+}
+.block-color-yellow {
+	color: rgb(223,171,1);
+	fill: rgb(223,171,1);
+}
+.block-color-teal {
+	color: rgb(15,123,108);
+	fill: rgb(15,123,108);
+}
+.block-color-blue {
+	color: rgb(11,110,153);
+	fill: rgb(11,110,153);
+}
+.block-color-purple {
+	color: rgb(105,64,165);
+	fill: rgb(105,64,165);
+}
+.block-color-pink {
+	color: rgb(173,26,114);
+	fill: rgb(173,26,114);
+}
+.block-color-red {
+	color: rgb(224,62,62);
+	fill: rgb(224,62,62);
+}
+.block-color-gray_background {
+	background: rgb(235,236,237);
+}
+.block-color-brown_background {
+	background: rgb(233,229,227);
+}
+.block-color-orange_background {
+	background: rgb(250,235,221);
+}
+.block-color-yellow_background {
+	background: rgb(251,243,219);
+}
+.block-color-teal_background {
+	background: rgb(221,237,234);
+}
+.block-color-blue_background {
+	background: rgb(221,235,241);
+}
+.block-color-purple_background {
+	background: rgb(234,228,242);
+}
+.block-color-pink_background {
+	background: rgb(244,223,235);
+}
+.block-color-red_background {
+	background: rgb(251,228,228);
+}
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="bbec8c1a-f0b6-4a7e-914b-98f8367a7969" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">⚗</span></div><h1 class="page-title">HA Wordpress Site (1) - Setup</h1></header><div class="page-body"><p id="2c624185-7ba7-4714-a66a-2795f354a694" class=""><em>Building a fault tolerant Wordpress site: LAB 1 - Getting Setup</em></p><h2 id="5e6a5f21-5315-401a-8193-81223b1f15e2" class="">Network Diagram</h2><figure id="59dab7bd-d038-465b-a390-cba485620752" class="image"><a href="HA%20Wordpress%20Site%201%20Setup/Screenshot_2020-01-10_at_11.25.50.png"><img style="width:288px" src="HA%20Wordpress%20Site%201%20Setup/Screenshot_2020-01-10_at_11.25.50.png"/></a></figure><h2 id="54420bde-998a-4f46-9b6b-758b24a6958b" class="">Setup S3 Buckets</h2><p id="61089be5-2a41-4842-a520-17b9c90f7da2" class="">Go to Storage &gt; S3</p><p id="d83d7db4-6dee-4e99-aac1-346afb3f8bfd" class="">Create 2 different buckets, one for code and the other for media assets (images)</p><ul id="0f2e0300-eb57-4c4f-8fea-03a657761a05" class="bulleted-list"><li>Bucket 1 name: acloudguruwp-code-12351345</li></ul><ul id="1a03efda-04ee-478d-a902-7c8def7af8eb" class="bulleted-list"><li>Bucket 2 name: acloudguruwp-media-123090983</li></ul><p id="4700559c-d93f-4d60-b7ee-aa0563346469" class="">
+</p><h2 id="5ccfec82-8969-46a8-97b9-b567cde8eca8" class="">Setup Cloudfront</h2><p id="60efefb0-5a6f-43be-ac9e-5e345ce79ac5" class="">Go to Networking &amp; Content Delivery &gt; CloudFront</p><p id="5e31bb13-f5be-4d47-8c93-ad43fb206fa1" class="">Create a new Cloudfront distribution with the following configuration:</p><ul id="c78dd3e2-b17b-4aa7-8b35-2ae5ddd9fc5a" class="bulleted-list"><li>Step 1: Select delivery method - Choose Web distribution.</li></ul><ul id="6f5e16bc-f703-4659-9ed8-f08f6216a6fb" class="bulleted-list"><li>Step 2: Create distribution - select Origin domain name → (bucket 2) → acloudguruwp-media-123090983. Leave everything else as default and click to create distribution.<figure id="06e922ed-be17-4aea-b33e-6e401bcbfdc4" class="image"><a href="HA%20Wordpress%20Site%201%20Setup/Screenshot_2020-01-10_at_11.32.57.png"><img style="width:1073px" src="HA%20Wordpress%20Site%201%20Setup/Screenshot_2020-01-10_at_11.32.57.png"/></a></figure></li></ul><p id="6781c3ea-e089-44e7-94f5-5aab19ac56f9" class="">
+</p><h2 id="1389864d-5e00-4c1a-8705-ce8aa396dcd5" class="">Setup Network</h2><p id="913011cd-8889-4612-aaeb-a3cf79073d6e" class="">First let&#x27;s create a security group for the instances:</p><p id="3730951f-f5af-480b-a0d6-b1d4753dc7c5" class="">Go to Networking &amp; Content Delivery &gt; VPC &gt; Security &gt; Security Groups</p><ul id="e2c27189-f486-499d-9404-b073ab8af907" class="bulleted-list"><li>Create new security group allowing http 80 to everyone, and ssh to everyone.<figure id="465851ff-472f-4092-baae-0cad4bd1c463" class="image"><a href="HA%20Wordpress%20Site%201%20Setup/Screenshot_2020-01-10_at_11.36.02.png"><img style="width:912px" src="HA%20Wordpress%20Site%201%20Setup/Screenshot_2020-01-10_at_11.36.02.png"/></a></figure></li></ul><p id="4158bb2c-8420-4045-8211-b2199fa14dbc" class="">Now let&#x27;s create a new security group for the RDS (called rds-launch-wizard), allowing traffic from the security group above (inboud rule, MYSQL/Aurora TCP 3306 with source Security group above.</p><figure id="9903b11e-95e9-4251-96ba-c6775f602879" class="image"><a href="HA%20Wordpress%20Site%201%20Setup/Screenshot_2020-01-10_at_11.37.43.png"><img style="width:815px" src="HA%20Wordpress%20Site%201%20Setup/Screenshot_2020-01-10_at_11.37.43.png"/></a></figure><p id="25271101-18b9-4190-a2cc-0f9c7b162a7f" class="">
+</p><h2 id="ba8b5ed5-6d5f-4f37-a311-83a406a257b4" class="">Setup RDS Database</h2><p id="8294f3a9-eb24-49cf-9170-fef0b2dec4b9" class="">Now let&#x27;s create our RDS databse:</p><ul id="140e82dd-c803-4156-884e-d1f37516ab8c" class="bulleted-list"><li>Go to Database &gt; RDS</li></ul><ul id="0e1ed907-f4ad-41d1-85f2-58354e62b7a9" class="bulleted-list"><li>Click on Create Database<ul id="5b6c5b56-f90e-4124-8d2c-424ef774e74b" class="bulleted-list"><li>Engine options → MySQL</li></ul><ul id="39082a31-e15b-478d-a21b-16ed0e435f21" class="bulleted-list"><li>Templates → Dev</li></ul><ul id="953857c4-30af-4667-938e-0ce8858ba6df" class="bulleted-list"><li>Settings<ul id="860cf26b-6f67-4d7c-932a-65fcb90a5000" class="bulleted-list"><li>DB instance identifier: acloudguru (or whatever)</li></ul><ul id="761414cd-922c-4557-bf29-c32bdc73f1f7" class="bulleted-list"><li>Master username: acloudguru</li></ul><ul id="dfc2b26f-da63-451b-90d9-98058143de60" class="bulleted-list"><li>Master password: ...</li></ul></li></ul><ul id="4b4406f6-dd17-4bfc-a1cc-87c4f5375fb8" class="bulleted-list"><li>DB instance size: burstable classes → db.t2.micro</li></ul><ul id="e0c68bf6-c7f2-4ae0-9887-9035a476a162" class="bulleted-list"><li>Storage: as default</li></ul><ul id="877e12ab-f787-4079-a7a8-fd3c0fa6f513" class="bulleted-list"><li>Availability &amp; durability → Multi-AZ deployment → Create a standby instance</li></ul><ul id="002f9eea-c795-4450-a08c-977f97c11ae6" class="bulleted-list"><li>Connectivity: VPC → default VPC</li></ul><ul id="e2779b34-8c48-42a8-8019-7793a6d674be" class="bulleted-list"><li>Additional connectivity configuration:<ul id="89488dab-ca6a-4db1-9860-524ad690117e" class="bulleted-list"><li>Subnet group as default</li></ul><ul id="c77d1d36-ecf8-4331-8025-b82cf9c7a201" class="bulleted-list"><li>Publicly accessible: No</li></ul><ul id="3e173df6-6c87-42a7-9eb0-b217e794bfda" class="bulleted-list"><li>VPC security Group: select the rds-launch-wizard security group (created before).</li></ul></li></ul><ul id="7c8c8fe5-a208-4a7a-a7f2-5d46a5bf9dc8" class="bulleted-list"><li>Additional configuration:<ul id="4b278e38-711f-4b4c-b61b-492eff2bc9a5" class="bulleted-list"><li>Initial database name: acloudguru</li></ul><ul id="0a397eec-d2ab-458a-b50b-e63d78c57e05" class="bulleted-list"><li>Everything else as default, except monitoring that we don&#x27;t want (disable)</li></ul></li></ul><ul id="ae7f1c2a-e85e-4041-a5ec-50196466cc72" class="bulleted-list"><li>CREATE DATABASE!</li></ul></li></ul><h2 id="410bc04e-f30e-46d4-a007-1b2e6970fd20" class="">Setup IAM</h2><p id="ed32bb7d-5ded-488f-a742-fbf528734e10" class="">Create a new role that allows us to talk to S3:</p><ul id="32469a3b-da54-4119-9cce-9140237c40ff" class="bulleted-list"><li>Go to Security, Identity &amp; Compliance &gt; IAM &gt; Roles</li></ul><ul id="12d89f1b-e100-40d7-aabf-234e2b57c6d1" class="bulleted-list"><li>Create role<ul id="8a1c8849-8971-4fe8-b538-ac0d88bfd551" class="bulleted-list"><li>Service that will use this role: EC2</li></ul><ul id="2b4352e0-c856-4bd1-92d9-d43831587229" class="bulleted-list"><li>Attach permissions policy: choose Amazon S3 Full access</li></ul><ul id="7d7068b2-5fa2-45d5-8a84-8a6da3478229" class="bulleted-list"><li>Next</li></ul><ul id="4fae03f6-2eff-4c6d-9710-ec6e85039e52" class="bulleted-list"><li>Role name: S3ForWP</li></ul><ul id="0c8b8241-f3f1-490c-a72b-b945c994cbde" class="bulleted-list"><li>Create role</li></ul></li></ul><p id="34c47cdc-f89a-4df3-8c98-d169b6815358" class="">
+</p><h2 id="df3f1e43-cf17-4095-a8b1-140d788cf88b" class="">Setup EC2 instance</h2><p id="a4879232-dbc4-470f-9429-8576eb2f9007" class="">Let&#x27;s create our EC2 instance:</p><ul id="88ea9ac7-a726-4bf4-aa68-f35286e51743" class="bulleted-list"><li>Go to Compute &gt; EC2</li></ul><ul id="6eba71f6-986f-4657-a556-f15d77bca27f" class="bulleted-list"><li>Launch instance<ul id="d91199b3-fd90-4f99-9ab8-3e788e7baba8" class="bulleted-list"><li>Step 1: Choose AMI: Amazon Linux 2 AMI</li></ul><ul id="52100acd-b55f-43ce-8cce-ba78d32bfccb" class="bulleted-list"><li>Step 2: Instance Type: t2.micro</li></ul><ul id="082b842d-7be9-4b06-ac01-6759c1ec7b4e" class="bulleted-list"><li>Step 3: change IAM role to S3ForWP and on advanced details → User data, paste the following bootstrap script:<ul id="110d04b3-fc3e-49a2-a0ce-23e8213743d5" class="bulleted-list"><li>installs apache (httpd), php and php-mysql</li></ul><ul id="4a4b3c52-8e62-406d-8c9a-ccb7c858aaa2" class="bulleted-list"><li>Create a file for our health checks (healthy.html)</li></ul><ul id="c38f0cfb-aeb7-4cb0-a7df-fcfeebfa924c" class="bulleted-list"><li>Get the latest version of wordpress and installs it and deletes the downloaded directories, </li></ul><ul id="805d0552-3ac6-4ab4-9186-9f314831519f" class="bulleted-list"><li>Put the correct permissions, </li></ul><ul id="499d8790-29f0-4d36-9d9c-34a426ee0e96" class="bulleted-list"><li>Sets htaccess, that will allow us to do our URL rewrite. So it will allow us to serve content out of cloudfront rather than doing it out of our S3 buckets</li></ul><ul id="842ed911-1e13-4fc3-8bf4-049747d04d65" class="bulleted-list"><li>Make sure that our apache will start back up in case EC2 instances restart. </li></ul><pre id="da6a47b3-3d3e-4287-8408-8ba25a186d3f" class="code"><code>#!/bin/bash
+yum update -y
+yum install httpd php php-mysql -y
+cd /var/www/html
+echo &quot;healthy&quot; &gt; healthy.html
+wget https://wordpress.org/wordpress-5.1.1.tar.gz
+tar -xzf wordpress-5.1.1.tar.gz
+cp -r wordpress/* /var/www/html/
+rm -rf wordpress
+rm -rf wordpress-5.1.1.tar.gz
+chmod -R 755 wp-content
+chown -R apache:apache wp-content
+wget https://s3.amazonaws.com/bucketforwordpresslab-donotdelete/htaccess.txt
+mv htaccess.txt .htaccess
+chkconfig httpd on
+service httpd start</code></pre></li></ul><ul id="2062876f-cb54-426a-b027-22c084207ce4" class="bulleted-list"><li>Step 4: add general purpose storage (default)</li></ul><ul id="6b7e94ec-b0a7-426f-b823-b8d95f47e7cf" class="bulleted-list"><li>Step 5: add tag —&gt; Name: MyGoldenImage</li></ul><ul id="c5f41d4b-0d80-42dd-9eba-c4477cdecffa" class="bulleted-list"><li>Step 6: Configure security Group: WebDMZ</li></ul><ul id="7e872a04-a47f-4a58-afa3-1bf57a8b6856" class="bulleted-list"><li>Launch!</li></ul></li></ul><h2 id="43c90453-0252-498d-a5e9-bbdf4ade157e" class="">Wait until everything is deployed correctly!</h2><p id="9b53b9b1-3c49-4787-a088-534d94a58ef0" class="">When deployed, go to next tutorial!</p><p id="abb4bd03-fc23-40b2-bd41-1305dc1ab932" class="">
+</p><p id="0ee74762-bc99-4d75-8d6e-53061c51710f" class="">
+</p><p id="e6a397b0-67b4-41e2-a88e-20969def0293" class="">
+</p></div></article></body></html>

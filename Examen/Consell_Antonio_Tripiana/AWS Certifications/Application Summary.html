@@ -1,0 +1,566 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Application Summary</title><style>
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	opacity: 0.5;
+}
+
+.sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, KaiTi, STKaiTi, '华文楷体', KaiTi_GB2312, '楷体_GB2312', serif; }
+.mono { font-family: Nitti, 'Microsoft YaHei', '微软雅黑', monospace; }
+.pdf .sans { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .code { font-family: Source Code Pro, 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, KaiTi, STKaiTi, '华文楷体', KaiTi_GB2312, '楷体_GB2312', serif, 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .mono { font-family: PT Mono, Nitti, 'Microsoft YaHei', '微软雅黑', monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.highlight-default {
+}
+.highlight-gray {
+	color: rgb(155,154,151);
+}
+.highlight-brown {
+	color: rgb(100,71,58);
+}
+.highlight-orange {
+	color: rgb(217,115,13);
+}
+.highlight-yellow {
+	color: rgb(223,171,1);
+}
+.highlight-teal {
+	color: rgb(15,123,108);
+}
+.highlight-blue {
+	color: rgb(11,110,153);
+}
+.highlight-purple {
+	color: rgb(105,64,165);
+}
+.highlight-pink {
+	color: rgb(173,26,114);
+}
+.highlight-red {
+	color: rgb(224,62,62);
+}
+.highlight-gray_background {
+	background: rgb(235,236,237);
+}
+.highlight-brown_background {
+	background: rgb(233,229,227);
+}
+.highlight-orange_background {
+	background: rgb(250,235,221);
+}
+.highlight-yellow_background {
+	background: rgb(251,243,219);
+}
+.highlight-teal_background {
+	background: rgb(221,237,234);
+}
+.highlight-blue_background {
+	background: rgb(221,235,241);
+}
+.highlight-purple_background {
+	background: rgb(234,228,242);
+}
+.highlight-pink_background {
+	background: rgb(244,223,235);
+}
+.highlight-red_background {
+	background: rgb(251,228,228);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(55, 53, 47, 0.6);
+	fill: rgba(55, 53, 47, 0.6);
+}
+.block-color-brown {
+	color: rgb(100,71,58);
+	fill: rgb(100,71,58);
+}
+.block-color-orange {
+	color: rgb(217,115,13);
+	fill: rgb(217,115,13);
+}
+.block-color-yellow {
+	color: rgb(223,171,1);
+	fill: rgb(223,171,1);
+}
+.block-color-teal {
+	color: rgb(15,123,108);
+	fill: rgb(15,123,108);
+}
+.block-color-blue {
+	color: rgb(11,110,153);
+	fill: rgb(11,110,153);
+}
+.block-color-purple {
+	color: rgb(105,64,165);
+	fill: rgb(105,64,165);
+}
+.block-color-pink {
+	color: rgb(173,26,114);
+	fill: rgb(173,26,114);
+}
+.block-color-red {
+	color: rgb(224,62,62);
+	fill: rgb(224,62,62);
+}
+.block-color-gray_background {
+	background: rgb(235,236,237);
+}
+.block-color-brown_background {
+	background: rgb(233,229,227);
+}
+.block-color-orange_background {
+	background: rgb(250,235,221);
+}
+.block-color-yellow_background {
+	background: rgb(251,243,219);
+}
+.block-color-teal_background {
+	background: rgb(221,237,234);
+}
+.block-color-blue_background {
+	background: rgb(221,235,241);
+}
+.block-color-purple_background {
+	background: rgb(234,228,242);
+}
+.block-color-pink_background {
+	background: rgb(244,223,235);
+}
+.block-color-red_background {
+	background: rgb(251,228,228);
+}
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="1d9a32cb-bb21-40cd-a9b7-7850b41a7814" class="page sans"><header><h1 class="page-title">Application Summary</h1></header><div class="page-body"><h1 id="76dbea87-aca4-4805-b845-b3beda9bf429" class="">SQS Exam Tips</h1><ul id="76910ae5-242d-4615-b37f-0fb7328d8dd7" class="bulleted-list"><li>SQS is a way to de-couple your infrastructure</li></ul><ul id="f0540992-3c9e-42d1-8e82-4e6a6b519d96" class="bulleted-list"><li>SQS is pull based, not pushed based.</li></ul><ul id="91f3e880-f1cb-4553-923a-98dc52c31570" class="bulleted-list"><li>Messages are 256 KB in size.</li></ul><ul id="a9d25a2e-1b44-46e0-8875-b7f2b4dbf05c" class="bulleted-list"><li>Messages can be kept in the queue from 1 minute to 14 days; the default retention period is 4 days.</li></ul><ul id="39827cfa-62ac-4ca4-ba06-bbdf73e7c66f" class="bulleted-list"><li>Standard SQS and FIFO SQS</li></ul><ul id="e09fb598-f796-46ec-a3d2-a88f82bfc142" class="bulleted-list"><li>Standard order is not guaranteed and messages can be delivered more than once.</li></ul><ul id="6ea75f16-e6d3-4b7c-92ae-a2fe5d14c2ab" class="bulleted-list"><li>FIFO order is strictly maintained and messages are delivered only once.</li></ul><ul id="041552cf-7ac5-4092-a252-0684d5f4048b" class="bulleted-list"><li>Visibility Time Out is the amount of time that the message is invisible in the SQS queue after a reader picks up that message. Provided the job is processed before the visibility time out expires, the message will then be deleted from the queue. If the job is not processed within that time, the message will become visible again and another reader will process it. This could result in the same message being delivered twice.</li></ul><ul id="3d61840f-54c2-40c3-93a7-b38646361046" class="bulleted-list"><li>Visibility Time Out maximum is 12 hours.</li></ul><ul id="439a4195-1977-48e5-bc83-7f84340773c6" class="bulleted-list"><li>SQS guarantees that your messages will be processed at least once.</li></ul><ul id="fe1e7c5e-1749-44fa-9532-3d8cd24490d6" class="bulleted-list"><li>Amazon SQS long polling is a way to retrieve messages from your Amazon SQS queues. While the regular short polling returns immediately (even if the message queue being polled is empty), long polling doesn&#x27;t return a response until a message arrives in the message queue, or the long poll times out. (way of saving money with SQS).</li></ul><h1 id="091497da-8beb-4336-a494-b2c4c62f5ea3" class="">SWF vs SQS</h1><ul id="5aad38ef-1923-4208-9996-312308b09435" class="bulleted-list"><li>SQS has a retention period of up to 14 days; with SWF, workflow executions can last up to 1 year.</li></ul><ul id="8dcd040f-2ad8-4ec7-917b-24e0c9b0c3c3" class="bulleted-list"><li>Amazon SWF presents a task-oriented API, whereas Amazon SQS offers a message-oriented API.</li></ul><ul id="771743c2-77a0-401d-88b2-d7cc0640c385" class="bulleted-list"><li>Amazon SWF ensures that a task is assigned only once and is never duplicated. With Amazon SQS, you need to handle duplicated messages and may also need to ensure that a message is processed only once.</li></ul><ul id="afb7b586-1d5a-44da-9df3-7722e135d55d" class="bulleted-list"><li>Amazon SWF keeps track of all the tasks and events in an application. With Amazon SQS, you need to implement your own application-level tracking, especially if your application uses multiple queues.</li></ul><h1 id="87e238ce-fe67-4063-8607-07e8e300ee0d" class="">SWF Actors</h1><ul id="a8941c39-132c-4b15-88bf-fd8ce09e7e1a" class="bulleted-list"><li>Workflow Starters - An application that can initiate (start) a workflow. Could be your e-commerce website following the placement of an order, or a mobile app searching for bus times.</li></ul><ul id="08bd3681-0699-4d90-a956-804549bc97a8" class="bulleted-list"><li>Deciders - Control the flow of activity tasks in a workflow execution. If something has finished (or failed) in a workflow, a Decider decides what to do next.</li></ul><ul id="9b2ed6a3-aebf-4d59-85c9-906157750560" class="bulleted-list"><li>Activity Workers - Carry out the activity tasks.</li></ul><h1 id="50ae2b5d-633d-4c91-b850-d79ac9125b53" class="">SNS Benefits</h1><ul id="a39c6e83-d259-445d-b171-91df99284402" class="bulleted-list"><li>Instantaneous, push-based delivery (no polling)</li></ul><ul id="9520ef71-0591-4dc2-93e3-1cc0afa80344" class="bulleted-list"><li>Simple APIs and easy integration with application</li></ul><ul id="ddc493ff-65cd-471e-9c32-475e3738dc62" class="bulleted-list"><li>Flexible message delivery over multiple transport protocols</li></ul><ul id="ad34ca5e-6550-497e-8836-c078409327f3" class="bulleted-list"><li>Inexpensive, pay-as-you-go model with no up-front costs.</li></ul><ul id="2ee2bd7f-6ffb-4327-b0bd-38ea785bdfbc" class="bulleted-list"><li>Web-based AWS Management Console offers the simplicity of a point-and-click interface.</li></ul><h1 id="b7f7c4bc-e23d-42fe-9b4f-91bdd51d3902" class="">SNS vs SQS</h1><ul id="c9dcb499-6801-45bf-9e25-425b72e46c5a" class="bulleted-list"><li>Both are Messaging services in AWS</li></ul><ul id="a03a370f-19ae-4c35-b735-33e9858fee25" class="bulleted-list"><li>SNS - Push</li></ul><ul id="29d54dd3-a795-4ad3-8cc1-1c6d813a4ebc" class="bulleted-list"><li>SQS - Polls (Pulls)</li></ul><h1 id="c8f3220b-5f0a-4396-9fec-58b18e7c960b" class="">Elastic Transcoder</h1><p id="2f355577-2324-4c9c-84cd-de4594e988fa" class="">Just remember that Elastic Transcoder is a media transcoder in the cloud. It converts media files from their original source format in to different formats that will play on smartphones, tablets, PCs, etc.</p><h1 id="f456bf3b-7239-48eb-a09e-cca0f20477e4" class="">API Gateway</h1><ul id="ced5f46a-4b8c-4297-bc44-c88baf278536" class="bulleted-list"><li>Remember what API Gateway is at high level</li></ul><ul id="648f422a-dea2-4b7d-a2d1-8675e0525d2d" class="bulleted-list"><li>API Gateway has caching capabilities to increase performance</li></ul><ul id="9d6690c7-11c9-4f6f-a685-8b4e69da20f8" class="bulleted-list"><li>API Gateway is low cost and scales automatically</li></ul><ul id="c02c4d21-1ac1-4d2d-8f56-99c0aad5419d" class="bulleted-list"><li>You can throttle API Gateway to prevent attacks.</li></ul><ul id="66659239-1816-41eb-9d82-bf1b7bfdcd40" class="bulleted-list"><li>You can log results to CloudWatch</li></ul><ul id="ae6270f1-c325-447e-965e-1ccdf58fc7b6" class="bulleted-list"><li>If you are using Javascript/AJAX that uses multiple domains with API Gateway, ensure that you have enabled CORS on API Gateway.</li></ul><ul id="47451bb9-4ac2-4458-9564-46fb126b7a73" class="bulleted-list"><li>CORS is enforced by the client.</li></ul><h1 id="00a11609-a35f-47da-acda-7b7640ea94e9" class="">Kinesis</h1><ul id="0d1fe5f5-57a8-4aee-a687-016680cddf11" class="bulleted-list"><li>Know the difference between Kinesis Streams and Kinesis Firehose. You will be given scenario questions and you must choose the most relevant service:<ul id="9bc69884-8d86-4876-a708-653d2aea49e9" class="bulleted-list"><li>Kinesis Streams has <strong>data persistance</strong> and uses <strong>Shards</strong>. It will store your data per default for 24h, but can go up to a longer period of time. Then your EC2 instances go and get the data from the streams.</li></ul><ul id="e54c8337-d566-4646-91d8-fe83eb96f395" class="bulleted-list"><li>Kinesis Firehose is where you need to analyze your data in <strong>real time </strong>and then find the place to store it (because there is <strong>no data persistence</strong>) so you could have lambda functions running in Firehose that then store that data into S3 or they can put it into Elastic Search clusters, etc.</li></ul></li></ul><ul id="6b689fe5-7fff-4d5f-8331-96aa494a4b27" class="bulleted-list"><li>Understand what Kinesis Analytics is: helps you analyze your data in Firehose and Kinesis Streams.</li></ul><h1 id="aff452dc-7408-4959-89bc-9fbb52257025" class="">Cognito</h1><ul id="103fed48-70dd-446f-b867-288a73b221e7" class="bulleted-list"><li>Federation allows users to authenticate with a Web Identity Provider (Google, Facebook, Amazon).</li></ul><ul id="06508238-860d-4f44-9067-803661342dff" class="bulleted-list"><li>The user authenticates first with the Web ID Provider and receives an authentication token, which is exchanged for temporary AWS credentials allowing them to assume an IAM role.</li></ul><ul id="0f253c36-3e4f-4297-a132-e19e5aad83e4" class="bulleted-list"><li>Cognito is an Identity Broker which handles interaction between your applications and the Web ID provider (You don&#x27;t need to write your own code to do this).</li></ul><ul id="67973491-a22b-4c1a-84f8-7232808182c4" class="bulleted-list"><li>User pool vs Identity pool:<ul id="ea234016-92d7-46eb-a39d-cd4b42b3948b" class="bulleted-list"><li>User pool is user based. It handles things like user registration, authentication, and account recovery.</li></ul><ul id="37859a48-3d7f-4743-ad38-f0d16590301c" class="bulleted-list"><li>Identity pools authorise access to your AWS resources.</li></ul></li></ul><p id="70c259c2-4d66-43c8-9442-5d20abb17085" class="">
+</p></div></article></body></html>

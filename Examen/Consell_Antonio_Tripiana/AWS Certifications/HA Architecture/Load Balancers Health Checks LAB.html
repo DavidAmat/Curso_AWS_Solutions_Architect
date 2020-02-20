@@ -1,0 +1,576 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Load Balancers &amp; Health Checks - LAB</title><style>
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	opacity: 0.5;
+}
+
+.sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, KaiTi, STKaiTi, '华文楷体', KaiTi_GB2312, '楷体_GB2312', serif; }
+.mono { font-family: Nitti, 'Microsoft YaHei', '微软雅黑', monospace; }
+.pdf .sans { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .code { font-family: Source Code Pro, 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, KaiTi, STKaiTi, '华文楷体', KaiTi_GB2312, '楷体_GB2312', serif, 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .mono { font-family: PT Mono, Nitti, 'Microsoft YaHei', '微软雅黑', monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.highlight-default {
+}
+.highlight-gray {
+	color: rgb(155,154,151);
+}
+.highlight-brown {
+	color: rgb(100,71,58);
+}
+.highlight-orange {
+	color: rgb(217,115,13);
+}
+.highlight-yellow {
+	color: rgb(223,171,1);
+}
+.highlight-teal {
+	color: rgb(15,123,108);
+}
+.highlight-blue {
+	color: rgb(11,110,153);
+}
+.highlight-purple {
+	color: rgb(105,64,165);
+}
+.highlight-pink {
+	color: rgb(173,26,114);
+}
+.highlight-red {
+	color: rgb(224,62,62);
+}
+.highlight-gray_background {
+	background: rgb(235,236,237);
+}
+.highlight-brown_background {
+	background: rgb(233,229,227);
+}
+.highlight-orange_background {
+	background: rgb(250,235,221);
+}
+.highlight-yellow_background {
+	background: rgb(251,243,219);
+}
+.highlight-teal_background {
+	background: rgb(221,237,234);
+}
+.highlight-blue_background {
+	background: rgb(221,235,241);
+}
+.highlight-purple_background {
+	background: rgb(234,228,242);
+}
+.highlight-pink_background {
+	background: rgb(244,223,235);
+}
+.highlight-red_background {
+	background: rgb(251,228,228);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(55, 53, 47, 0.6);
+	fill: rgba(55, 53, 47, 0.6);
+}
+.block-color-brown {
+	color: rgb(100,71,58);
+	fill: rgb(100,71,58);
+}
+.block-color-orange {
+	color: rgb(217,115,13);
+	fill: rgb(217,115,13);
+}
+.block-color-yellow {
+	color: rgb(223,171,1);
+	fill: rgb(223,171,1);
+}
+.block-color-teal {
+	color: rgb(15,123,108);
+	fill: rgb(15,123,108);
+}
+.block-color-blue {
+	color: rgb(11,110,153);
+	fill: rgb(11,110,153);
+}
+.block-color-purple {
+	color: rgb(105,64,165);
+	fill: rgb(105,64,165);
+}
+.block-color-pink {
+	color: rgb(173,26,114);
+	fill: rgb(173,26,114);
+}
+.block-color-red {
+	color: rgb(224,62,62);
+	fill: rgb(224,62,62);
+}
+.block-color-gray_background {
+	background: rgb(235,236,237);
+}
+.block-color-brown_background {
+	background: rgb(233,229,227);
+}
+.block-color-orange_background {
+	background: rgb(250,235,221);
+}
+.block-color-yellow_background {
+	background: rgb(251,243,219);
+}
+.block-color-teal_background {
+	background: rgb(221,237,234);
+}
+.block-color-blue_background {
+	background: rgb(221,235,241);
+}
+.block-color-purple_background {
+	background: rgb(234,228,242);
+}
+.block-color-pink_background {
+	background: rgb(244,223,235);
+}
+.block-color-red_background {
+	background: rgb(251,228,228);
+}
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="5b404767-860b-4234-bfa8-5cae2b2a9b78" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">⚗</span></div><h1 class="page-title">Load Balancers &amp; Health Checks - LAB</h1></header><div class="page-body"><p id="65f9b79c-d9bd-42fd-9597-d42a5fbfe3cf" class="">Prerequisite for the lab:</p><ol id="04d6645d-5034-4fb5-a491-21fc944fbc2d" class="numbered-list" start="1"><li>Forget about our private VPC and subnets etc. We will be doing this, for simplicity, in the default VPC that AWS provides. Feel free to do it using the custom VPC, but some things may be a bit more complicated.</li></ol><p id="9768bbb9-0711-4485-936c-c163bd0ba6ef" class="">
+</p><h2 id="92710d79-5b79-4905-bd65-4ec97bf6e76d" class="">Classic Load Balancer setup</h2><ol id="8f2cefdd-c078-417a-831a-90176a25d537" class="numbered-list" start="1"><li>Launch two EC2 instances in two different availability zones, using the default VPC and subnets in different availability zones (open subnets), and webDMZ security group (or port80 open security group). Use the following bootstrap Script - remember: step 3 → advanced details → user data as text - to launch a simple webserver (please change the title of the webpage, last line of code, in order to see the different webservers easily):<pre id="e7e1b413-2669-4a1d-a1a1-5931a75b30eb" class="code"><code>#!/bin/bash
+yum update -y
+yum install httpd -y
+service httpd start
+chkconfig httpd on
+cd /var/www/html
+echo &quot;&lt;html&gt;&lt;h1&gt; This is Webserver 01 &lt;/h1&gt;&lt;/html&gt;&quot; &gt; index.html</code></pre></li></ol><ol id="5d45498a-99f1-47d0-9f2a-686660d642f4" class="numbered-list" start="2"><li>Copy the EC2 public ip addresses and try in chrome to see if they are accesible from internet.</li></ol><ol id="d9954833-97f2-4302-b901-8c60bb8f6754" class="numbered-list" start="3"><li>Go to EC2 &gt; Load Balancing &gt; Load Balancers &gt; Create Load Balancer &gt; Choose Classic Load Balancer</li></ol><ol id="e4d01e07-ca4a-4a22-84cc-762fb7734894" class="numbered-list" start="4"><li> Put the following configuration (basically, assign your new load balancer to the same VPC where the EC2s are, and in the same security group).<figure id="6b9572a6-cf49-4424-836e-6cfc012c3a9e" class="image"><a href="Load%20Balancers%20Health%20Checks%20LAB/Screenshot_2020-01-06_at_12.48.31.png"><img style="width:1135px" src="Load%20Balancers%20Health%20Checks%20LAB/Screenshot_2020-01-06_at_12.48.31.png"/></a></figure><figure id="9d56db25-dfbd-43fd-9b06-f0a5c0dc3e08" class="image"><a href="Load%20Balancers%20Health%20Checks%20LAB/Screenshot_2020-01-06_at_12.48.51.png"><img style="width:1137px" src="Load%20Balancers%20Health%20Checks%20LAB/Screenshot_2020-01-06_at_12.48.51.png"/></a></figure><figure id="8cc016d4-0cb5-4fcd-895a-fefae37ad47a" class="image"><a href="Load%20Balancers%20Health%20Checks%20LAB/Screenshot_2020-01-06_at_12.50.28.png"><img style="width:1125px" src="Load%20Balancers%20Health%20Checks%20LAB/Screenshot_2020-01-06_at_12.50.28.png"/></a></figure><figure id="151e971e-5dea-491d-8de3-339b8425639b" class="image"><a href="Load%20Balancers%20Health%20Checks%20LAB/Screenshot_2020-01-06_at_12.50.58.png"><img style="width:1135px" src="Load%20Balancers%20Health%20Checks%20LAB/Screenshot_2020-01-06_at_12.50.58.png"/></a></figure><p id="5a3ce037-288a-4a0f-bdac-ad12671ad457" class="">
+</p></li></ol><ol id="bcbb4c11-159d-4ecf-bbc8-94abaca056cf" class="numbered-list" start="5"><li>The Classic Load Balancer is created, now wait (for a couple of minutes) until your instances are in Status &quot;InService&quot;<figure id="175fec66-e392-4965-9fb3-9069a14268d9" class="image"><a href="Load%20Balancers%20Health%20Checks%20LAB/Screenshot_2020-01-06_at_12.54.28.png"><img style="width:1129px" src="Load%20Balancers%20Health%20Checks%20LAB/Screenshot_2020-01-06_at_12.54.28.png"/></a></figure></li></ol><ol id="6d31513e-3d26-4c78-8188-294f7177fa94" class="numbered-list" start="6"><li>Copy the DNS name of the Load Balancer and paste in your internet browser<figure id="4e9d40e1-290f-4163-a6ef-9d58abef9b1a" class="image"><a href="Load%20Balancers%20Health%20Checks%20LAB/Screenshot_2020-01-06_at_12.52.47.png"><img style="width:1139px" src="Load%20Balancers%20Health%20Checks%20LAB/Screenshot_2020-01-06_at_12.52.47.png"/></a></figure></li></ol><ol id="20444e3b-c492-4c0e-9cc9-d992106a2e64" class="numbered-list" start="7"><li>Do a hard refresh and check that your server is chaging all the time (from server 1 to server 2).</li></ol><ol id="4a52c8cd-cd4d-4932-b270-9e25799a4058" class="numbered-list" start="8"><li>Go to EC2 &gt; Instances and stop one instance. Wait until is fully stopped (red dot)</li></ol><ol id="d0075911-0b5c-4df0-bda6-07b4c2466806" class="numbered-list" start="9"><li>Go back to Elastic Beanstalk menu (EC2 &gt; Load Balancing &gt; Load Balancers) → select your load balancer → click on &quot;Instances&quot; tab. You will see one out of service.</li></ol><ol id="24682cf5-7aa8-4919-815d-fceceb43265b" class="numbered-list" start="10"><li>Copy and paste the elastic DNS in your browser and try to refresh again. Now it only redirects traffic to the healthy instance (not stopped one).</li></ol><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="b724155c-c862-4175-9f19-1c8f6e5826cd"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">That&#x27;s all! This is basically what a classic load balancer does.</div></figure><h2 id="f52e6408-ead1-4022-98e3-23bb5b8372c7" class="">Application Load Balancer setup</h2><p id="87012e13-44ba-4474-8b23-385c98e0a395" class="">Prerequisites - If you have followed the classic load balancer setup:</p><ol id="d286a420-ba4c-4280-8f68-31bec03e0426" class="numbered-list" start="1"><li>Delete the classic load balancer that you have created</li></ol><ol id="9cb3ad4e-4476-4d55-b471-98ea15c7095c" class="numbered-list" start="2"><li>Power up your stopped EC2 instance.</li></ol><p id="c6e7a112-2352-421d-ae56-e180d4f5efd8" class="">If you haven&#x27;t followed the prior setup, do steps 1 and 2 from classic load balancer setup before starting this (create EC2 instances).</p><p id="de8189f5-3b50-48a5-9110-7a116fe36824" class="">
+</p><p id="0fd5f839-9824-4460-b115-9ebc77e1bcce" class="">Now let&#x27;s create an application load balancer. </p><ol id="3429b229-75ae-4c95-8f6f-27de2f9e4d61" class="numbered-list" start="1"><li>First we will need a Target Group. A Target group is a group of EC2 instances that you want to &quot;load balance&quot;. Your load balancer routes requests to the targets in a target group using the target group settings that you specify, and performs health checks on the targets using the health check settings that you specify. So go to: EC2 &gt; Load Balancing &gt; Target Groups &gt; Create target group)</li></ol><ol id="186c8acf-75c9-431e-a6e5-e3b2dfebca07" class="numbered-list" start="2"><li>Use the following configuration:<figure id="88d8986e-2331-42d1-aa38-9852b87434ad" class="image"><a href="Load%20Balancers%20Health%20Checks%20LAB/Screenshot_2020-01-06_at_13.08.27.png"><img style="width:1131px" src="Load%20Balancers%20Health%20Checks%20LAB/Screenshot_2020-01-06_at_13.08.27.png"/></a></figure><figure id="7f2c076f-a5ce-4150-9cbd-c34977dce4a5" class="image"><a href="Load%20Balancers%20Health%20Checks%20LAB/Screenshot_2020-01-06_at_13.10.04.png"><img style="width:1142px" src="Load%20Balancers%20Health%20Checks%20LAB/Screenshot_2020-01-06_at_13.10.04.png"/></a></figure></li></ol><ol id="cdea06d8-17a9-419f-8ac8-942b37f0c746" class="numbered-list" start="3"><li>Ok, we have our Target Group created. Now let&#x27;s add new targets to our Target Group. Select the Target Group → go to &quot;Targets&quot; tab → Edit. Here select the 2 instances that we have, click on &quot;Add to registered&quot; and hit Save.<figure id="2bc2e9d6-9b83-4605-a316-5b4cbec2cbe1" class="image"><a href="Load%20Balancers%20Health%20Checks%20LAB/Screenshot_2020-01-06_at_13.18.10.png"><img style="width:1125px" src="Load%20Balancers%20Health%20Checks%20LAB/Screenshot_2020-01-06_at_13.18.10.png"/></a></figure></li></ol><ol id="9d90d0e0-9d77-4116-9080-65c85d39cb80" class="numbered-list" start="4"><li>Wait until status of registered targets goes to Healthy. Great, now that we have our target group ready, let&#x27;s create the Application Load Balancer. Go to EC2 &gt; Load Balancing &gt; Load Balancers &gt; Create load balancer</li></ol><ol id="2c49033a-73d2-4e79-8546-4dfb0c5e03a2" class="numbered-list" start="5"><li>Choose Application load balancer.<figure id="aa1650ff-c8be-4020-8a7a-f1a60f76b653" class="image"><a href="Load%20Balancers%20Health%20Checks%20LAB/Screenshot_2020-01-06_at_13.15.14.png"><img style="width:1132px" src="Load%20Balancers%20Health%20Checks%20LAB/Screenshot_2020-01-06_at_13.15.14.png"/></a></figure><figure id="bdcc6bc6-2ba5-481d-afc0-da48dcfec677" class="image"><a href="Load%20Balancers%20Health%20Checks%20LAB/Screenshot_2020-01-06_at_13.15.39.png"><img style="width:1136px" src="Load%20Balancers%20Health%20Checks%20LAB/Screenshot_2020-01-06_at_13.15.39.png"/></a></figure><figure id="7dc492f1-5caf-49fa-9df3-a00617b04764" class="image"><a href="Load%20Balancers%20Health%20Checks%20LAB/Screenshot_2020-01-06_at_13.16.22.png"><img style="width:1133px" src="Load%20Balancers%20Health%20Checks%20LAB/Screenshot_2020-01-06_at_13.16.22.png"/></a></figure><figure id="0a950a4d-ca79-4934-96ab-fdd48a91a788" class="image"><a href="Load%20Balancers%20Health%20Checks%20LAB/Screenshot_2020-01-06_at_13.16.51.png"><img style="width:1135px" src="Load%20Balancers%20Health%20Checks%20LAB/Screenshot_2020-01-06_at_13.16.51.png"/></a></figure></li></ol><ol id="83166bc5-8822-484b-a5ab-fc718d16bbb7" class="numbered-list" start="6"><li>Perfect, now we have our EC2 instances behind an application load balancer. Copy the DNS of the load balancer and check that is working properly!</li></ol><ol id="bac60ed7-f674-43b9-b47f-de2f95299723" class="numbered-list" start="7"><li>How is this ALB more intelligent than the classic one (ELB)? Go to EC2 &gt; Load Balancing &gt; Load Balancers &gt; choose &quot;Listeners&quot; tab, and click on View/edit rules:<figure id="c39df025-f511-480e-921e-226a6b501bb1" class="image"><a href="Load%20Balancers%20Health%20Checks%20LAB/Screenshot_2020-01-07_at_09.34.56.png"><img style="width:1103px" src="Load%20Balancers%20Health%20Checks%20LAB/Screenshot_2020-01-07_at_09.34.56.png"/></a></figure></li></ol><ol id="1f6e8d61-9899-4bdf-a97d-d8c3b8f8328b" class="numbered-list" start="8"><li>There you will be able to put rules based on your preferences (intelligent routing).</li></ol><p id="5968a055-5466-4029-a764-9237fa00b4ba" class="">
+</p><p id="b64b2e64-3711-4a56-a6be-a7abbd421b51" class="">
+</p></div></article></body></html>

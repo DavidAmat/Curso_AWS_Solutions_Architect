@@ -1,0 +1,568 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>DNS 101</title><style>
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	opacity: 0.5;
+}
+
+.sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, KaiTi, STKaiTi, '华文楷体', KaiTi_GB2312, '楷体_GB2312', serif; }
+.mono { font-family: Nitti, 'Microsoft YaHei', '微软雅黑', monospace; }
+.pdf .sans { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .code { font-family: Source Code Pro, 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, KaiTi, STKaiTi, '华文楷体', KaiTi_GB2312, '楷体_GB2312', serif, 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .mono { font-family: PT Mono, Nitti, 'Microsoft YaHei', '微软雅黑', monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.highlight-default {
+}
+.highlight-gray {
+	color: rgb(155,154,151);
+}
+.highlight-brown {
+	color: rgb(100,71,58);
+}
+.highlight-orange {
+	color: rgb(217,115,13);
+}
+.highlight-yellow {
+	color: rgb(223,171,1);
+}
+.highlight-teal {
+	color: rgb(15,123,108);
+}
+.highlight-blue {
+	color: rgb(11,110,153);
+}
+.highlight-purple {
+	color: rgb(105,64,165);
+}
+.highlight-pink {
+	color: rgb(173,26,114);
+}
+.highlight-red {
+	color: rgb(224,62,62);
+}
+.highlight-gray_background {
+	background: rgb(235,236,237);
+}
+.highlight-brown_background {
+	background: rgb(233,229,227);
+}
+.highlight-orange_background {
+	background: rgb(250,235,221);
+}
+.highlight-yellow_background {
+	background: rgb(251,243,219);
+}
+.highlight-teal_background {
+	background: rgb(221,237,234);
+}
+.highlight-blue_background {
+	background: rgb(221,235,241);
+}
+.highlight-purple_background {
+	background: rgb(234,228,242);
+}
+.highlight-pink_background {
+	background: rgb(244,223,235);
+}
+.highlight-red_background {
+	background: rgb(251,228,228);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(55, 53, 47, 0.6);
+	fill: rgba(55, 53, 47, 0.6);
+}
+.block-color-brown {
+	color: rgb(100,71,58);
+	fill: rgb(100,71,58);
+}
+.block-color-orange {
+	color: rgb(217,115,13);
+	fill: rgb(217,115,13);
+}
+.block-color-yellow {
+	color: rgb(223,171,1);
+	fill: rgb(223,171,1);
+}
+.block-color-teal {
+	color: rgb(15,123,108);
+	fill: rgb(15,123,108);
+}
+.block-color-blue {
+	color: rgb(11,110,153);
+	fill: rgb(11,110,153);
+}
+.block-color-purple {
+	color: rgb(105,64,165);
+	fill: rgb(105,64,165);
+}
+.block-color-pink {
+	color: rgb(173,26,114);
+	fill: rgb(173,26,114);
+}
+.block-color-red {
+	color: rgb(224,62,62);
+	fill: rgb(224,62,62);
+}
+.block-color-gray_background {
+	background: rgb(235,236,237);
+}
+.block-color-brown_background {
+	background: rgb(233,229,227);
+}
+.block-color-orange_background {
+	background: rgb(250,235,221);
+}
+.block-color-yellow_background {
+	background: rgb(251,243,219);
+}
+.block-color-teal_background {
+	background: rgb(221,237,234);
+}
+.block-color-blue_background {
+	background: rgb(221,235,241);
+}
+.block-color-purple_background {
+	background: rgb(234,228,242);
+}
+.block-color-pink_background {
+	background: rgb(244,223,235);
+}
+.block-color-red_background {
+	background: rgb(251,228,228);
+}
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="f762f249-f2a0-4e92-aed0-f8be7313ab37" class="page sans"><header><img class="page-cover-image" src="https://www.notion.so/images/page-cover/rijksmuseum_rembrandt_1642.jpg" style="object-position:center 60%"/><div class="page-header-icon page-header-icon-with-cover"><span class="icon">📚</span></div><h1 class="page-title">DNS 101</h1></header><div class="page-body"><p id="f8e8a2ce-5c6c-42ef-b358-a683e20b562e" class="">If you have used the internet, you have used DNS. DNS is used to convert human friendly domain names (such as http://google.com) into an Internet Protocol (IP) address (such as http://82.124.53.1).<div class="indented"><p id="94d5732a-0bc3-40dc-9d95-bbed82ead354" class=""><a href="http://google.com">http://google.com</a> → DNS → http://82.124.53.1</p></div></p><p id="f0b989e0-c560-4aef-a95f-fe0eb17fad20" class=""><strong>DNS is on the port 53 of TCP/UDP protocol</strong>. Route 53 has this name based on the fact that Route 66 is the road that crosses US from east to west; and port 53 is the DNS port.</p><h2 id="1184ef52-1656-41e3-8183-3caaf4a3ea3a" class="">IPv4 vs IPv6</h2><p id="e52a991a-17c4-4d7d-9ce1-e269d88eca85" class="">IP addresses are used by computers to identify each other on the network. IP addresses commonly come in 2 different forms, IPv4 and IPv6:</p><ul id="56535273-ba13-4160-8472-861ac3458d31" class="bulleted-list"><li>IPv4 are running out. The IPv4 space is a 32 bit field and has over 4 billion different addresses.</li></ul><ul id="b5f74526-bf01-456e-af10-dbf9cb6bc2f9" class="bulleted-list"><li>IPv6 was created to solve this depletion issue and has an address space of 128bits which is 340 undecillion addresses.</li></ul><h2 id="cc2d6594-b526-4cf4-a730-39422b51209e" class="">Top Level Domain (TLD) [name]</h2><p id="8f343a73-815c-4ec2-9f86-46b9abd138f1" class="">.com, .org, .edu ... The last word in a domain name represents the &quot;top level domain&quot;.</p><p id="56f08467-8885-4c8b-98a1-d5b494e2db69" class="">For domains such as .co.uk:</p><ul id="71ca98a4-9473-4465-bd84-fb983b2768b8" class="bulleted-list"><li>.uk is the top level domain (always the last) </li></ul><ul id="20fef21b-7493-475f-9060-a7e7bd3aa714" class="bulleted-list"><li>.co is the second level domain name.</li></ul><p id="5249ab36-b3df-41da-9ad2-8858a32e230c" class="">These top level domain names are controlled by the Internet Assigned Numbers Authority (IANA) in a root zone database which is essentially a database of all available top level domains. You can view this database by visiting:</p><p id="7f069089-5db9-4197-a286-dfcd54b8867c" class=""><a href="http://www.iana.org/domains/root/db">http://www.iana.org/domains/root/db</a></p><h2 id="6299619a-f120-4011-9dec-119b9d8f9b2a" class="">Domain Registrars</h2><p id="96f54d2c-f2e9-4519-a2db-0c3192f4cc98" class="">Because all of the names in a given domain name have to be unique there needs to be a way to organize this all so that domain names aren&#x27;t duplicated. This is where domain registrars come in.</p><blockquote id="5e4ed865-3127-42f4-8668-9f60e8a242d1" class="">A registrar is an authority that can assign domain names directly under one or more top-level domains.</blockquote><p id="c1df6aba-5d0c-4301-b94c-e7a20d5d373d" class="">These domains are registered with InterNIC, a service of ICANN, which enforces uniqueness of domain names across the Internet. </p><p id="ac06f9e3-3b31-4ca0-8489-16a44c7b88ec" class="">Each domain name becomes registered in a central database known as the <strong>WhoIS database.</strong></p><p id="9b08daeb-f6fb-4d1a-b699-5c38a47a7a2b" class="">Popular domain registrars include:</p><p id="dda1dd36-88d9-4cdb-b6a8-be3620bf1c15" class="">Amazon, <a href="http://godaddy.com">GoDaddy.com</a>, <a href="http://123-reg.co.uk">123-reg.co.uk</a> etc.</p><p id="43e9921e-1ff1-4474-b455-282e1eefcc5d" class="">
+</p><h3 id="16f2ffb4-647b-410f-b8b4-ae47416e6b00" class="">Start of Authority (SOA) Record </h3><p id="53935e84-f94e-4078-b0b6-4c5c7a61a4d3" class="">When you buy a domain, every DNS address starts with a SOA record.  The SOA Record stores information about:</p><ul id="0d209283-65e6-462c-9df5-b3b5b8deccc2" class="bulleted-list"><li>The name of the server that supplied the data for the zone.</li></ul><ul id="4c4d54a6-e5a5-4378-8b50-c7b85362edb9" class="bulleted-list"><li>The administrator of the zone.</li></ul><ul id="5394d641-fc70-44d8-983a-30425ad1b0dd" class="bulleted-list"><li>The current version of the data file.</li></ul><ul id="6256e89a-75ff-4df2-9bf1-fdcbdf80bf19" class="bulleted-list"><li>The default number of seconds for the time-to-live file on resource records.</li></ul><h3 id="718de6db-11a5-44de-82a9-aa674876a84a" class="">Name Server (NS) Records</h3><p id="d6a14521-31e9-4892-aaae-8e6a2df1e52d" class="">They are used by Top Level Domain servers to direct traffic to the Content DNS server which contains the authoritative DNS records (SOA).</p><figure id="2a2dcd16-dda6-4ef5-9cda-5aa81927f2bb" class="image"><a href="DNS%20101/Screenshot_2019-12-18_at_10.14.19.png"><img style="width:1544px" src="DNS%20101/Screenshot_2019-12-18_at_10.14.19.png"/></a></figure><h3 id="4ea28026-4ba5-4322-b7ba-630f502168f9" class="">Address (A) Records</h3><p id="b14c109d-6b4d-44f7-9117-dd40cbef6fdd" class="">An &quot;A&quot; record is the fundamental type of DNS record. The &quot;A&quot; stands for Address. The A record is used by a computer to translate the name of the domain to an IP address. For example:</p><p id="97745840-c1c6-4bee-8d26-9cb4e9a3b912" class=""><a href="http://www.google.com">http://www.google.com</a> might point to http://123.10.10.80</p><h3 id="63291991-08b5-4c29-82ed-a3c7c47be2e3" class="">Canonical Name (CNAME) Records</h3><p id="868cae29-f5ea-4a4d-96c9-876328ef4c87" class="">This can be used to resolve one domain name to another. For example, you may have a mobile website with the domain name <a href="http://m.acloud.guru">http://m.acloud.guru</a> that is used for when users browse using mobile phones. You may also want the name <a href="http://mobile.acloud.guru">http://mobile.acloud.guru</a> to resolve to this same address.</p><p id="bd3acb1c-8f53-45c0-a97e-7c389ca13b3c" class=""><a href="http://mobile.acloud.guru">http://mobile.acloud.guru</a> → CNAME → http://m.acloud.guru</p><h3 id="c7af1030-62e9-49f5-8ca6-2ee1dff5c8ae" class="">Alias Records (aws-specific)</h3><p id="cbb36d9d-391c-4c45-aff2-a1908435e359" class="">Alias records are used to map resource record sets in your hosted zone to Elastic Load Balancers, CloudFront distributions, S3 buckets, etc.</p><p id="11020f43-3627-48a7-9f25-c5a783a89969" class="">Alias records work like a CNAME record in that you can map one DNS name (www.example.com) to another &quot;target&quot; DNS name (elb1234.elb.amazonaws.com).</p><h3 id="e51c535d-2b9e-4a83-a136-68c92827c1f7" class="">Difference between Alias and CNAME</h3><p id="863a1852-afc3-4a07-8635-749257d82b16" class="">CNAME can&#x27;t be used for naked domains such as <a href="http://pod.com">http://pod.com</a> (called Zone Apex Record)</p><p id="02002877-6e3c-4c0b-a2e0-d211ec84f023" class="">For this you need an Alias or A record, But CNAME can be used for <a href="http://app.pod.com">http://app.pod.com</a> for example. Given the choice, choose Alias over CNAME.</p><h3 id="04a0d8fa-96d5-4451-94de-67d2aba730dd" class="">MX Records</h3><p id="33a4895f-273d-41fd-9713-aa67b6aa8a2c" class="">Used for mailing</p><h3 id="acf61fe2-cf2d-48b5-a057-cb9a378d343d" class="">PTR Records</h3><p id="91916a55-044f-4070-9aa1-07d6ccdf7711" class="">the opposite of A record. Converts IP address to a domain name.</p><h1 id="35748745-a631-4dd7-a851-4e5bc071b76f" class="">Time to Live (TTL)</h1><p id="4c84f0a6-9e48-4b01-b0e4-5909e118f353" class="">The length that a DNS record is cached on either the Resolving Server or the users own local PC is equal to the value of the &quot;Time To Live&quot; (TTL) in seconds. The lower the time to live, the faster changes to DNS records take to propagate throughout the internet.</p><p id="4c8274a8-c27c-4513-8666-8d9d682b16ba" class="">Default TTL for most providers is 48 hours. This means that a DNS change can take 48 hours to propagate.</p><p id="5b9a6a2a-c368-4cfb-b0f9-d436734550b0" class="">
+</p><h2 id="4a376149-ef32-4154-a7d9-6d0d730523c1" class="">🔥Exam Tips</h2><ul id="cd417857-b247-470e-bf62-c0246f450051" class="bulleted-list"><li>Elastic Load Balancers (ELBs) do not have pre-defined IPv4 addresses; you resolve to them using a DNS name.</li></ul><ul id="af99d197-a0bf-42ed-9a8c-d88d0ba46784" class="bulleted-list"><li>Understand the difference between an Alias Record and a CNAME.<p id="91fcc37a-40eb-4386-ab16-8b66eab6587c" class="">(ALIAS) William hill → (+23) 23423 234</p><p id="cc29df0d-8c15-4ba8-a324-6cd20e9fc75e" class="">(CNAME) Batman → See William Hill</p></li></ul><ul id="d1ef9ecc-b925-45dd-8463-ea29ceb87d85" class="bulleted-list"><li>Given the choice, <strong>always choose an Alias Record</strong> over a CNAME.</li></ul><p id="8a4b4f6c-bb46-4ce8-8ff9-826880b83866" class="">
+</p></div></article></body></html>
