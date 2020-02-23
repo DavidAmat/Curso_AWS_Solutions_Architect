@@ -591,3 +591,97 @@ curl http://169.254.169.2/latest/meta-data/<option>
 
 - Metada is used to get information about an instance (such as Public IP)
 - You can curl to latest: **meta-data** or **user-data** (BootStrap script that you run when first provisioned the instance)
+
+# EFS
+
+- We provision an EFS: **Storage > EFS > Create file system**:
+
+<img src="imgs\img73.PNG" width="600px"/>
+
+- There are 3 AZ it will be spread across. The instances connect to a file system using a newtork interface called a **mount target**. Each mount target has an IP address, which we assign automatically.
+
+- EFS FS is accessed by EC2 instances running inside one of your VPCs.
+
+- We also have **Lifecycle policies** for EFS, they are move to **EFS Infrequent Access** class which is cheaper:
+
+<img src="imgs\img74.PNG" width="600px"/>
+
+- Enable encryption: use the KMS master key.
+
+- **Configure client access**:
+
+	- A file system policy is an IAM resource policy that applies to all NFS clients that connect to that file system. You can edit permissions to grant permissions to different IAM roles or different AWS accounts.
+
+<img src="imgs\img75.PNG" width="800px"/>
+
+- **On parallel, we launch EC2 instances that will share the EFS volume**:
+
+	- We create 2 instances and provide a Bootstrap script to convert them to web servers:
+
+	<img src="imgs\img76.PNG" width="800px"/>
+
+	- We create a Bootstrap script:
+
+```bash
+#!/bin/bash
+yum update -y
+yum install httpd -y
+service httpd on
+yum install -y amazon-efs-utils
+```
+
+<img src="imgs\img77.PNG" width="800px"/>
+
+- In the Security group, use the existing Security Group of WebMZ to allow inbound traffic for the HTTP protocols and all output traffic.
+
+- Launch the 2 instances!! While waiting, if we go to **Security Groups** we will see the default SG. We provisioned our EFS system on the **default SG** and our web server is going to communicate with our EFS system using the NFS protocol.  
+
+<img src="imgs\img78.PNG" width="800px"/>
+
+- That is why we need to **allow inbound traffic por the NFS**:
+
+<img src="imgs\img79.PNG" width="800px"/>
+<img src="imgs\img80.PNG" width="800px"/>
+
+- We allow NFS protocol into our default SG from our WebServers.
+- We then get the public IPv4 IP addresses of the EC2 instances:
+	- 34.226.138.168
+	- 54.86.129.154
+
+- We SSH both instances:
+	- ec2-user@34.226.138.168 -i MyUSE1KP
+	- ec2-user@54.86.129.154 -i MyUSE1KP
+
+- If the directory /var/www/html exists it means that we have correctly installed apache.
+- Elevate your privileges:
+
+```bash
+sudo su
+```
+
+<img src="imgs\img81.PNG" width="800px"/>
+
+- We go back to the AWS console and go to EFS and **get the file system ID**:
+
+	- fs-d2ae2b52
+
+- Go at each instance and run:
+
+```bash
+sudo mount -t efs -o tls fs-d2ae2b52:/ /var/www/html
+```
+
+<img src="imgs\img82.PNG" width="800px"/>
+
+- Then you can verify that by creating one file in one instance and look at it in the other instance.
+
+- To terminate EFS, first delete the EC2 instances.
+
+
+## Exam Tips
+
+- EFS you only pay for the storage you use (pay as you go) (no pre provisioning required)
+- You can scale up to petabytes
+- Can support thousands of concurrent NFS connections 
+- Data is stored across multiple AZ within a region
+- Consistency is READ after write (you create the file in a EC2 and in another EC2 you can see that file)
