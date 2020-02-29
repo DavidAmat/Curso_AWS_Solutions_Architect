@@ -132,7 +132,10 @@ nano wp-config.php
 <img src="imgs\img23.PNG" width="500px" />
 
 - You can migrate MySQL db to Aurora.
-- Take an snapshot and migrate snapshot. If we create the SNAPSHOT and restore from that snapshot, it will create a new entire RDS instance. 
+
+### Create a Snapshot
+
+- If we take an snapshot and migrate snapshot. If we create the SNAPSHOT and restore from that snapshot, it will create a new entire RDS instance. 
 - **Click on Modify**:
 
 	- Turn on Multi-AZ:
@@ -193,14 +196,67 @@ nano wp-config.php
 
 <img src="imgs\img38.PNG" width="500px" />
 
+- We can **PROMOTE a RR**:
 
 <img src="imgs\img39.PNG" width="500px" />
+
+## Exam Tips
+
+- Two different types of BK: Automated (in a scheduled maintanance window) and DB Snapshots (manually).
+- RR can be MultiAZ too
+- Used to increase performance
+- Must have backups turned on to have a RR
+- Can be in different regions
+- Can be promoted to master (and break replication, so it will no longer act as a RR)
+
+- MultiAZ are used for Disaster Recovery
+- You can **force the failover from one AZ to another by rebooting the RDS**.
+
+- Encryption is supported for MySQL, Oracle, SQL Server, PostgreSQL, MariaDB and AUrora. 
+- Is done using the AWS KMS (Key Management Services). 
+- Once data is encrypted, the underlyng storage is also encrypted too (as are its automated backup,s replicas and snapshots).
+
+
+# Aurora Database (convert MySQL to Aurora)
+
+- Create an Aurora READ Replica from our RDS instance.
+
+- Actions > Create an Aurora Read replica
+
 <img src="imgs\img40.PNG" width="500px" />
+
+- We can create our replica in a **different AZ**:
+
 <img src="imgs\img41.PNG" width="500px" />
+
+- Put a DB instance identifier (name of the DB Aurora: acloudguru-aurora)
+
+- Leave everything else as default (no encryption, backups for 1 day)
+
+
 <img src="imgs\img42.PNG" width="500px" />
+
+- Once  it is finished we have our aurora cluster with 2 nodes:
+	- writer node
+	- reader node
+
+- They are in **separate AZ** each one with each own DNS endpoint:
+
 <img src="imgs\img43.PNG" width="500px" />
+
+- Hence, **reader and writer are SEPARATE databases** in separate AZ with separate DNS endpoint.
+
+- Now, we can go to the **writer and PROMOTE READ REPLICA**:
+
 <img src="imgs\img44.PNG" width="500px" />
+
+- This can be also done with the reader node. This takes time, but once it is done, what has happened is that **we have migrated our database from a MySQL database to an AURORA database simply by creating a READ REPLICA and PROMOTING that database to its own STANDALONE database**.
+
+- Another alternative to **convert the MySQL to AURORA** would have been to take an snapshot of my read replica (i.e. writer) :
+
 <img src="imgs\img45.PNG" width="500px" />
+
+- And then we can **restore an AURORA DB from that SNAPSHOT**. 
 <img src="imgs\img46.PNG" width="500px" />
 <img src="imgs\img47.PNG" width="500px" />
 <img src="imgs\img48.PNG" width="500px" />
