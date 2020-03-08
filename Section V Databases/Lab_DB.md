@@ -257,6 +257,37 @@ nano wp-config.php
 <img src="imgs\img45.PNG" width="500px" />
 
 - And then we can **restore an AURORA DB from that SNAPSHOT**. 
+
+
+# Other Exam Content
+
+## Amazon RDS Reserved Instances
+
+- Amazon RDS Reserved Instances give you the option to reserve a DB instance for a one or three year term and in turn receive a significant discount compared to the On-Demand Instance pricing for the DB instance.
+- Reserved Instances are a great option for the steady state use case. Most production applications require database servers to be available 24×7. Reserved Instances could provide your business substantial savings if you currently use On-Demand DB instances for your production applications.  
+- Reserved Instances can also provide significant cost savings for mission critical applications that run on **Multi-AZ database deployments** for higher availability and data durability.
+
+
+
+## Amazon RDS Database instances
+
+- Amazon RDS database instances use [Amazon EBS](https://aws.amazon.com/ebs/) volumes for storage.
+
+## Amazon RDS Storage Types
+
+### General Purpose SSD
+
+- General Purpose SSD volumes offer cost-effective storage that is ideal for a broad range of workloads. These volumes deliver single-digit millisecond latencies and the ability to burst to 3,000 IOPS for extended periods of time. Baseline performance for these volumes is determined by the volume's size.
+
+
+- Provisioned IOPS storage is designed to meet the needs of I/O-intensive workloads, particularly database workloads, that require low I/O latency and consistent I/O throughput.
+	- For production application that requires fast and consistent I/O performance
+	- For production OLTP use cases, we recommend that you use Multi-AZ deployments for enhanced fault tolerance with Provisioned IOPS storage for fast and predictable performance.
+	- You can also use Provisioned IOPS SSD storage with Read Replicas for MySQL, MariaDB or PostgreSQL
+	- MariaDB, MySQL, Oracle, PostgreSQL: from 100GB to 64TB
+	- SQL Server: 20GB - 16TB
+
+- Magnetic – Amazon RDS also supports magnetic storage for backward compatibility. We recommend that you use General Purpose SSD or Provisioned IOPS for any new storage needs. The maximum amount of storage allowed for DB instances on magnetic storage is less than that of the other storage types. 
 <img src="imgs\img46.PNG" width="500px" />
 <img src="imgs\img47.PNG" width="500px" />
 <img src="imgs\img48.PNG" width="500px" />
@@ -312,8 +343,7 @@ nano wp-config.php
 <img src="imgs\img98.PNG" width="500px" />
 <img src="imgs\img99.PNG" width="500px" />
 
-
 ´´´python
 for ii in range(0,100):
 	print(f'<img src="imgs\img{ii}.PNG" width="500px" />')
-´´´
+´´´ 
