@@ -222,64 +222,385 @@ In 90% of cases we are going to use **NAT Gateways**. NAT instances are individu
 
 - Launch an instance in my Public Subnet
 
-
+- Select Community AMI for NAT: select the first
 <img src="imgs\img49.png" width="500px" />
+
+- Launch that **NAT INSTANCE for the PUBLIC SUBNET**.
+
 <img src="imgs\img50.png" width="500px" />
+
+- That will give me a public IP address for that instance. Select the security group:
 <img src="imgs\img51.png" width="500px" />
+
+- **The NAT instance is acting as a bridge between our private subnets, through the public subnets and finally reaching the internet gateway**. According to the documentation, we must disable source and destination checks on the NAT instance.
+
 <img src="imgs\img52.png" width="500px" />
+
+- We need to disable SOURCE and DESTINATION CHECKS:
+
 <img src="imgs\img53.png" width="500px" />
+
+- Now I need to create a **route** to allow my **private EC2 instance (in the privaate subnet) allow to talk to the public EC2 instance (NAT Instance)**.
+
+- We go to VPC > Route Tables :
+
 <img src="imgs\img54.png" width="500px" />
+
+- So if we want to **go out of the internet (0.0.0.0/0) (destination) we have to use as target our NAT Instance**
+
 <img src="imgs\img55.png" width="500px" />
+
+- See in routes that for that route table (the MAIN) we have created an elastic network interface (eni). 
+
 <img src="imgs\img56.png" width="500px" />
+
+- Take the PUBLIC IP ADDRESS of the **NAT Instance** and **SSH**:
+
+- We do a SSH to the private EC2 instance as we did before:
+
 <img src="imgs\img57.png" width="500px" />
+
+- Run a "yum update -y" and **we will see that it starts doing things**. So, it is using a route out of the Internet by using my NAT Instance .
+
+- Once problem is that a **NAT Instance** is just a single machine, so it can get quickly overwhelmed. If we had thousands of EC2 instances in private subnets all trying to download things at once...  This NAT Instance is a massive bottleneck. If we terminate the NAT instance, all the EC2 instances in private subnets connected to the internet through the NAT instance will not be longer getting connection to the Internet. 
+
+- **If I terminate the NAT instance** and go to the Route table:
+
 <img src="imgs\img58.png" width="500px" />
+
+- We see a blackhole status... Cause the instance does not exist. So we go to **Edit routes** and remove this route.
+
+## NAT Gateway
+
+- Go to VPC > NAT Gateway > Create a NAT GAteway. This will be a highly available and scalable solution compared to NAT Instance.
+
+<img src="imgs\img599.png" width="500px" />
+
+- Select the subnet: **CHOOSE THE PUBLIC SUBNET**
+
+
 <img src="imgs\img59.png" width="500px" />
+
+- We let the system create a Elastic IP Address and then we will attach it to my NAT gateway. 
+
 <img src="imgs\img60.png" width="500px" />
+
+- We need to **edit the route tables to point to this NAT gateway**. Edit the MAIN route table and edit route to add a route out of the internet.
+
 <img src="imgs\img61.png" width="500px" />
 
-
-```bash
-
-```
-
 <img src="imgs\img62.png" width="500px" />
+
+- NAT Gateways can take some time to get up...
+
+- I go to my private EC2 instance, which I was in throug and SSH from the public EC2 instance. I try to make a command that uses the internet and VOILA, it has connection through the NAT Gateway. 
+
+## Exam tips
+
+- NAT instances are out of date but are in the exam
+- When creating NAT instance we need to disable the source and destination check on the instance
+- NAT instance must be ina public subnet and there must be a route OUT of the private subnet to that NAT Instance in order for this to work.
+- The amount of traffic that the NAT Instance supports depends on the instance size... So if you are bottlenecking, increase the instance SIZE
+- You can create high availability using **Autoscaling Groups**, multiple subnets in differents AZ, an script to automate failover...
+- Our NAT Instance always lays behind a Security Group
+
+- NAT Gateways are redundant inside the AZ, they can survive the failure of EC2 instances that power NAT gateways. 
+- **You can only have 1 NAT Gateway inside 1 AZ**.
+- Start with a throughput of 5Gbps and scale currently to 45Gbps. (not quizzed on that)
+- No need to patch the OS for your NAT gateways
+- No need to associate it with security groups
+- Automatically be assigned a public ip address
+- Update the route tables for your NAT gateways
+- No need to disable Source and Destination checks for NAT Gateways
+- **If you have resources in multiple AZ**, and they share ONE NAT gateway... in the event that the NAT gateway's AZ is down, the resources in the other AZ **lose internet access**. To create an **AZ-independent architecture**, create a NAT gateway **in each AZ and configure your routing to ensure that resources use the NAT gateway for the SAME AZ that they are in**. 
+
+
+# NACL - Network Access Control Lists
+
+- Services > Network > VPC > Security > Network ACLs
+
 <img src="imgs\img63.png" width="500px" />
+
+- We see two ACLs. Both are default. One sits inside our custom VPC (the one created before) default VPC. And we see that it detects how many subnets does it have associated. 
+
 <img src="imgs\img64.png" width="500px" />
+
+- We see that in Inboud Rules there are Rule numbers:
+	- 100: for Ipv4
+	- 101: for Ipv6
+	- If you add another route, add from 101...
+
+- Outbound Rules:
+
 <img src="imgs\img65.png" width="500px" />
+
+- Create a new VPC and select the VPC that is gonna go in. 
+
 <img src="imgs\img66.png" width="500px" />
+
+-  **By default, a new ACLs DENIES everything by default**:
+
 <img src="imgs\img67.png" width="500px" />
+
+- We will test this. We will go to EC2, take the Public IP address of the public EC2 (web server). We SSH to the public ip address. Now I will try to see if the services httpd is running. Since it is not, I install httpd and create a web page:
+
 <img src="imgs\img68.png" width="500px" />
+
+- I go in my browser and see that the webpage is working:
+
 <img src="imgs\img69.png" width="500px" />
+
+- The reason why this is working is because that EC2 instance (public) was associated with the DEFAULT network ACL:
+
 <img src="imgs\img70.png" width="500px" />
+
+- **What we will do is to MOVE our subnet (public) over the network ACL by default so it will only be in the MyWebNACL**. We edit the subnet associations for the newly created ACL:
+
 <img src="imgs\img71.png" width="500px" />
+
+- Associate the subnet with this ACL.  
+
 <img src="imgs\img72.png" width="500px" />
 <img src="imgs\img73.png" width="500px" />
+
+- In my defaul subnet we see that the subnet public is no longer associated to that ACL:
+
 <img src="imgs\img74.png" width="500px" />
+
+- If I refresh my webpage is going to fail:
+
 <img src="imgs\img75.png" width="500px" />
+
+- We want to allow rules to be able to see HTTP connections in that subnet.
+
 <img src="imgs\img76.png" width="500px" />
+
+- Add a Rule:
+	- 100: allow port 80 for all addresses (0.0.0.0/0)
+	- 200: allow HTTPs (Port 443) all addresses
+	- 300: allow SSH (port 22) all addresses
+
+- **Rules are evaluated in order by their Rule number (first evaluate 100, after, 200, after, 300)...** and then it denies everything else.
+
 <img src="imgs\img77.png" width="500px" />
+
+- These rules are allowing us to connect to Port 80, 443, 22 but this is configured for **inbound**. We do the same to allow **outbound traffic**:
+
 <img src="imgs\img78.png" width="500px" />
+
+- And here is where **we add our EPHEMERAL PORTS!!!!** 
+
+<Start of section>
+### Ephemeral ports
+
+On servers, ephemeral ports may be used as the port assignment on the server end of a communication. This is done to continue communications with a client that inittially connected to one of the server's well-known listening ports (like port 80 or port 22). The allocations are temporary and only valid for the duration of the communication session (Wikipedia). After the communication senssion ,the ports become available for reuse. 
+
 <img src="imgs\img79.png" width="500px" />
+
+- In the official documentation we see that the NAT gateway uses ports 1024-65535. That's why we have chosen this port range. 
+
+<End of section>
+
+- Now we will Edit Inbound Rules and **add a DENY RULE**:
+
 <img src="imgs\img80.png" width="500px" />
+
+- **I will DENY my own IP address**:
+
+- But if I refresh the page, I am able to see the page stil... Why is that? Well, **route 100 here is trumping rule 400 so rule 100 is allowing everything on port 80, is NOT denying my IP address**. So take care of the CHRONOLOGICAL ORDER!!! **IF YOU HAVE A DENY, YOU MUST HAVE THE DENY BEFORE THE ALLOW!!!!**. 
+
 <img src="imgs\img81.png" width="500px" />
+
+- We change it to rule 99 to be before the ALLOW. Now when connecting to my webserver we cannot reach the site. 
+
+## Exam Tips
+
+- **When creating a VPC, a NACL was created by default**, allowing by default ALL inbound and outbound traffic. Every time we add a subnet to OUR VPC is going to be associated with a default NACL. You can then associate the subnet with a new NACL, but a **subnet itself can ONLY be associated with ONE network ACL at any given time**. 
+
+- You can create custom NACL but by default it will **deny all inbound and outbound traffic until you add rules**.
+
+- **NACL can have multiple subnets** on them. I could have MANY subnets associated in a single NACL. 
+
+- Any change in the NACL, **those changes take effect immediately**. 
+
+- Rules are evaluated in numerical order (rule number). DENY rules of specific IP address should go first.
+
+- **NACL are always evaluated BEFORE security groups SG. So if we deny a specific port on your network ACL, it is never even going to reach your SG**. 
+
+- Each subnet in your VPC must be associated with a NACL. If you don't associate a subnet with a ACL, the subnet is going to automatically associate with the default NACL. 
+
+- You can **block specific IP addresses (we cannot did that in SG)**. 
+
+- NACL have separate inbound and outbound rules, and each rule can either allow or deny traffic.
+
+- NACL are **STATELESS**; we have to add both inbound and outbound rules. Responses to allowed inbound traffic are subject to the rules for outbound traffic and viceversa. In SG, since they were STATEFUL, we didn't need to do that. 
+
+# Custom VPCs and Elastic Load Balancers
+
+- EC2 > Load Balancers > Create a Load Balancers
+- 3 types of ELB:
+
 <img src="imgs\img82.png" width="500px" />
 <img src="imgs\img83.png" width="500px" />
+
+- If I choose an AZ to enable my Load balancer (which route traffic to the targets) in these AZ only, we will see that a warning appears since there is NO IG attached to the selected subnet. This is because this was the **private subnet**. We will **choose the public subnet**. 
+
 <img src="imgs\img84.png" width="500px" />
+
+- But if we want to continue.... BAM, ERROR! At least **2 subnets must be specified**:
+
 <img src="imgs\img85.png" width="500px" />
+
+- **A load balancer NEEDS at least 2 PUBLIC subnets**.
+
+# VPC Flow Logs
+
+- VPC Flow Logs allos to capture information about the **IP traffic going to and from network interfaces in your VPC**. 
+
+- Stored using **Amazon CloudWatch Logs**.
+
+- After you create a flow log, you can view and retrieve its data in Amazon CloudWatch Logs.
+
+- Created at 3 levels :
+	- VPC level
+	- Subnet level
+	- Network Interface Level (ENI - Elastic Network Interface) 
+
+- Go to VPC > Your VPCs > Select our Custom VPC
+
 <img src="imgs\img86.png" width="500px" />
+
+- We have different filters. This is the type of traffic to be logged. So we can filter by only accepted traffic, denied traffic or ALL. The destination can either be a CloudWatch Logs or a S3 bucket. 
+
+- For the destination we will need to go to CloudWatch and create a log group for this:
+
+- Logs > Get Started
+
 <img src="imgs\img87.png" width="500px" />
 <img src="imgs\img88.png" width="500px" />
+
+- Go back to VPC > Your VPCs > Create flow log
+
 <img src="imgs\img89.png" width="500px" />
+
+- We have not created an IAM role so we click on Set Up Permissions:
+
 <img src="imgs\img90.png" width="500px" />
+
+- Going back to VPC, we select that IAM role:
+
 <img src="imgs\img91.png" width="500px" />
+
+- We see that is being created in the CloudWatch > Logs:
+
 <img src="imgs\img92.png" width="500px" />
+
+- We see that if we try to access the denied EC2 instance we had before and look at the logs, there will be rejections:
+
 <img src="imgs\img93.png" width="500px" />
 <img src="imgs\img94.png" width="500px" />
+
+## Exam Tips
+
+- You cannot enable flow logs for VPCs that are peered with your VPC unless the peer VPC is in your accound
+
+- You cannot tag a flow log
+
+- After you create a flow log, you CANNOT change its configuration; for example, you CANNOT associate a different IAM role with the flow log. 
+
+- Not all IP traffic is monitored. Traffic generated by instances when they contact the Amazon DNS server! If you use your OWN DNS server, then all traffic to that DNS server is logged. 
+
+- Traffic generated by a Windows instance for Amazon Windows license activation will NOT be monitored
+
+- Traffic to and from 169.254.169.254 NOT monitored (for instance metadata).
+
+- DHCP traffic is NOT monitored
+
+- Traffic to the reserved IP address for the default VPC router is NOT monitored
+
+# NATs vs. Bastion Hosts
+
+- What is a Bastion Host?
+
 <img src="imgs\img95.png" width="500px" />
+
+- When EC2 instances in the private subnet want to connect to the Internet, they do so by the either NAT Instance or the NAT Gateway.   
+
+- But if we need to SSH (for Linux) or RDP (Windows). The SSH is going through the Internet Gateway, through our Router, Route Tables, NACLs, through our SG and reach our **Bastion server**. Our **Bastion server basically just forwards the connection (either thorugh SSH or RDP) to our private instances**.  
+
 <img src="imgs\img96.png" width="500px" />
+
+- In this scenario we need to **HARDEN** our bastion host, since this is what receives the connection from the outside and maybe is trying to be HACKED. We don't need to care about hardening our instances in our private subnet as long as our Bastion host is hardened.
+
+- So a Bastion is basically that, a way to SSH or RDP into our private instance in your private subnet. 
+
+- You can get **Bastion AMI from the AMI Community**. 
+
+
+## Exam Tips
+
+- A NAT Gateway or NAT Instance is used to provide internet traffic to EC2 instances in private subnets.
+- A Bastion is used to securely administer EC2 instances (called Jump boxes in Australia). .
+- **You CANNOT use a NAT Gateway as a Bastion Host**. 
+
+
+# Direct Connect
+
+- Direct Connect is a cloud service that makes it **easy to establish a DEDICATED network connection from your premises to AWS**. 
+
+- You can establish a private **connectivity between AWS and your datacenter, office,...**, to reduce network cost, increase bandwidth throughput and provide a more consistent network experience than internet based connections. 
+
+- It is done on dedicated lines to connect directly to AWS. 
+
 <img src="imgs\img97.png" width="500px" />
+
+- We have a AWS region and inside we have AWS public services like S3... And we have our VPCs (could be private).
+- We have our Direct Connect (DX) Location. These are spread ALL over the world
+- Then we have our Customer Environment (this could be our own datacenter) (WAN/MAN/LAN). 
+
+- Inside the Direct Connect Location we have a **AWS Cage** which is dedicated to AWS. Inside that cage we have Direct Connect Routers. Inside that location, where our customer will also have to have their own cage (or you could use a AWS Partner Cage), inside that cage they will be going to have  their own customer routers or partner routers. 
+
+- SO what happens is, we have our router in Customer (WAN/MAN/LAN), in my datacenter, and we are going to have **a dedicated link** (in green) from your datacenter and AWS has its **own backbone network as well** (in gray). From their backbone they are connecting their direct connect routers through a direct connect connection and then we have what's called a cross connect. And this is essentially a network cable that is connecting our Direct Connect to our customer or our partner routers. And then we have our own dedicated link, so this is our last mile extension so this could be a NPLs circuit or dedicated line, etc...
+
+- We run a connection from own datacentr through our Customer or Partner Routers. That router cross connects to the Direct Connect Routers and then that has a dedicated connection to the AWS public service and a dedicated connection to our VPC. 
+
+## Exam Tips
+
+- Direct Connect directly connects your datacenter to AWS
+- Useful for High Throughput workloads (high network traffic)
+- If we need a stable and reliable secure connection.
+- If we have a scenario where we have a VPN connection that keeps dropping out because of the amount of throughput and what kinds of things can be done to solve, that will be answered by using DIRECT CONNECT.  
+## Set Up Direct Connect
+
+**IMPORTANT! This steps should be memorized!!!**
+
+1) Create a Virtual Interface in the Direct Connect Console. This is a **Public Virtual Interface**
 <img src="imgs\img98.png" width="500px" />
 <img src="imgs\img99.png" width="500px" />
+<img src="imgs\img100.png" width="500px" />
+2) Go to VPC console and to VPN connections and create a **Customer Gateway**.
+<img src="imgs\img101.png" width="500px" />
+3) Create a **Virtual Private Gateway**.
+<img src="imgs\img102.png" width="500px" />
+4) Attach the **Virtual Private Gateway** to the desired **VPC**
+<img src="imgs\img103.png" width="500px" />
+5) Select VPN Connections and **create new VPN Connection**
+6) Select the **Virtual Private Gateway** and the **Customer Gateway** (step 2).
+<img src="imgs\img104.png" width="500px" />
+7) Once the VPN is available, setup the VPN on the customer gateway or firewall. 
+
+
+
+
+
+
+
+
+<img src="imgs\img105.png" width="500px" />
+<img src="imgs\img106.png" width="500px" />
+<img src="imgs\img107.png" width="500px" />
+<img src="imgs\img108.png" width="500px" />
+
 
 
 ´´´python
