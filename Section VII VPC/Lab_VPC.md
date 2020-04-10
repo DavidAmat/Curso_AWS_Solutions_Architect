@@ -589,22 +589,342 @@ On servers, ephemeral ports may be used as the port assignment on the server end
 <img src="imgs\img104.png" width="500px" />
 7) Once the VPN is available, setup the VPN on the customer gateway or firewall. 
 
+# Global Accelerator
 
+- Service to create accelerators to improve availability and performance of your applications for local and global users.
+- Directs traffic to the **optimal endpoints** over the AWS global network. This improves availability and performance of you internet apps that are used by a global audience. 
 
-
-
-
+- Global Accelerator gives 2 **static IP addresses that you associate with your accelerator**.
 
 
 <img src="imgs\img105.png" width="500px" />
+
+- Users traffic is sent to AWS Global Accelerator
+- It's going by an Edge Location, so the user traffic enters the AWS global network at the closest Edge Location
+- Global Accelerator directs traffic to the **closest endpoint** based on proximity to the client and endpoint weights.
+- The user's traffic traverses the AWS global network to the optimal endpoint group in an AWS Region. Each endpoint group includes one or more application endpoints. 
+- The Endpoints can be application Load Balancers, EC2 instances, ... 
+
 <img src="imgs\img106.png" width="500px" />
+
+- Without AWS Global accelerator we are relying on a lot of providers, it takes many networks to reach the application. Each hop introduces delay... Whereas in the Global Accelerator, you are using AWS backbone Network thanks to the Edge Location.
+
+## Components
+
+### Static IP addresses
+- Global Acc provides you with 2 statip IP addresses that you associate with your accelerator. Or bring you own IP.
+
+###  Accelerator
+- Directs traffic to optimal endpoints over the AWS global network to improve availab and performance of you app.
+- Each accelerator contains one or many listeners.
+
+###  DNS Name
+- When you create a Global Acclerator it will assign each accelerator a default DNS name (XXXXXX.awsglobalaccelerator.com). This DNS points to the **static IP addresses that Global Accelerator assigns to you**.
+
+###  Network Zone
+- It services the static IP addresses for your accelerator from a unique IP subnet. It is similar to an AZ, it is a isolated unit with its own set of physical infraestructure.
+
+- Global Accelerator allocates 2 IPv4 addresses for the accelerator. If 1 IP address from one network zone becomes NOT available due to IP address blocking or network disruptions, client applications canretry on the healthy static IP address from **another isolated network zone**. 
+
+### Listener
+- It processes inbound connections from clients TO Global Acceletor, based on the port and protocol that you configure.
+- GlobAcc supports TCP and UDP protocols.
+
+- Each listener has one or more endpoint groups associated with, so traffic is forwarded to endpoints in one of the groups. 
+- You associate endpoint groups with listeners by specifying the regions that you want to distribute traffic to.
+- Traffic is distributed to optimal endpoints within the endpoint groups associated with a listener. 
+
+### Endpoint Group
+- Each endpoint group is associated with a specific AWS Region
+- Endpoint groups include on or more endpoints in the Region
+- You can increase or reduce % of traffic that woud be otherwise directed to an endpoint group by adjusting a setting called **traffic dial**. 
+- **Traffic dial** allows you to do performance testing or blue/green deployment testing for new releases across different AWS Regions. 
+
+### Endpoint
+- Can be Network Load Balancers, Application Load Balancers, EC2, Elastic IP addresses...
+- An Application Load Balancer endpoint can be an internet-facing or internal. Traffic is routed to endpoints based on configuration options that you choose, such as **endpoint weights**. This numbers are the proportion of traffic to route to each one. This can be done to do performance testing within a Region. 
+
+
+## Global Accelerator Lab
+
+- Create a Endpont: in this case a EC2 instance: t2.micro, all by default.
+- This EC2 is where the Global accelerator is going to send all the traffic to.
+
+> Networking > Global Accelerator > Crete accelerator (IPv4)
+
+- Configure the listeners: we want to listen to port 80 and port 443 (http and https). 
+- Protocol: TCP
+- Client affinity: by default GlobAcc distributes traffic equally between the endpoints in the endpoint groups for the listener, bu if you have stateful applications you can direct all requests from a user at a specific IP address to the same endpoint resource to maintain client affinity. Leave as None
+
 <img src="imgs\img107.png" width="500px" />
+
+- Endpoint groups: when we deploy the EC2 instance we did on us-east-1, so select that region. 
+
 <img src="imgs\img108.png" width="500px" />
 
+<img src="imgs\img109.png" width="500px" />
+
+<img src="imgs\img110.png" width="500px" />
+
+<img src="imgs\img111.png" width="500px" />
+
+
+- We are assigned 2 IP addresses ans well as a DNS name.
+
+<img src="imgs\img112.png" width="500px" />
+
+## Exam tips
+
+- AWS GlobAcc is a service in which you create accelerators to improve availability and performance of you applications for local and global users.
+- You are assigned 2 static IP addresses.
+- You can control traffic using traffic dials. This is done within the endpoint group. And you can control traffic weights to individual endpoints. 
+
+
+# VPC Endpoints
+
+- Enables to traverse your traffic without having to leave the Amazon Network.
+- It enables to privately connect your VPC to AWS services and VPC endpoint services powered by PrivateLink. It does not require an Internet Gateway, NAT device, VPN connection, AWS Direct Connect connections...
+- Instances in your VPC do NOT require a **public IP address to communicate with resources in the service**. Traffic between your VPC and the ther service does NOT leave the Amazon AWS network. 
+- Endpoints are virtual devices and horizontally scaled and highly available VPC components that allow communication between instances in your VPC and service without **imposing availability risks or bandwidth constraints on your network traffic**. 
+
+## Two types
+
+- VPC Endpoints
+- Gateway Endpoints 
+
+**An interface endpoint is an elastic network interface with a private IP address that serves as an entry point fro traffic destined to a service.** 
+
+- Gateway Endpoints look like a NAT Gateway and **are supported for S3 and DynamoDB**. 
+- Right now, for our private EC2 instance in our VPC environment, will need to use the NAT Gateway in the Public Instance to communicate to the S3 bucket.
+
+<img src="imgs\img113.png" width="500px" />
+
+- Instead, our private instance will send files to the VPC Gateway and that gateway is going to send the file to the S3 bucket
+
+<img src="imgs\img114.png" width="500px" />
+
+## Lab
+
+> Security Identity and Complicance > IAM > Roles > Create Role > EC2
+
+<img src="imgs\img115.png" width="500px" />
+<img src="imgs\img116.png" width="500px" />
+
+- Once created the role that helps me to communicate to S3 bucket, we are going to go to EC2.
+- We will add this role to our instance that is in the private subnet.
+
+<img src="imgs\img117.png" width="500px" />
+
+<img src="imgs\img118.png" width="500px" />
+
+- He realizes that he has to change somethin in the Network ACLS:
+- Subnet associations for the default VPC:
+
+<img src="imgs\img119.png" width="500px" />
+
+- Edit > Add the subnet 10.0.1.0.
+<img src="imgs\img120.png" width="500px" />
+
+- SSH into the EC2 instance. Remember that to SSH to the private instance we need to SSH the public one and from the public one SSH the private one (IP private). Remember that the public EC2 instance needs to have the .pem key inside to ssh into the private instance.
+<img src="imgs\img121.png" width="500px" />
+
+- List the fils in AWS: 
+```bash
+aws s3 ls
+echo "Hola" > test.txt
+aws S3 cp test.txt s3://music-emotions
+```
+
+- Now go to Route tables, and grab the main route table.  Here we see that we have the route out to the NAT gateway:
+
+<img src="imgs\img122.png" width="500px" />
+
+- Delete that route:
+
+<img src="imgs\img123.png" width="500px" />
+
+- Now we have NO route out to our NAT gateway. 
+
+<img src="imgs\img124.png" width="500px" />
+
+- Back in the private EC2 instance, if we do
+```bash
+aws s3 ls
+```
+It will get stucked since **we have removed the way OUT of the internet**. 
+
+- So **now is the MOMENT IN WHICH WE ADD our VPC ENDPOINT**. 
+
+<img src="imgs\img125.png" width="500px" />
+
+- Configure the VPC and the Route table. We will do it to my main route table:
+
+<img src="imgs\img126.png" width="500px" />
+
+<img src="imgs\img127.png" width="500px" />
+
+<img src="imgs\img128.png" width="500px" />
+
+- Go to Route Tables and after some minutes you will see in the destination the endpoint available. 
+
+<img src="imgs\img129.png" width="500px" />
+
+- Go to EC2 instance and if the s3 ls command hangs, try specifying the region:
+```bash
+aws s3 ls --region us-east-2
+```
+
+<img src="imgs\img130.png" width="500px" />
+
+# Summary
+
+- Remember that SG are stateful, so we only need to open up a port and we didn't need to worry about the outbound traffic. With NACLs we have to do both inbound and outbound.
+- You cannot do transitive peering with VPC. They need to be peered in a 1-to-1 basis.
+- With a VPC creation, it creates a default RT,NACL and SG. 
+- It does NOT create any subnets nor IG.
+- The AZ are randomised between AWS account.
+- 5 IP addresses are reserved within your subnets
+- You can only have 1 IG per VPC. 
+- SG can NOT span VPCs.
+---------------------------------------------------
+- NAT Instance, you always disable source/destination check on the instance
+- NAT instance must be ina public subnet
+- There mut be a route OUT of the private subnet to the NAT instance
+- The amount of traffic that NAT instances can support depends on the instance size. If there is bottlenecking, increase the instance size. 
+- You can create HA using AutoScaling groups, multiple subnets in different AZ and a script to automate failover. 
+- NAT instances are always behind a SG. 
+---------------------------------------------------
+- NAT Gateway:
+ 
+<img src="imgs\img131.png" width="500px" />
+
+- Remember that in a NAT Gateway we are NOT behind a SG. 
+
+
+- Redundant inside the AZ
+- Starts at 5 GBps and scales currently to 45GBps
+- Not associated with SG
+- Automatically assigned a PUBLIC IP Address
+- Remember to update your route tables
+- No need to disable Source/Destination Checks
+- If you have resources in multiple AZ and they share 1 NAT gateway, if the NAT gateway's AZ is DOWN, resource in the other AZ lose internet access. To create an AZ independent architecture create a NAT gateway in each AZ and cofigure your routing to ensure that resources use the NAT gateway in the **same AZ**. 
+
+---------------------------------------------------
+
+- Network ACL
+- Your VPC automatically comes with a default network ACL and by default allows ALL out/in trafic
+- You can create custom network ACL but by default each custom network DENIES ALL in/out traffic until you add rules
+- Each subnet in your VPC must be associated with a NETWORK ACL. If you don't explicitly associate a subnet with a NACL, the subnet is automaticall associated with the default NACL. 
+- Block IP addresses on specific ports (this cannot be done using SG). 
+- You can associate network ACL with multiple subnets, however, ha subnet can be associated with ONLY one NACL. When you associate a NACL with a subnet, the previous association is removed.
+- NACLs contain a numbered list of rules. **This rules are evaluated in ORDER, starting with the lowest numbered rule**. Remember, TO DENY something, you MUST PUT IF BEFORE (number of evaluation smaller) than the ALLOW rule. 
+- NACL have separate IN/OUTbound rules, and each rule can either allow or deny traffic. 
+- NACL are STATELESS, responses to allowed inbound traffic are **subject to rules for outbound traffic**. This does not occur in SG, in which when your instance is listening on port 80 and you allow inbound connections to that port on your SG, you can access it even though you have not explicitly allowed the OUTBOUND communication of the EC2 instance to the client. 
+
+---------------------------------------------------
+
+- ELB: you need a minimum of 2 public subnets to deploy an internet facing loadblanacer
+
+---------------------------------------------------
+
+- FlowLogs: you cannot enable flow logs for VPCs that are peered with your VPC unless the peer VPC is in your account.
+- Tag VPC flow logs
+- After you create a flog low, you CANNOT change the configuration: you can't associate a different IAM role. 
+- Not all the IP traffic is monitored: traffic generated by instances when they contact the AWS DNS. If you use your own DNS server, then ALL traffic to that DNS server is logged.
+- Traffic generated by a Windows instance for Amazon Windws license activation is not going to be monitored.
+- Traffic to and from 169.254.169.254 is not going to be monitored.
+- DHCP traffic not monitored
+- Traffic to the reserved IP address for the default VPC router will not be monitored.
+
+---------------------------------------------------
+
+- Bastions: 
+
+<img src="imgs\img132.png" width="500px" />
+
+- NAT Gateway is used to provide internet acces to EC2 isntances in private subnets.
+- Bastion is used to securely administer EC2 instances. 
+- You cannot use a NAT Gateway as a bastion host.
+
+---------------------------------------------------
+
+- Direct connect:
+
+- Connects the Datacenter to AWS and it's useful for highthroughput workloads or when you need stable and reliable secure connection.
+- Remember the steps of configuring Direct Connect. 
+
+---------------------------------------------------
+
+- Global Acc: service that imprve availability and performance of you apps for local and global users. 
+- Your user is going to the AWS Edge Location and it's traversing the AWS own internal backbone network to get to your AWS service (endpoint). 
+- Are assigned 2 IP static addresses.
+- Can tcontrol traffic using the traffic dials. This is done within the ENDPOINT GROUP.
+- Control weighting to individual endpoints using weights. 
+
+---------------------------------------------------
+
+- VPC Endpoints.
+- Privately connect your VPC to supported AWS services. 
+- Instances in your VPC do NOT require public IP addresses to communicate with resources in the service (remember that we used the private EC2 instance to get the contents of S3 bucket and upload a file). 
+- Interface Endpoints and Gateway endpoints (S3 and Dynamo DB).
+
+<img src="imgs\img133.png" width="500px" />
+
+-
+<img src="imgs\img134.png" width="500px" />
+
+-
+<img src="imgs\img135.png" width="500px" />
+
+-
+<img src="imgs\img136.png" width="500px" />
+
+-
+<img src="imgs\img137.png" width="500px" />
+
+-
+<img src="imgs\img138.png" width="500px" />
+
+-
+<img src="imgs\img139.png" width="500px" />
+
+-
+<img src="imgs\img140.png" width="500px" />
+
+-
+<img src="imgs\img141.png" width="500px" />
+
+-
+<img src="imgs\img142.png" width="500px" />
+
+-
+<img src="imgs\img143.png" width="500px" />
+
+-
+<img src="imgs\img144.png" width="500px" />
+
+-
+<img src="imgs\img145.png" width="500px" />
+
+-
+<img src="imgs\img146.png" width="500px" />
+
+-
+<img src="imgs\img147.png" width="500px" />
+
+-
+<img src="imgs\img148.png" width="500px" />
+
+-
+<img src="imgs\img149.png" width="500px" />
+
+-
 
 
 ´´´python
-for ii in range(0,100):
+for ii in range(111,150):
 	print(f'<img src="imgs\img{ii}.png" width="500px" />')
+	print('')
+	print('- ')
 ´´´ 
 
