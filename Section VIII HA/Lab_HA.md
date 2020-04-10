@@ -408,7 +408,7 @@ service httpd start
 
 - Install Wordpress on EC2 instance
 - Create a post and inside that post and add 2 new images
-- Add some resiliency to see wheter those images are save on our EC2 instance and look at a way of backing that up to S3 (first do it manually but then use Chrone to do it automatically).
+- Add some resiliency to see wheter those images are save on our EC2 instance and look at a way of backing that up to S3 (first do it manually but then use **crontab** to do it automatically).
 - Put the EC2 instance behind an ALB (Application Load Balancer) and connect our ALB up to Route53.
 
 ### 7.1 Install Wordpress
@@ -595,83 +595,235 @@ aws s3 ls
 
 <img src="imgs\img80.png" width="500px" />
 
-## 8. Adding resilience and autoscaling
+## 8. Adding resilience and autoscaling (crontab)
 
 -  We have on the left our EC2 instance. This will be our writer node. Every time our marketing team wants to go and write a new article it will navigate to this address 34... This EC2 instance will be configured to push any changes to S3.
 - We are going to have a fleet (flota) of EC2 instances in the http://hellocloudgurus2019.com, their job is to constantly pull the S3 bucket looking for changes. So when people visit that domain, route53 will redirect them to the http:... (fleet of instances) not to the EC2 instance. So our writer node will not see the users. 
 
 <img src="imgs\img81.png" width="500px" />
 
--
+```bash
+cd /etc
+nano crontab
+```
+
+- Crontab is a scheduler task for windows. Is for executing commands on a regular basis (using the Crone notation * * * * *). 
+
+- What we are going to do is **take a snapshot of the EC2 instance**, this is going to be our **base image for all the fleet of EC2 instances that will act as reader nodes**. So this is going to be the WordPress site that is going to be behind an ALB that is going to be behind Route53 on our domain name. So this will be reader nodes only. 
+
+- A reader node will scan S3. We will do it **every minute to see for any changes in the WordPress site**. If there is a change it is going to download that change to the EC2 instance. 
+
+- We want to run that on the "root" level.
+- Every minute
+- Synch to S3 and we want this to be a perfect copy (delete any files off your EC2 instance that are not in the Bucket: --delete )
+- Destination of the synching: /var/www/html
 
 <img src="imgs\img82.png" width="500px" />
-
--
-
 <img src="imgs\img83.png" width="500px" />
 
--
+- If we delete the files in S3 it will delete the files in the EC2 instance as well. 
+
+- If you want the crontab file to execute RIGHT NOW:
+```bash
+service crond restart
+```
+-  Add a file to S3:
 
 <img src="imgs\img84.png" width="500px" />
-
--
-
 <img src="imgs\img85.png" width="500px" />
 
--
+- Now we want to create an **image**, since this will be our gold boot image for our Wordpress servers in our autoscaling group. 
+
+- EC2 > Image > Create Image
 
 <img src="imgs\img86.png" width="500px" />
 
--
+- Now that we have saved the image base for the reader nodes, go back to the writer node (EC2 instance that was the base for that image), and **we will open the CRONTAB that we have just edited, and REVERSE IT!!!!**.
+
+- Remember that this is our writer node so we will need to synch the html directory to the S3 bucket.
 
 <img src="imgs\img87.png" width="500px" />
 
--
+- We need one more command: to synch to our other S3 bucket because we want that if any images are uploaded to the EC2 instance, it is going to be distributed throughout the CloudFront as well!!. Now the **folder that we want to upload is just the folder where the images are saved when writing them!**. This is the "wp-content/uploads" folder. Now, remember to point the S3 bucket that was dedicated to the images:
 
 <img src="imgs\img88.png" width="500px" />
-
--
-
 <img src="imgs\img89.png" width="500px" />
 
--
+- Now, any file that is written in the html directory will be written in the S3 bucket of the code. **Here be carefull with the EVENTUAL CONSISTENCY PROBLEM!!**. Maybe you have to wait a minute till you see that file written in the html to be present in the S3 bucket!!
+
+- So now we understand better our main architecture: the writer EC2 is uploading any change to S3 bucket. The reason why we have not given that writer node a domain name is because we don't want the general public trying to access this EC2 instance. You want to keep it as your Master Writer node. 
+
+<img src="imgs\img81.png" width="500px" />
+
+- What we also did before is to get our reader instances to pull changes from S3. We will use the AMI to build a fleet of EC2 instances. These EC2 instances will be under a AutoScaling Group. This ASG will sit behind an ALB. And then when people visit our DNS, Route 53 will send them to our ALB and this will redirect traffic to the EC2 instances. 
+
+- **Create an Autoscaling group**: 
 
 <img src="imgs\img90.png" width="500px" />
 
--
+- Use my AMI:
 
 <img src="imgs\img91.png" width="500px" />
 
--
+- Use the t2.micro  and **associate the IAM role to the S3ForWP to allow for S3 access**. 
+
+- Pass a bootstrap script:
+```bash
+#!/bin/bash
+yum update -y
+aws s3 sync --delete s3://YOUR_S3_BUCKET_NAME /var/www/html
+```
+- This will sync my S3 to my /var/ww/html to load the latest copy of my S3 bucket. 
 
 <img src="imgs\img92.png" width="500px" />
 
--
+- Choose the WebDMZ SG and Launch configuration!
+
+- **Create an AutoScaling Group**. MyWP_RN (reader nodes RN). 
 
 <img src="imgs\img93.png" width="500px" />
 
--
+- Configure the ASG, using 2 instances, **and choosing the RECEIVE TRAFFIC FROM Load Balancer** and select the Target Group (MyWPInstances). 
+- Choose the healthcheck in ELB. 
 
 <img src="imgs\img94.png" width="500px" />
 
--
+- Configure the Scaling Policies
 
 <img src="imgs\img95.png" width="500px" />
 
--
+- No Notifications. Add a Tag (Reader Nodes). Create the Autoscaling group.
+
+- **Now what we want to do is take the WRITER NODE and take it OUT of that group!!**. The reason for that is that we don't want that instance to be getting read traffic:
 
 <img src="imgs\img96.png" width="500px" />
 
--
+- Remove the golden EC2 instance from the group (the reader).
 
 <img src="imgs\img97.png" width="500px" />
 
--
+- By looking at the instances we see that the WRITER NODE is in the same AZ as another reader node. This is kind of annyoying. you may want to put this in its own autoscaling group if you want to do something like that but we are going to keep it as it is.
 
 <img src="imgs\img98.png" width="500px" />
 
--
+- See the Target Groups they are healthy:
 
 <img src="imgs\img99.png" width="500px" />
 
--
+- Go to the domain hellocloudgurus2019.com. If we go to the same direction bu hellocloudgurus2019.com/wp-admin it will redirect to:
+
+<img src="imgs\img100.png" width="500px" />
+
+- This is the WRITER INSTANCE!!! Here I can **add a new post**.
+- We add a new post, add a new picture! We see an issue... The URL re-write is writing to CloudFront automatically but it's gonna take some time for this image to propagate through CloudFront. (10 min). I Publish the post anyway.
+
+<img src="imgs\img101.png" width="500px" />
+
+- I rferesh the page and if I go to the DNS hellocloudgurus2019.com:
+
+<img src="imgs\img102.png" width="500px" />
+
+- The new post is there and the path is CLOUDFRONT of that image. 
+
+- To test its availability, we STOP the AZ eu-west-1c and go to the ELB in the Target Groups that we have only 1 register (1 EC2 instance running as reader). 
+
+<img src="imgs\img103.png" width="500px" />
+
+- However, the page hellocloudgurus2019.com is still up and running. 
+- In the AutoScaling group section we will see that it is already launching a new EC2 instance:
+
+<img src="imgs\img104.png" width="500px" />
+
+- Check until this EC2 instance that is being launched joins the Target Group so that at minimum 2 instances are running:
+
+<img src="imgs\img105.png" width="500px" />
+
+## Failover from one AZ to another
+
+- Do a simulated failure (failover) doing a reboot of the RDS (This is a recurrent EXAM QUESTION to do a simulated AZ failure). 
+
+<img src="imgs\img106.PNG" width="500px" />
+<img src="imgs\img107.PNG" width="500px" />
+
+- If we keep refreshing we may have some 504 Gateway Time-out errors in some cases:
+
+<img src="imgs\img108.PNG" width="500px" />
+
+- What happens is that our WebServers can't connect to the RDS instance because it is in the process of FAILING OVER. 
+- We check that the instance RDS was down for 90 seconds aprox when doing that reboot.
+
+## CloudFormation
+
+- CloudFormation will help us to automate this without doing it so manually.
+
+- Management & Governance > CloudFormation > Create Stack
+
+<img src="imgs\img109.PNG" width="500px" />
+
+-  We are going to use a sample stack. Hit next after selecting the WordPress:
+
+<img src="imgs\img110.PNG" width="500px" />
+
+- Configure the DB:
+
+<img src="imgs\img111.PNG" width="500px" />
+
+- Add tags and we will not need an IAM Role. Forget about Rollback Triggers (monitor the state of the app during stack creation).  Hit Next
+
+- Hit Create:
+
+- What this will do is provision a WordPress site on a EC2 instance (I think it might create an RDS instance too). 
+
+<img src="imgs\img112.PNG" width="500px" />
+
+- Once it is UP we see also the events and in the link it will allow to install wordpress:
+
+<img src="imgs\img113.PNG" width="500px" />
+<img src="imgs\img114.PNG" width="500px" />
+
+- The resources show an EC2 instance as well as a WebServices SG  so it does not seem to be using RDS. So it isn't. It has install mysql in my EC2 instance so the DB is inside the EC2 instance. 
+
+- You can have CloudFormation templates that deploy really complex stuff. 
+
+<img src="imgs\img115.PNG" width="500px" />
+
+### Exam Tips
+
+- CloudFormation is a way of completely scripting your cloud environment.
+- Quick Start is a bunch of CloudFormation Templates already build by AWS Solutions Architects allowing you to create complex environments very quickly.
+
+## Elastic BeanStalk
+
+- In CloudFormation is all very scripted, is using JSON, you can create massive templates and deploy resources at scale but it is really used for advanced AWS users.
+
+- EB is aimed at developers with NO idea of AWS. 
+
+- Compute > Elastic Beanstalk 
+
+<img src="imgs\img116.PNG" width="500px" />
+
+- It has created a SG, has created a S3 bucket ... all completely automated.  Once it is deployed we will see the green check:
+
+<img src="imgs\img117.PNG" width="500px" />
+<img src="imgs\img118.PNG" width="500px" />
+
+- Have a look at the environment. 
+
+<img src="imgs\img119.PNG" width="500px" />
+
+- In Configuration, we can modify many things, modify the instance, the capacity... 
+
+- You can configure it to have capacity provisioning, so you don't just need a single EC2 instance, **you can use AUTOSCALING with Elastic BeanStalk**. 
+
+- It is a way of deploying applications to the cloud without knowing anything about AWS. The Elastic Beanstalk will know if it has to run a PHP enviroment.
+
+- You can quickly deploy and manage apps in the AWS without worrying about the infrastructure that runs on those apps.. You upload the app, and EB will handle the details of capacity provisioning, load balancing, scaling, application health monitoring...
+
+
+´´´python
+for ii in range(106,180):
+	print(f'<img src="imgs\img{ii}.PNG" width="500px" />')
+    print('')
+    print('- ')
+    print('')
+´´´ 
