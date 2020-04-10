@@ -922,9 +922,10 @@ aws s3 ls --region us-east-2
 
 
 ´´´python
-for ii in range(111,150):
+for ii in range(0,100):
 	print(f'<img src="imgs\img{ii}.png" width="500px" />')
 	print('')
 	print('- ')
+	print('')
 ´´´ 
 
